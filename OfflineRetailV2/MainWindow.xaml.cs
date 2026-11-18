@@ -421,23 +421,10 @@ namespace OfflineRetailV2
             {
                 GeneralFunctions.ExecuteCopyBackground();
                 GeneralFunctions.ExecuteCopyLabelDesign();
-                string strfilename = GeneralFunctions.GetUserBackground();
-                if (!File.Exists(strfilename))
-                {
-                    var imgBrush = new ImageBrush();
-                    imgBrush.ImageSource = this.FindResource("MainBackground") as ImageSource;
-                    imgBrush.Stretch = Stretch.Fill;
-                    LoginGrid.Background = imgBrush;
-                }
-                else
-                {
-                    var img = new System.Windows.Controls.Image();
-                    img.Source = new BitmapImage(new Uri(strfilename, UriKind.Absolute));
-                    var imgBrush = new ImageBrush();
-                    imgBrush.ImageSource = GeneralFunctions.ConvertImageToImageSource(img);
-                    imgBrush.Stretch = Stretch.Fill;
-                    LoginGrid.Background = imgBrush;
-                }
+                // New design: the login area always uses the new login photo (Resources/Images/LoginBackground.jpg).
+                // The old Background.png (copied to the user data folder) is no longer shown at start-up.
+                LoginGrid.Background = (this.TryFindResource("ND.LoginPhoto") as System.Windows.Media.Brush)
+                                       ?? (System.Windows.Media.Brush)this.FindResource("ND.Navy");
                 string arg = "";
                 try
                 {
