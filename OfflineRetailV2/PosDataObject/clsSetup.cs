@@ -10683,6 +10683,97 @@ namespace PosDataObject
 
         #endregion
 
+        #region SumUp
+
+        private string strSumUpIsActive = "N";
+        private string strSumUpApiKey = "";
+        private string strSumUpMerchantCode = "";
+        private string strSumUpAffiliateKey = "";
+        private string strSumUpAppId = "";
+        private string strSumUpCurrency = "GBP";
+        private string strSumUpReaderId = "";
+        private string strSumUpReaderName = "";
+
+        public string SumUpIsActive { get { return strSumUpIsActive; } set { strSumUpIsActive = value; } }
+        public string SumUpApiKey { get { return strSumUpApiKey; } set { strSumUpApiKey = value; } }
+        public string SumUpMerchantCode { get { return strSumUpMerchantCode; } set { strSumUpMerchantCode = value; } }
+        public string SumUpAffiliateKey { get { return strSumUpAffiliateKey; } set { strSumUpAffiliateKey = value; } }
+        public string SumUpAppId { get { return strSumUpAppId; } set { strSumUpAppId = value; } }
+        public string SumUpCurrency { get { return strSumUpCurrency; } set { strSumUpCurrency = value; } }
+        public string SumUpReaderId { get { return strSumUpReaderId; } set { strSumUpReaderId = value; } }
+        public string SumUpReaderName { get { return strSumUpReaderName; } set { strSumUpReaderName = value; } }
+        private string strSumUpUseCardForm = "Y";
+        private string strSumUpUseSoloReader = "Y";
+        public string SumUpUseCardForm { get { return strSumUpUseCardForm; } set { strSumUpUseCardForm = value; } }
+        public string SumUpUseSoloReader { get { return strSumUpUseSoloReader; } set { strSumUpUseSoloReader = value; } }
+        private string strSumUpPairingCode = "";
+        public string SumUpPairingCode { get { return strSumUpPairingCode; } set { strSumUpPairingCode = value; } }
+
+        // Saved on its own connection so a failure elsewhere in PostSetupData cannot roll the SumUp settings back silently.
+        public string PostSumUpSettings()
+        {
+            using (SqlConnection con = new SqlConnection(SystemVariables.ConnectionString))
+            {
+                try
+                {
+                    con.Open();
+                    using (SqlCommand cmd = new SqlCommand(" ", con))
+                    {
+                        return SaveSumUpInfo(cmd);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return ex.Message;
+                }
+            }
+        }
+
+        private string SaveSumUpInfo(SqlCommand objSQlComm)
+        {
+            string strErrMsg = "";
+            try
+            {
+                objSQlComm.Parameters.Clear();
+                objSQlComm.CommandText = " select count(*) from SumUpInfo where UserID=@UserID ";
+                objSQlComm.Parameters.Add(new SqlParameter("@UserID", System.Data.SqlDbType.Int)).Value = SystemVariables.CurrentUserID;
+                int cnt = Convert.ToInt32(objSQlComm.ExecuteScalar());
+
+                objSQlComm.Parameters.Clear();
+                if (cnt == 0)
+                {
+                    objSQlComm.CommandText = " insert into SumUpInfo(UserID, IsActive, ApiKey, MerchantCode, AffiliateKey, AppId, Currency, ReaderId, ReaderName, UseCardForm, UseSoloReader, PairingCode) "
+                        + " values (@UserID, @IsActive, @ApiKey, @MerchantCode, @AffiliateKey, @AppId, @Currency, @ReaderId, @ReaderName, @UseCardForm, @UseSoloReader, @PairingCode) ";
+                }
+                else
+                {
+                    objSQlComm.CommandText = " update SumUpInfo set IsActive=@IsActive, ApiKey=@ApiKey, MerchantCode=@MerchantCode, AffiliateKey=@AffiliateKey, "
+                        + " AppId=@AppId, Currency=@Currency, ReaderId=@ReaderId, ReaderName=@ReaderName, UseCardForm=@UseCardForm, UseSoloReader=@UseSoloReader, PairingCode=@PairingCode where UserID=@UserID ";
+                }
+
+                objSQlComm.Parameters.Add(new SqlParameter("@UserID", System.Data.SqlDbType.Int)).Value = SystemVariables.CurrentUserID;
+                objSQlComm.Parameters.Add(new SqlParameter("@IsActive", System.Data.SqlDbType.Char)).Value = strSumUpIsActive;
+                objSQlComm.Parameters.Add(new SqlParameter("@ApiKey", System.Data.SqlDbType.NVarChar)).Value = strSumUpApiKey;
+                objSQlComm.Parameters.Add(new SqlParameter("@MerchantCode", System.Data.SqlDbType.NVarChar)).Value = strSumUpMerchantCode;
+                objSQlComm.Parameters.Add(new SqlParameter("@AffiliateKey", System.Data.SqlDbType.NVarChar)).Value = strSumUpAffiliateKey;
+                objSQlComm.Parameters.Add(new SqlParameter("@AppId", System.Data.SqlDbType.NVarChar)).Value = strSumUpAppId;
+                objSQlComm.Parameters.Add(new SqlParameter("@Currency", System.Data.SqlDbType.NVarChar)).Value = strSumUpCurrency;
+                objSQlComm.Parameters.Add(new SqlParameter("@ReaderId", System.Data.SqlDbType.NVarChar)).Value = strSumUpReaderId;
+                objSQlComm.Parameters.Add(new SqlParameter("@ReaderName", System.Data.SqlDbType.NVarChar)).Value = strSumUpReaderName;
+                objSQlComm.Parameters.Add(new SqlParameter("@UseCardForm", System.Data.SqlDbType.Char)).Value = strSumUpUseCardForm;
+                objSQlComm.Parameters.Add(new SqlParameter("@UseSoloReader", System.Data.SqlDbType.Char)).Value = strSumUpUseSoloReader;
+                objSQlComm.Parameters.Add(new SqlParameter("@PairingCode", System.Data.SqlDbType.NVarChar)).Value = strSumUpPairingCode ?? "";
+                objSQlComm.ExecuteNonQuery();
+            }
+            catch (SqlException SQLDBException)
+            {
+                strErrMsg = SQLDBException.Message;
+            }
+            return strErrMsg;
+        }
+
+        #endregion
+
 
         public DataTable FetchSalesDataForQuickBooksOnline()
         {

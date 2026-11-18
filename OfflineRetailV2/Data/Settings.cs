@@ -68,7 +68,7 @@ namespace OfflineRetailV2.Data
         public const int NoOfPrintSpace2 = 3;    // default 8
         public const int NoOfPrintSpace3 = 5;    // default 10
         public const int NoOfPrintSign = 20;   // default 28
-        public const int MaxDemoInvoiceNo = 1000;   // maximum invoice allowed in demo version
+        public const int MaxDemoInvoiceNo = 10000;   // maximum invoice allowed in demo version
         public const string StocktakeDocPrefix = "DOC - ";
         public const int MaxEmployeeInAppointmentScreen = 10;    // 
 
@@ -5927,6 +5927,68 @@ namespace OfflineRetailV2.Data
                 return;
             }
         }
+
+        #region SumUp
+
+        public static string SumUpIsActive { get; set; } = "N";
+        public static string SumUpApiKey { get; set; } = "";
+        public static string SumUpMerchantCode { get; set; } = "";
+        public static string SumUpAffiliateKey { get; set; } = "";
+        public static string SumUpAppId { get; set; } = "";
+        public static string SumUpCurrency { get; set; } = "GBP";
+        public static string SumUpReaderId { get; set; } = "";
+        public static string SumUpReaderName { get; set; } = "";
+        public static string SumUpUseCardForm { get; set; } = "Y";
+        public static string SumUpUseSoloReader { get; set; } = "Y";
+        public static string SumUpPairingCode { get; set; } = "";
+
+        public static void LoadSumUpSettings()
+        {
+            SumUpIsActive = "N";
+            SumUpApiKey = "";
+            SumUpMerchantCode = "";
+            SumUpAffiliateKey = "";
+            SumUpAppId = "";
+            SumUpCurrency = "GBP";
+            SumUpReaderId = "";
+            SumUpReaderName = "";
+            SumUpUseCardForm = "Y";
+            SumUpUseSoloReader = "Y";
+            SumUpPairingCode = "";
+
+            using (SqlConnection conn = new SqlConnection(SystemVariables.ConnectionString))
+            using (SqlCommand cmd = new SqlCommand(" select top 1 * from SumUpInfo where UserID=@UserID ", conn))
+            {
+                try
+                {
+                    conn.Open();
+                    cmd.Parameters.AddWithValue("@UserID", SystemVariables.CurrentUserID);
+                    using (SqlDataReader rdr = cmd.ExecuteReader())
+                    {
+                        if (rdr.Read())
+                        {
+                            SumUpIsActive = rdr["IsActive"].ToString();
+                            SumUpApiKey = rdr["ApiKey"].ToString();
+                            SumUpMerchantCode = rdr["MerchantCode"].ToString();
+                            SumUpAffiliateKey = rdr["AffiliateKey"].ToString();
+                            SumUpAppId = rdr["AppId"].ToString();
+                            SumUpCurrency = rdr["Currency"].ToString();
+                            SumUpReaderId = rdr["ReaderId"].ToString();
+                            SumUpReaderName = rdr["ReaderName"].ToString();
+                            SumUpUseCardForm = rdr["UseCardForm"].ToString();
+                            SumUpUseSoloReader = rdr["UseSoloReader"].ToString();
+                            SumUpPairingCode = rdr["PairingCode"].ToString();
+                        }
+                    }
+                }
+                catch (SqlException)
+                {
+                    // SumUpInfo table is created by DB script 112.0sql1.sql
+                }
+            }
+        }
+
+        #endregion
 
         public static void LoadXEROSettings()
         {
