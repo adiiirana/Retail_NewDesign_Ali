@@ -25933,6 +25933,106 @@ namespace OfflineRetailV2.UserControls
             dtblFn.Dispose();
         }
 
+        #region New design - POS options modal
+
+        private void BtnPosOptions_Click(object sender, RoutedEventArgs e)
+        {
+            tglMoreFunctions.IsChecked = false;
+            tglMoreFunctions.Visibility = HasVisibleFunctionButtons() ? Visibility.Visible : Visibility.Collapsed;
+            POSActionScrollViewer.ScrollToTop();
+            pnlPosOptions.Visibility = Visibility.Visible;
+        }
+
+        /// <summary>PDF "POS options" tiles mapped to the existing POS actions (each keeps its own permission checks).</summary>
+        private async void PosTile_Click(object sender, RoutedEventArgs e)
+        {
+            string tag = (sender as FrameworkElement)?.Tag as string;
+            ClosePosOptions();
+            switch (tag)
+            {
+                case "Print": btnReprint_Click(sender, e); break;                 // reprint receipts
+                case "Discount": btnCoupon_Click(sender, e); break;               // discount ticket (whole sale)
+                case "Notes": btnINVNotes_Click(sender, e); break;                // invoice item notes
+                case "CancelItem": btnDelete_Click(sender, e); break;             // remove the selected item
+                case "Edit": simpleButton6_Click(sender, e); break;               // edit item
+                case "Retrieve": btnResumeSuspend_Click(sender, e); break;        // resume a suspended sale
+                case "Recall": btnReprint_Click(sender, e); break;                // recall an invoice (return / reprint)
+                case "ManualDiscount": BtnDiscount1_Click(sender, e); break;      // manual item discount
+                case "AddMisc": open_misc_screen(); break;                        // misc item calculator
+                case "VoidOrder": btnCancel_Click(sender, e); break;              // cancel transaction (asks to confirm)
+            }
+            await System.Threading.Tasks.Task.CompletedTask;
+        }
+
+        private bool HasVisibleFunctionButtons()
+        {
+            foreach (UIElement c in pnlFB.Children)
+                if (c is System.Windows.Controls.Button && c.Visibility == Visibility.Visible) return true;
+            return false;
+        }
+
+        private void ClosePosOptions()
+        {
+            pnlPosOptions.Visibility = Visibility.Collapsed;
+        }
+
+        private void BtnPosOptionsClose_Click(object sender, RoutedEventArgs e)
+        {
+            ClosePosOptions();
+        }
+
+        // Tap outside the card closes the modal
+        private void PnlPosOptions_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (ReferenceEquals(e.OriginalSource, pnlPosOptions)) ClosePosOptions();
+        }
+
+        // A function tile was used (its own handler has already run): close the modal
+        private void PnlFB_Click(object sender, RoutedEventArgs e)
+        {
+            ClosePosOptions();
+        }
+
+        // "Clear Order" = the existing clear-the-whole-sale action (Void button)
+        private void BtnPosOptionsClearOrder_Click(object sender, RoutedEventArgs e)
+        {
+            ClosePosOptions();
+            BtnDelete1_Click(sender, e);
+        }
+
+        /// <summary>Picks a line icon for a function tile from its configured function name.</summary>
+        private System.Windows.Media.Geometry GetPosOptionIcon(string functionName)
+        {
+            string n = (functionName ?? "").ToLowerInvariant();
+            string key;
+            if (n.Contains("qty (+)") || n.Contains("fees") || n.Contains("misc")) key = "ND.Icon.Plus";
+            else if (n.Contains("qty (-)")) key = "ND.Icon.Minus";
+            else if (n.Contains("discount") || n.Contains("coupon") || n.Contains("points")) key = "ND.Icon.Percent";
+            else if (n.Contains("price")) key = "ND.Icon.Tag";
+            else if (n.Contains("note")) key = "ND.Icon.Edit";
+            else if (n.Contains("suspend")) key = "ND.Icon.Pause";
+            else if (n.Contains("recall") || n.Contains("resume") || n.Contains("open invoice")) key = "ND.Icon.History";
+            else if (n.Contains("print") || n.Contains("reprint") || n.Contains("label") || n.Contains("receipt")) key = "ND.Icon.Printer";
+            else if (n.Contains("report")) key = "ND.Icon.Report";
+            else if (n.Contains("cash") || n.Contains("paid out") || n.Contains("no sale") || n.Contains("lotto")) key = "ND.Icon.Cash";
+            else if (n.Contains("cc") || n.Contains("card") || n.Contains("gift") || n.Contains("ebt") || n.Contains("tran")) key = "ND.Icon.Card";
+            else if (n.Contains("layaway") || n.Contains("acct") || n.Contains("account")) key = "ND.Icon.Wallet";
+            else if (n.Contains("refund") || n.Contains("return") || n.Contains("bottle")) key = "ND.Icon.Swap";
+            else if (n.Contains("refresh")) key = "ND.Icon.Refresh";
+            else if (n.Contains("cancel") || n.Contains("void")) key = "ND.Icon.Close";
+            else if (n.Contains("help")) key = "ND.Icon.Help";
+            else if (n.Contains("appt") || n.Contains("check in")) key = "ND.Icon.Calendar";
+            else if (n.Contains("picture") || n.Contains("photo") || n.Contains("cust")) key = "ND.Icon.Person";
+            else if (n.Contains("save") || n.Contains("sales") || n.Contains("order")) key = "ND.Icon.Cart";
+            else if (n.Contains("rent") || n.Contains("repair") || n.Contains("work")) key = "ND.Icon.Edit";
+            else if (n.Contains("tare") || n.Contains("weigh")) key = "ND.Icon.BarChart";
+            else if (n.Contains("send")) key = "ND.Icon.Send";
+            else key = "ND.Icon.Grid";
+            return TryFindResource(key) as System.Windows.Media.Geometry;
+        }
+
+        #endregion
+
         private void DisplayFunctionButtons()
         {
             bool_btnsupnd = false;
@@ -25948,10 +26048,13 @@ namespace OfflineRetailV2.UserControls
 
                 System.Windows.Controls.Button btn = new System.Windows.Controls.Button();
 
-                btn.Height = 42;
-                btn.Width = 70;
-                btn.Margin = new Thickness(2, 2, 2, 3);
-                btn.Style = this.FindResource("POSFunctionButtonStyle") as Style;
+                // New design: POS options tile (icon above label), shown in the POS options modal
+                btn.Height = 78;
+                btn.Width = 96;
+                btn.Margin = new Thickness(4);
+                btn.Style = this.FindResource("ND.PosOptionTile") as Style;
+                System.Windows.Media.Geometry tileIcon = GetPosOptionIcon(dr["NAME"].ToString());
+                if (tileIcon != null) btn.Resources["ND.TileIcon"] = tileIcon;
 
                 if ((dr["NAME"].ToString() == "Save Invoice") || (dr["NAME"].ToString() == "Open Invoice"))
                 {
@@ -26527,7 +26630,7 @@ namespace OfflineRetailV2.UserControls
                             else
                             {
                                 (cr as System.Windows.Controls.Button).Opacity = 0.9;
-                                ((cr as System.Windows.Controls.Button).Content as TextBlock).Foreground = System.Windows.Media.Brushes.White; //(SolidColorBrush)new BrushConverter().ConvertFromString("#64C2DB");
+                                ((cr as System.Windows.Controls.Button).Content as TextBlock).Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0x26, 0x32, 0x4F)); // new design tile text
                             }
                         }
                     }

@@ -18,6 +18,10 @@
     <!--Width="1024" Height="768"-->
     <UserControl.Resources>
         <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/NewDesignStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <BooleanToVisibilityConverter x:Key="ND.BoolToVis"/>
             <dxre:HtmlToContentConverter x:Key="htmlToContentConverter"></dxre:HtmlToContentConverter>
             <dxre:RtfToContentConverter x:Key="rtfToContentConverter" />
             <Style x:Key="richEditStyle" TargetType="dxre:RichEditControl">
@@ -2578,7 +2582,17 @@
 
 
 
-                    <Grid Grid.Row="2" Margin="0,7,9,5"  Background="#489DAC" Height="Auto"  >
+                    <!-- New design: function buttons live in the POS options modal (pnlPosOptions) -->
+                    <Grid Grid.Row="2" Margin="0,7,9,5">
+                        <Button x:Name="btnPosOptions" Style="{StaticResource ND.OutlineNavyButton}" Height="44" MinWidth="180"
+                                HorizontalAlignment="Right" Click="BtnPosOptions_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <Path Data="{StaticResource ND.Icon.Sliders}" Style="{StaticResource ND.IconPath}" Stroke="{StaticResource ND.Navy}" Width="16" Height="15" Margin="0,0,9,0"/>
+                                <TextBlock Text="POS options" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+                    <Grid Grid.Row="2" Margin="0,7,9,5"  Background="#489DAC" Height="Auto" Visibility="Collapsed" >
 
                         <Grid  Margin="7"  >
 
@@ -2607,269 +2621,6 @@
                                     <ColumnDefinition Width="9"/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
-                                <ScrollViewer Grid.Column="0" x:Name="POSActionScrollViewer"
-                                  HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" OverridesDefaultStyle="False" Grid.ColumnSpan="3" PanningMode="Both" PanningRatio="1" PanningDeceleration="2" ManipulationBoundaryFeedback="ScrlViewer_ManipulationBoundaryFeedback" >
-                                    <WrapPanel Orientation="Horizontal" x:Name="pnlFB">
-
-
-                                        <RadioButton Visibility="Collapsed" x:Name="btnProductNote" Click="btnProductNote_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Product Notes"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnViewPrice" Click="btnViewPrice_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="View Product Price"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnChangePrice" Click="btnChangePrice_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Change Product Price"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnUsePrice" Click="btnUsePrice_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Use Price Level"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnFastCash" Click="btnFastCash_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Fast Cash"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-
-                                        <RadioButton Visibility="Collapsed" x:Name="btnGiftCertBalance" Click="btnGiftCertBalance_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Gift Cert Balance"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnINVNotes" Click="btnINVNotes_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Invoice Item Notes"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnWorkOrder" Click="btnWorkOrder_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Word Order"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnPrintLabel" Click="btnPrintLabel_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Print Cust. Label"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnPrintGiftReceipt" Click="btnPrintGiftReceipt_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Print Gift Receipt"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnCoupon" Click="btnCoupon_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Discount Ticket"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnRentRecall" Click="btnRentRecall_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Recall Rent"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnFastCC" Click="btnFastCC_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Fast CC"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnFees" Click="btnFees_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Fees &amp; Charges Item"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnBottleRefund" Click="btnBottleRefund_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Bottle Refund"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnDiscItem" Click="btnDiscItem_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Discount Item"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnAddQty" Click="btnAddQty_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="QTY (+)"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnMinusQty" Click="btnMinusQty_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="QTY (-)"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnMoreFunctions" Click="btnMoreFunctions_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="More Apps"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnHelp" Click="btnHelp_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Help"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnApptBook" Click="btnApptBook_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Book Appt."/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnApptRecall" Click="btnApptRecall_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Recall Appt."/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnPaidOut" Click="btnPaidOut_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Paid Out"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnNoSale" Click="btnNoSale_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="No Sale"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnCancel" Click="btnCancel_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Cancel"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnLayAway" Click="btnLayAway_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Layaway"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnAcctPay" Click="btnAcctPay_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Acct Pay"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnGiftCert" Click="btnGiftCert_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Gift Cert"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnResumeSuspend" Click="btnResumeSuspend_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Suspend"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnReprint" Click="btnReprint_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Return Reprint"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnStockRefresh" Click="btnStockRefresh_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Refresh Stock"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnCustomize" Click="btnCustomize_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Select Apps"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnBoardingPassSalesReport" Click="btnBoardingPassReport_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Boarding Pass Report"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnCustPhoto" Click="btnCustPhoto_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Cust. Picture"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnCustNotes" Click="btnCustNotes_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Cust. Notes"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnEmpPhoto" Click="btnEmpPhoto_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Emp. Picture"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnProductPhoto" Click="btnProductPhoto_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Product Picture"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnsrvSales" Click="btnsrvSales_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Sales"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnsrvRent" Click="btnsrvRent_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Rent"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnsrvRepair" Click="btnsrvRepair_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Repair"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnSaveRepair" Click="btnSaveRepair_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Save Invoice"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnOrdering" Click="btnOrdering_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Customer Ordering"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnRepairRecall" Click="btnRepairRecall_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Recall Repair"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnCardTran" Click="btnCardTran_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Revert CARD Tran."/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnMcryGiftCard" Click="btnMcryGiftCard_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Mercury Gift Card"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnEBTBal" Click="btnEBTBal_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="EBT/ Mercury Gift Card Balance"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnTare" Click="btnTare_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Tare"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnFeesCoupon" Click="btnFeesCoupon_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Fees &amp; Charges Ticket"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnCheckInOut" Click="btnCheckInOut_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Check In/Out"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnPointToStoreCredit" Click="btnPointToStoreCredit_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Points to Store Credit"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnLottoPayout" Click="btnLottoPayout_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Lotto Payout"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                    </WrapPanel>
-                                </ScrollViewer>
 
                                 <Grid Grid.Column="4" VerticalAlignment="Center" Margin="0,4">
                                     <Grid.RowDefinitions>
@@ -2896,6 +2647,353 @@
 
                 </Grid>
             </Grid>
+        </Grid>
+        <!-- ===================== POS options modal (new design, PDF page 4) =====================
+             Hosts the configurable function buttons (pnlFB, built in DisplayFunctionButtons) as tiles. -->
+        <Grid x:Name="pnlPosOptions" Visibility="Collapsed" Background="#7326324F" Panel.ZIndex="50"
+              MouseLeftButtonDown="PnlPosOptions_MouseLeftButtonDown">
+            <Border Width="560" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#FFFFFF" CornerRadius="14"
+                    Padding="18,14,18,18" Effect="{StaticResource ND.Shadow}">
+                <StackPanel>
+                    <Grid Margin="0,0,0,14">
+                        <TextBlock Text="POS options" FontFamily="{StaticResource ND.Font.SemiBold}" FontSize="19"
+                                   Foreground="{StaticResource ND.TextDark}" VerticalAlignment="Center"/>
+                        <Button Style="{StaticResource ND.ModalCloseButton}" HorizontalAlignment="Right" Click="BtnPosOptionsClose_Click" ToolTip="Close"/>
+                    </Grid>
+                    <!-- PDF page 4 tiles; Separate / Hold / Send / Re-fire / Mark Sent are hospitality-only and shown disabled -->
+                    <UniformGrid Columns="5" x:Name="pnlPosOptionTiles">
+                        <Button Style="{StaticResource ND.PosOptionTile}" Height="78" Margin="4" Tag="Print" Click="PosTile_Click">
+                            <Button.Resources><StaticResource x:Key="ND.TileIcon" ResourceKey="ND.Icon.Printer"/></Button.Resources>
+                            <TextBlock Text="Print" TextWrapping="Wrap" TextAlignment="Center"/>
+                        </Button>
+                        <Button Style="{StaticResource ND.PosOptionTile}" Height="78" Margin="4" Tag="Discount" Click="PosTile_Click">
+                            <Button.Resources><StaticResource x:Key="ND.TileIcon" ResourceKey="ND.Icon.List"/></Button.Resources>
+                            <TextBlock Text="Discount" TextWrapping="Wrap" TextAlignment="Center"/>
+                        </Button>
+                        <Button Style="{StaticResource ND.PosOptionTile}" Height="78" Margin="4" Tag="Notes" Click="PosTile_Click">
+                            <Button.Resources><StaticResource x:Key="ND.TileIcon" ResourceKey="ND.Icon.Edit"/></Button.Resources>
+                            <TextBlock Text="Notes" TextWrapping="Wrap" TextAlignment="Center"/>
+                        </Button>
+                        <Button Style="{StaticResource ND.PosOptionTile}" Height="78" Margin="4" Tag="Separate" Click="PosTile_Click" IsEnabled="False" ToolTip="Not available in Retail">
+                            <Button.Resources><StaticResource x:Key="ND.TileIcon" ResourceKey="ND.Icon.Swap"/></Button.Resources>
+                            <TextBlock Text="Separate" TextWrapping="Wrap" TextAlignment="Center"/>
+                        </Button>
+                        <Button Style="{StaticResource ND.PosOptionTile}" Height="78" Margin="4" Tag="CancelItem" Click="PosTile_Click">
+                            <Button.Resources><StaticResource x:Key="ND.TileIcon" ResourceKey="ND.Icon.Close"/></Button.Resources>
+                            <TextBlock Text="Cancel Item" TextWrapping="Wrap" TextAlignment="Center"/>
+                        </Button>
+                        <Button Style="{StaticResource ND.PosOptionTile}" Height="78" Margin="4" Tag="Edit" Click="PosTile_Click">
+                            <Button.Resources><StaticResource x:Key="ND.TileIcon" ResourceKey="ND.Icon.Edit"/></Button.Resources>
+                            <TextBlock Text="Edit" TextWrapping="Wrap" TextAlignment="Center"/>
+                        </Button>
+                        <Button Style="{StaticResource ND.PosOptionTile}" Height="78" Margin="4" Tag="Retrieve" Click="PosTile_Click">
+                            <Button.Resources><StaticResource x:Key="ND.TileIcon" ResourceKey="ND.Icon.Refresh"/></Button.Resources>
+                            <TextBlock Text="Retrieve" TextWrapping="Wrap" TextAlignment="Center"/>
+                        </Button>
+                        <Button Style="{StaticResource ND.PosOptionTile}" Height="78" Margin="4" Tag="Recall" Click="PosTile_Click">
+                            <Button.Resources><StaticResource x:Key="ND.TileIcon" ResourceKey="ND.Icon.History"/></Button.Resources>
+                            <TextBlock Text="Recall" TextWrapping="Wrap" TextAlignment="Center"/>
+                        </Button>
+                        <Button Style="{StaticResource ND.PosOptionTile}" Height="78" Margin="4" Tag="ManualDiscount" Click="PosTile_Click">
+                            <Button.Resources><StaticResource x:Key="ND.TileIcon" ResourceKey="ND.Icon.Percent"/></Button.Resources>
+                            <TextBlock Text="Manual Discount" TextWrapping="Wrap" TextAlignment="Center"/>
+                        </Button>
+                        <Button Style="{StaticResource ND.PosOptionTile}" Height="78" Margin="4" Tag="AddMisc" Click="PosTile_Click">
+                            <Button.Resources><StaticResource x:Key="ND.TileIcon" ResourceKey="ND.Icon.Plus"/></Button.Resources>
+                            <TextBlock Text="Add Misc" TextWrapping="Wrap" TextAlignment="Center"/>
+                        </Button>
+                        <Button Style="{StaticResource ND.PosOptionTile}" Height="78" Margin="4" Tag="VoidOrder" Click="PosTile_Click">
+                            <Button.Resources><StaticResource x:Key="ND.TileIcon" ResourceKey="ND.Icon.Trash"/></Button.Resources>
+                            <TextBlock Text="Void Order" TextWrapping="Wrap" TextAlignment="Center"/>
+                        </Button>
+                        <Button Style="{StaticResource ND.PosOptionTile}" Height="78" Margin="4" Tag="Hold" Click="PosTile_Click" IsEnabled="False" ToolTip="Not available in Retail">
+                            <Button.Resources><StaticResource x:Key="ND.TileIcon" ResourceKey="ND.Icon.Pause"/></Button.Resources>
+                            <TextBlock Text="Hold Item" TextWrapping="Wrap" TextAlignment="Center"/>
+                        </Button>
+                        <Button Style="{StaticResource ND.PosOptionTile}" Height="78" Margin="4" Tag="Send" Click="PosTile_Click" IsEnabled="False" ToolTip="Not available in Retail">
+                            <Button.Resources><StaticResource x:Key="ND.TileIcon" ResourceKey="ND.Icon.Send"/></Button.Resources>
+                            <TextBlock Text="Send Item" TextWrapping="Wrap" TextAlignment="Center"/>
+                        </Button>
+                        <Button Style="{StaticResource ND.PosOptionTile}" Height="78" Margin="4" Tag="Refire" Click="PosTile_Click" IsEnabled="False" ToolTip="Not available in Retail">
+                            <Button.Resources><StaticResource x:Key="ND.TileIcon" ResourceKey="ND.Icon.Refresh"/></Button.Resources>
+                            <TextBlock Text="Re-fire Item" TextWrapping="Wrap" TextAlignment="Center"/>
+                        </Button>
+                        <Button Style="{StaticResource ND.PosOptionTile}" Height="78" Margin="4" Tag="MarkSent" Click="PosTile_Click" IsEnabled="False" ToolTip="Not available in Retail">
+                            <Button.Resources><StaticResource x:Key="ND.TileIcon" ResourceKey="ND.Icon.Check"/></Button.Resources>
+                            <TextBlock Text="Mark Sent" TextWrapping="Wrap" TextAlignment="Center"/>
+                        </Button>
+                    </UniformGrid>
+                    <ToggleButton x:Name="tglMoreFunctions" Style="{StaticResource ND.LinkToggle}" Content="More functions" Margin="6,10,0,4" HorizontalAlignment="Left"/>
+                    <ScrollViewer x:Name="POSActionScrollViewer" MaxHeight="200"
+                                  Visibility="{Binding IsChecked, ElementName=tglMoreFunctions, Converter={StaticResource ND.BoolToVis}}" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"
+                                  PanningMode="VerticalOnly" PanningRatio="1" PanningDeceleration="2" ManipulationBoundaryFeedback="ScrlViewer_ManipulationBoundaryFeedback">
+                        <WrapPanel Orientation="Horizontal" x:Name="pnlFB" ButtonBase.Click="PnlFB_Click">
+                                            <RadioButton Visibility="Collapsed" x:Name="btnProductNote" Click="btnProductNote_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Product Notes"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnViewPrice" Click="btnViewPrice_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="View Product Price"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnChangePrice" Click="btnChangePrice_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Change Product Price"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnUsePrice" Click="btnUsePrice_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Use Price Level"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnFastCash" Click="btnFastCash_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Fast Cash"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+
+                                            <RadioButton Visibility="Collapsed" x:Name="btnGiftCertBalance" Click="btnGiftCertBalance_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Gift Cert Balance"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnINVNotes" Click="btnINVNotes_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Invoice Item Notes"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnWorkOrder" Click="btnWorkOrder_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Word Order"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnPrintLabel" Click="btnPrintLabel_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Print Cust. Label"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnPrintGiftReceipt" Click="btnPrintGiftReceipt_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Print Gift Receipt"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnCoupon" Click="btnCoupon_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Discount Ticket"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnRentRecall" Click="btnRentRecall_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Recall Rent"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnFastCC" Click="btnFastCC_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Fast CC"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnFees" Click="btnFees_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Fees &amp; Charges Item"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnBottleRefund" Click="btnBottleRefund_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Bottle Refund"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnDiscItem" Click="btnDiscItem_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Discount Item"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnAddQty" Click="btnAddQty_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="QTY (+)"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnMinusQty" Click="btnMinusQty_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="QTY (-)"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnMoreFunctions" Click="btnMoreFunctions_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="More Apps"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnHelp" Click="btnHelp_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Help"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnApptBook" Click="btnApptBook_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Book Appt."/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnApptRecall" Click="btnApptRecall_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Recall Appt."/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnPaidOut" Click="btnPaidOut_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Paid Out"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnNoSale" Click="btnNoSale_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="No Sale"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnCancel" Click="btnCancel_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Cancel"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnLayAway" Click="btnLayAway_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Layaway"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnAcctPay" Click="btnAcctPay_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Acct Pay"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnGiftCert" Click="btnGiftCert_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Gift Cert"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnResumeSuspend" Click="btnResumeSuspend_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Suspend"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnReprint" Click="btnReprint_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Return Reprint"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnStockRefresh" Click="btnStockRefresh_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Refresh Stock"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnCustomize" Click="btnCustomize_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Select Apps"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnBoardingPassSalesReport" Click="btnBoardingPassReport_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Boarding Pass Report"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnCustPhoto" Click="btnCustPhoto_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Cust. Picture"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnCustNotes" Click="btnCustNotes_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Cust. Notes"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnEmpPhoto" Click="btnEmpPhoto_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Emp. Picture"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnProductPhoto" Click="btnProductPhoto_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Product Picture"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnsrvSales" Click="btnsrvSales_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Sales"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnsrvRent" Click="btnsrvRent_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Rent"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnsrvRepair" Click="btnsrvRepair_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Repair"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnSaveRepair" Click="btnSaveRepair_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Save Invoice"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnOrdering" Click="btnOrdering_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Customer Ordering"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnRepairRecall" Click="btnRepairRecall_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Recall Repair"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnCardTran" Click="btnCardTran_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Revert CARD Tran."/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnMcryGiftCard" Click="btnMcryGiftCard_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Mercury Gift Card"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnEBTBal" Click="btnEBTBal_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="EBT/ Mercury Gift Card Balance"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnTare" Click="btnTare_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Tare"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnFeesCoupon" Click="btnFeesCoupon_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Fees &amp; Charges Ticket"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnCheckInOut" Click="btnCheckInOut_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Check In/Out"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnPointToStoreCredit" Click="btnPointToStoreCredit_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Points to Store Credit"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnLottoPayout" Click="btnLottoPayout_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Lotto Payout"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                        </WrapPanel>
+                    </ScrollViewer>
+                    <Button Style="{StaticResource ND.DangerOutlineButton}" Height="46" Margin="4,14,4,0" Click="BtnPosOptionsClearOrder_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <Path Data="{StaticResource ND.Icon.Trash}" Style="{StaticResource ND.IconPath}" Stroke="#C0392B" Width="15" Height="16" Margin="0,0,8,0"/>
+                            <TextBlock Text="Clear Order" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Border>
         </Grid>
         <Grid Background="#3D000000" x:Name="blurGrid" Visibility="Collapsed"/>
         <Grid Background="#3D000000" x:Name="menuGrid" Visibility="Collapsed" >

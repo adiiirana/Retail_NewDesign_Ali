@@ -3063,6 +3063,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Resources\NewDesignStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\Fonts.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -5120,6 +5124,7 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\Background.png" />
+    <Resource Include="Resources\Images\LoginBackground.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\GreaterThan.png" />

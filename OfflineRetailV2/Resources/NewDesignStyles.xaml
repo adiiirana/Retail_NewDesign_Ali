@@ -1,0 +1,1109 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!--
+        XEPOS new design (XEPOS_UI_Screens_Overview.pdf) - shared palette, icons and styles.
+        Merged locally by MainWindow, KeyPadPasswordControl and frmCloseoutDlg_CashOut so it
+        survives the Light/Dark theme switch (which clears Application.Resources).
+    -->
+
+    <!-- ===================== Fonts ===================== -->
+    <FontFamily x:Key="ND.Font.Regular">/Resources/Fonts/#Poppins</FontFamily>
+    <FontFamily x:Key="ND.Font.Medium">/Resources/Fonts/#Poppins Medium</FontFamily>
+    <FontFamily x:Key="ND.Font.SemiBold">/Resources/Fonts/#Poppins SemiBold</FontFamily>
+    <FontFamily x:Key="ND.Font.Bold">/Resources/Fonts/#Poppins Bold</FontFamily>
+
+    <!-- ===================== Palette ===================== -->
+    <SolidColorBrush x:Key="ND.Navy" Color="#26324F"/>
+    <SolidColorBrush x:Key="ND.NavyButton" Color="#323C5B"/>
+    <SolidColorBrush x:Key="ND.NavyPressed" Color="#1E2840"/>
+    <SolidColorBrush x:Key="ND.Orange" Color="#E8961C"/>
+    <SolidColorBrush x:Key="ND.Yellow" Color="#F8C95A"/>
+    <SolidColorBrush x:Key="ND.PageBg" Color="#EEF2F7"/>
+    <SolidColorBrush x:Key="ND.KeyBg" Color="#E8EDF5"/>
+    <SolidColorBrush x:Key="ND.KeyPressed" Color="#D3DBE8"/>
+    <SolidColorBrush x:Key="ND.InputBg" Color="#EEF1F6"/>
+    <SolidColorBrush x:Key="ND.Border" Color="#D8DEE8"/>
+    <SolidColorBrush x:Key="ND.TextDark" Color="#26324F"/>
+    <SolidColorBrush x:Key="ND.TextBody" Color="#5B6478"/>
+    <SolidColorBrush x:Key="ND.TextMuted" Color="#8A93A6"/>
+    <SolidColorBrush x:Key="ND.White" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="ND.Blue" Color="#3DB6ED"/>
+    <SolidColorBrush x:Key="ND.BlueTint" Color="#E8F7FC"/>
+    <SolidColorBrush x:Key="ND.Purple" Color="#9A60A5"/>
+    <SolidColorBrush x:Key="ND.PurpleTint" Color="#F5ECF7"/>
+    <SolidColorBrush x:Key="ND.OrangeTint" Color="#FFF4E5"/>
+    <SolidColorBrush x:Key="ND.Teal" Color="#2AA7A1"/>
+    <SolidColorBrush x:Key="ND.TealTint" Color="#E6F7F6"/>
+    <SolidColorBrush x:Key="ND.Green" Color="#3E9B6B"/>
+    <SolidColorBrush x:Key="ND.GreenTint" Color="#EAF6EF"/>
+    <SolidColorBrush x:Key="ND.Amber" Color="#D9893A"/>
+    <SolidColorBrush x:Key="ND.AmberTint" Color="#FCF1E4"/>
+    <SolidColorBrush x:Key="ND.Red" Color="#D9605A"/>
+    <SolidColorBrush x:Key="ND.RedTint" Color="#FDEEED"/>
+    <SolidColorBrush x:Key="ND.Check" Color="#4CAE43"/>
+
+    <DropShadowEffect x:Key="ND.Shadow" BlurRadius="18" ShadowDepth="3" Direction="270" Opacity="0.12" Color="#1B2540"/>
+    <DropShadowEffect x:Key="ND.ShadowSoft" BlurRadius="10" ShadowDepth="1" Direction="270" Opacity="0.08" Color="#1B2540"/>
+
+    <!-- ===================== Line icons (24x24 grid, drawn as strokes) ===================== -->
+    <Geometry x:Key="ND.Icon.Person">M12,12 A4,4 0 1 0 12,4 A4,4 0 1 0 12,12 Z M4,21 C4,16.6 7.6,14.2 12,14.2 C16.4,14.2 20,16.6 20,21</Geometry>
+    <Geometry x:Key="ND.Icon.Cart">M2,3 H5 L7.6,15 H18 L20.4,7 H6 M9,19.5 A1.2,1.2 0 1 0 9,19.49 M17,19.5 A1.2,1.2 0 1 0 17,19.49</Geometry>
+    <Geometry x:Key="ND.Icon.Layers">M12,3 L21,8 L12,13 L3,8 Z M3,12.5 L12,17.5 L21,12.5 M3,16.5 L12,21.5 L21,16.5</Geometry>
+    <Geometry x:Key="ND.Icon.Headset">M4,15 V12 A8,8 0 0 1 20,12 V15 M4,14 H7.5 V20 H5.5 A1.5,1.5 0 0 1 4,18.5 Z M20,14 H16.5 V20 H18.5 A1.5,1.5 0 0 0 20,18.5 Z</Geometry>
+    <Geometry x:Key="ND.Icon.Close">M6,6 L18,18 M18,6 L6,18</Geometry>
+    <Geometry x:Key="ND.Icon.Lock">M5.5,11 H18.5 V21 H5.5 Z M8.5,11 V7.5 A3.5,3.5 0 0 1 15.5,7.5 V11</Geometry>
+    <Geometry x:Key="ND.Icon.Clock">M3,12 A9,9 0 1 0 21,12 A9,9 0 1 0 3,12 Z M12,7 V12 L15.5,14</Geometry>
+    <Geometry x:Key="ND.Icon.Coffee">M4,9 H16 V13.5 A5.5,5.5 0 0 1 10.5,19 H9.5 A5.5,5.5 0 0 1 4,13.5 Z M16,10 H17.5 A2.2,2.2 0 0 1 17.5,14.4 H16 M3,21.5 H17 M7.5,3 V6 M10.5,3 V6 M13.5,3 V6</Geometry>
+    <Geometry x:Key="ND.Icon.Backspace">M8,5 H21 V19 H8 L2,12 Z M11.5,9 L16.5,15 M16.5,9 L11.5,15</Geometry>
+    <Geometry x:Key="ND.Icon.Menu">M4,6.5 H20 M4,12 H20 M4,17.5 H20</Geometry>
+    <Geometry x:Key="ND.Icon.ArrowRight">M4,12 H20 M14,6 L20,12 L14,18</Geometry>
+    <Geometry x:Key="ND.Icon.ChevronLeft">M15,5 L8,12 L15,19</Geometry>
+    <Geometry x:Key="ND.Icon.ChevronRight">M9,5 L16,12 L9,19</Geometry>
+    <Geometry x:Key="ND.Icon.ChevronDown">M5,9 L12,16 L19,9</Geometry>
+    <Geometry x:Key="ND.Icon.Power">M12,3 V11 M7,6.5 A7.5,7.5 0 1 0 17,6.5</Geometry>
+    <Geometry x:Key="ND.Icon.Calendar">M4,6 H20 V20 H4 Z M4,10 H20 M8,3 V7 M16,3 V7</Geometry>
+    <Geometry x:Key="ND.Icon.Swap">M4,8 H19 M15,4 L19,8 L15,12 M20,16 H5 M9,12 L5,16 L9,20</Geometry>
+    <Geometry x:Key="ND.Icon.Report">M6,3 H14 L19,8 V21 H6 Z M14,3 V8 H19 M9.5,17.5 V14.5 M12.5,17.5 V11.5 M15.5,17.5 V13.5</Geometry>
+    <Geometry x:Key="ND.Icon.AreaChart">M3,20.5 H21 M3,4 V20.5 M5,18 L9.5,11.5 L13,14.5 L20,7 V18 Z</Geometry>
+    <Geometry x:Key="ND.Icon.Printer">M7,9 V3 H17 V9 M7,17 H4 V9 H20 V17 H17 M7,13.5 H17 V21 H7 Z</Geometry>
+    <Geometry x:Key="ND.Icon.Edit">M4,20 H8 L19,9 L15,5 L4,16 Z M13,7 L17,11</Geometry>
+    <Geometry x:Key="ND.Icon.Grid">M3,3 H10 V10 H3 Z M14,3 H21 V10 H14 Z M3,14 H10 V21 H3 Z M14,14 H21 V21 H14 Z</Geometry>
+    <Geometry x:Key="ND.Icon.BarChart">M5,20 V11 M10,20 V5 M15,20 V13 M20,20 V8 M3,20.5 H22</Geometry>
+    <Geometry x:Key="ND.Icon.Eraser">M4,15 L13,6 L19,12 L12,19 H8 Z M9,10 L15,16 M12,19 H20</Geometry>
+    <Geometry x:Key="ND.Icon.Fullscreen">M4,9 V4 H9 M15,4 H20 V9 M20,15 V20 H15 M9,20 H4 V15</Geometry>
+
+    <!-- Path used for every icon; colour comes from Stroke (bound to Foreground where useful) -->
+    <Style x:Key="ND.IconPath" TargetType="{x:Type Path}">
+        <Setter Property="Stretch" Value="Uniform"/>
+        <Setter Property="StrokeThickness" Value="1.8"/>
+        <Setter Property="StrokeStartLineCap" Value="Round"/>
+        <Setter Property="StrokeEndLineCap" Value="Round"/>
+        <Setter Property="StrokeLineJoin" Value="Round"/>
+        <Setter Property="Fill" Value="Transparent"/>
+        <Setter Property="SnapsToDevicePixels" Value="False"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+    </Style>
+
+    <!-- ===================== Header navigation (Admin / Ordering / Manage Register / Technical Support) ===================== -->
+    <ControlTemplate x:Key="ND.NavTemplate" TargetType="{x:Type ButtonBase}">
+        <Border x:Name="bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="1.2" CornerRadius="6" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True">
+            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center">
+                <ContentPresenter.Resources><Style TargetType="{x:Type TextBlock}"/></ContentPresenter.Resources>
+            </ContentPresenter>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="bd" Property="BorderBrush" Value="#FFFFFFFF"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter TargetName="bd" Property="Opacity" Value="0.85"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <Style x:Key="ND.NavBase" TargetType="{x:Type ButtonBase}">
+        <Style.Resources>
+            <!-- shield content from the app-wide implicit TextBlock style so Foreground/FontFamily inherit -->
+            <Style TargetType="{x:Type TextBlock}"/>
+        </Style.Resources>
+        <Setter Property="Height" Value="36"/>
+        <Setter Property="Padding" Value="12,0"/>
+        <Setter Property="Margin" Value="4,0"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="#B3FFFFFF"/>
+        <Setter Property="Foreground" Value="#FFFFFF"/>
+        <Setter Property="FontFamily" Value="{StaticResource ND.Font.Medium}"/>
+        <Setter Property="FontSize" Value="12.5"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Template" Value="{StaticResource ND.NavTemplate}"/>
+    </Style>
+
+    <!-- Section selector: checked = white pill with navy text -->
+    <Style x:Key="ND.NavRadio" TargetType="{x:Type RadioButton}" BasedOn="{StaticResource ND.NavBase}">
+        <Style.Resources>
+            <!-- shield content from the app-wide implicit TextBlock style so Foreground/FontFamily inherit -->
+            <Style TargetType="{x:Type TextBlock}"/>
+        </Style.Resources>
+        <Style.Triggers>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter Property="Background" Value="#FFFFFF"/>
+                <Setter Property="BorderBrush" Value="#FFFFFF"/>
+                <Setter Property="Foreground" Value="{StaticResource ND.Navy}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- Plain nav button: Tag="Active" shows the selected look (used while the support popup is open) -->
+    <Style x:Key="ND.NavButton" TargetType="{x:Type Button}" BasedOn="{StaticResource ND.NavBase}">
+        <Style.Resources>
+            <!-- shield content from the app-wide implicit TextBlock style so Foreground/FontFamily inherit -->
+            <Style TargetType="{x:Type TextBlock}"/>
+        </Style.Resources>
+        <Style.Triggers>
+            <Trigger Property="Tag" Value="Active">
+                <Setter Property="Background" Value="#FFFFFF"/>
+                <Setter Property="BorderBrush" Value="#FFFFFF"/>
+                <Setter Property="Foreground" Value="{StaticResource ND.Navy}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- Square icon-only header button (close / full screen) -->
+    <Style x:Key="ND.HeaderIconButton" TargetType="{x:Type Button}">
+        <Style.Resources>
+            <!-- shield content from the app-wide implicit TextBlock style so Foreground/FontFamily inherit -->
+            <Style TargetType="{x:Type TextBlock}"/>
+        </Style.Resources>
+        <Setter Property="Width" Value="36"/>
+        <Setter Property="Height" Value="36"/>
+        <Setter Property="Margin" Value="5,0"/>
+        <Setter Property="Background" Value="#33FFFFFF"/>
+        <Setter Property="BorderBrush" Value="#80FFFFFF"/>
+        <Setter Property="Foreground" Value="#FFFFFF"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="1.2" CornerRadius="6">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <ContentPresenter.Resources><Style TargetType="{x:Type TextBlock}"/></ContentPresenter.Resources>
+                        </ContentPresenter>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="#55FFFFFF"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="#77FFFFFF"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ===================== Keypad ===================== -->
+    <Style x:Key="ND.KeyButton" TargetType="{x:Type Button}">
+        <Style.Resources>
+            <!-- shield content from the app-wide implicit TextBlock style so Foreground/FontFamily inherit -->
+            <Style TargetType="{x:Type TextBlock}"/>
+        </Style.Resources>
+        <Setter Property="Background" Value="{StaticResource ND.KeyBg}"/>
+        <Setter Property="Foreground" Value="{StaticResource ND.TextDark}"/>
+        <Setter Property="FontFamily" Value="{StaticResource ND.Font.Medium}"/>
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="8" SnapsToDevicePixels="True">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <ContentPresenter.Resources><Style TargetType="{x:Type TextBlock}"/></ContentPresenter.Resources>
+                        </ContentPresenter>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="#DFE5EF"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="{StaticResource ND.KeyPressed}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Navy primary action (LOGIN, Live Chat) -->
+    <Style x:Key="ND.PrimaryButton" TargetType="{x:Type Button}">
+        <Style.Resources>
+            <!-- shield content from the app-wide implicit TextBlock style so Foreground/FontFamily inherit -->
+            <Style TargetType="{x:Type TextBlock}"/>
+        </Style.Resources>
+        <Setter Property="Background" Value="{StaticResource ND.NavyButton}"/>
+        <Setter Property="Foreground" Value="#FFFFFF"/>
+        <Setter Property="FontFamily" Value="{StaticResource ND.Font.SemiBold}"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="8" SnapsToDevicePixels="True">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <ContentPresenter.Resources><Style TargetType="{x:Type TextBlock}"/></ContentPresenter.Resources>
+                        </ContentPresenter>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="#3C4769"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="{StaticResource ND.NavyPressed}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="bd" Property="Opacity" Value="0.55"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Tinted soft button (Clock In / Start Break / Clock Out). Set Background (tint) + Foreground (accent). -->
+    <Style x:Key="ND.SoftButton" TargetType="{x:Type Button}">
+        <Style.Resources>
+            <!-- shield content from the app-wide implicit TextBlock style so Foreground/FontFamily inherit -->
+            <Style TargetType="{x:Type TextBlock}"/>
+        </Style.Resources>
+        <Setter Property="FontFamily" Value="{StaticResource ND.Font.Medium}"/>
+        <Setter Property="FontSize" Value="11.5"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="8" SnapsToDevicePixels="True">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <ContentPresenter.Resources><Style TargetType="{x:Type TextBlock}"/></ContentPresenter.Resources>
+                        </ContentPresenter>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="bd" Property="Opacity" Value="0.8"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="bd" Property="Opacity" Value="0.5"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Round grey carousel arrow -->
+    <Style x:Key="ND.RoundArrowButton" TargetType="{x:Type Button}">
+        <Style.Resources>
+            <!-- shield content from the app-wide implicit TextBlock style so Foreground/FontFamily inherit -->
+            <Style TargetType="{x:Type TextBlock}"/>
+        </Style.Resources>
+        <Setter Property="Width" Value="40"/>
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="Background" Value="#D9DDE4"/>
+        <Setter Property="Foreground" Value="{StaticResource ND.Navy}"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="20">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <ContentPresenter.Resources><Style TargetType="{x:Type TextBlock}"/></ContentPresenter.Resources>
+                        </ContentPresenter>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="#FFFFFF"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="bd" Property="Opacity" Value="0.35"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ===================== Manage Register ===================== -->
+    <!-- Action tile: white card, coloured accent bar on the left (BorderBrush), chevron on the right -->
+    <Style x:Key="ND.Tile" TargetType="{x:Type Button}">
+        <Style.Resources>
+            <!-- shield content from the app-wide implicit TextBlock style so Foreground/FontFamily inherit -->
+            <Style TargetType="{x:Type TextBlock}"/>
+        </Style.Resources>
+        <Setter Property="Background" Value="#FFFFFF"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Margin" Value="8"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Grid>
+                        <Border x:Name="card" Background="{TemplateBinding Background}" CornerRadius="12" Effect="{StaticResource ND.ShadowSoft}"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="6"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Background="{TemplateBinding BorderBrush}" CornerRadius="12,0,0,12"/>
+                            <ContentPresenter Grid.Column="1" Margin="22,0,8,0" VerticalAlignment="Center" HorizontalAlignment="Stretch">
+                                <ContentPresenter.Resources><Style TargetType="{x:Type TextBlock}"/></ContentPresenter.Resources>
+                            </ContentPresenter>
+                            <Path Grid.Column="2" Data="{StaticResource ND.Icon.ChevronRight}" Style="{StaticResource ND.IconPath}"
+                                  Stroke="#9AA3B5" Width="9" Height="16" Margin="0,0,26,0"/>
+                        </Grid>
+                        <Border x:Name="hover" CornerRadius="12" Background="#0A26324F" Visibility="Collapsed"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="hover" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="hover" Property="Background" Value="#1426324F"/>
+                            <Setter TargetName="hover" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.5"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ND.TileTitle" TargetType="{x:Type TextBlock}">
+        <Setter Property="FontFamily" Value="{StaticResource ND.Font.SemiBold}"/>
+        <Setter Property="FontSize" Value="17"/>
+        <Setter Property="Foreground" Value="{StaticResource ND.TextDark}"/>
+    </Style>
+    <Style x:Key="ND.TileSubtitle" TargetType="{x:Type TextBlock}">
+        <Setter Property="FontFamily" Value="{StaticResource ND.Font.Regular}"/>
+        <Setter Property="FontSize" Value="12.5"/>
+        <Setter Property="Foreground" Value="{StaticResource ND.TextMuted}"/>
+        <Setter Property="Margin" Value="0,3,0,0"/>
+        <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+    </Style>
+
+    <!-- Outlined white button on the hero (Exit) -->
+    <Style x:Key="ND.OutlineButton" TargetType="{x:Type Button}">
+        <Style.Resources>
+            <!-- shield content from the app-wide implicit TextBlock style so Foreground/FontFamily inherit -->
+            <Style TargetType="{x:Type TextBlock}"/>
+        </Style.Resources>
+        <Setter Property="Background" Value="{StaticResource ND.Navy}"/>
+        <Setter Property="Foreground" Value="#FFFFFF"/>
+        <Setter Property="FontFamily" Value="{StaticResource ND.Font.SemiBold}"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="bd" Background="{TemplateBinding Background}" BorderBrush="#E6FFFFFF" BorderThickness="1.5" CornerRadius="8">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <ContentPresenter.Resources><Style TargetType="{x:Type TextBlock}"/></ContentPresenter.Resources>
+                        </ContentPresenter>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="#323C5B"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="{StaticResource ND.NavyPressed}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Wide navy bar with yellow swoosh and round arrow (Open / Close Register) -->
+    <Style x:Key="ND.RegisterBarButton" TargetType="{x:Type Button}">
+        <Style.Resources>
+            <!-- shield content from the app-wide implicit TextBlock style so Foreground/FontFamily inherit -->
+            <Style TargetType="{x:Type TextBlock}"/>
+        </Style.Resources>
+        <Setter Property="Background" Value="{StaticResource ND.Navy}"/>
+        <Setter Property="Foreground" Value="#FFFFFF"/>
+        <Setter Property="FontFamily" Value="{StaticResource ND.Font.SemiBold}"/>
+        <Setter Property="FontSize" Value="19"/>
+        <Setter Property="Height" Value="64"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="10" ClipToBounds="True">
+                        <Grid ClipToBounds="True">
+                            <Path HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="210" Height="44" Stretch="Fill"
+                                  Fill="{StaticResource ND.Yellow}" Data="M0,44 C60,40 110,0 210,2 L210,44 Z"/>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <ContentPresenter.Resources><Style TargetType="{x:Type TextBlock}"/></ContentPresenter.Resources>
+                            </ContentPresenter>
+                            <Border HorizontalAlignment="Right" Width="42" Height="42" CornerRadius="21" Background="#FFFFFF" Margin="0,0,22,0">
+                                <Path Data="{StaticResource ND.Icon.ArrowRight}" Style="{StaticResource ND.IconPath}"
+                                      Stroke="{StaticResource ND.Navy}" Width="18" Height="14"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="#2E3B5D"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="{StaticResource ND.NavyPressed}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Simple round radio (Consolidated / By Terminal) -->
+    <Style x:Key="ND.Radio" TargetType="{x:Type RadioButton}">
+        <Style.Resources>
+            <!-- shield content from the app-wide implicit TextBlock style so Foreground/FontFamily inherit -->
+            <Style TargetType="{x:Type TextBlock}"/>
+        </Style.Resources>
+        <Setter Property="Foreground" Value="{StaticResource ND.TextBody}"/>
+        <Setter Property="FontFamily" Value="{StaticResource ND.Font.Regular}"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Margin" Value="0,0,30,0"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type RadioButton}">
+                    <StackPanel Orientation="Horizontal" Background="Transparent">
+                        <Grid Width="16" Height="16" VerticalAlignment="Center">
+                            <Ellipse Stroke="#8A93A6" StrokeThickness="1.2" Fill="#FFFFFF"/>
+                            <Ellipse x:Name="dot" Width="8" Height="8" Fill="{StaticResource ND.Navy}" Visibility="Collapsed"/>
+                        </Grid>
+                        <ContentPresenter Margin="7,0,0,0" VerticalAlignment="Center">
+                            <ContentPresenter.Resources><Style TargetType="{x:Type TextBlock}"/></ContentPresenter.Resources>
+                        </ContentPresenter>
+                    </StackPanel>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="dot" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Toggle switch (Print in Receipt Printer) -->
+    <Style x:Key="ND.ToggleSwitch" TargetType="{x:Type CheckBox}">
+        <Style.Resources>
+            <!-- shield content from the app-wide implicit TextBlock style so Foreground/FontFamily inherit -->
+            <Style TargetType="{x:Type TextBlock}"/>
+        </Style.Resources>
+        <Setter Property="Foreground" Value="{StaticResource ND.TextBody}"/>
+        <Setter Property="FontFamily" Value="{StaticResource ND.Font.Regular}"/>
+        <Setter Property="FontSize" Value="12.5"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type CheckBox}">
+                    <StackPanel Orientation="Horizontal" Background="Transparent">
+                        <Grid Width="38" Height="20" VerticalAlignment="Center">
+                            <Border x:Name="track" CornerRadius="10" Background="#E2E2E2"/>
+                            <Ellipse x:Name="thumb" Width="14" Height="14" Fill="#FFFFFF" HorizontalAlignment="Left" Margin="3,0"
+                                     Effect="{StaticResource ND.ShadowSoft}"/>
+                        </Grid>
+                        <ContentPresenter Margin="12,0,0,0" VerticalAlignment="Center">
+                            <ContentPresenter.Resources><Style TargetType="{x:Type TextBlock}"/></ContentPresenter.Resources>
+                        </ContentPresenter>
+                    </StackPanel>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="thumb" Property="HorizontalAlignment" Value="Right"/>
+                            <Setter TargetName="thumb" Property="Fill" Value="{StaticResource ND.Blue}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!-- ===================== Painted food-scene backdrop (stand-in for the design photo) =====================
+         Vector-only "photo": dark kitchen, chef's hand top-left, white bowl with pasta, tomatoes and herbs,
+         warm bokeh on the right. Drawn on a 1600x900 canvas; put a navy overlay on top as in the design. -->
+    <DrawingGroup x:Key="ND.FoodDrawing">
+        <DrawingGroup.ClipGeometry><RectangleGeometry Rect="0,0,1600,900"/></DrawingGroup.ClipGeometry>
+        <GeometryDrawing>
+            <GeometryDrawing.Geometry><RectangleGeometry Rect="0,0,1600,900"/></GeometryDrawing.Geometry>
+            <GeometryDrawing.Brush>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#2A2F3C" Offset="0"/>
+                    <GradientStop Color="#33302E" Offset="0.45"/>
+                    <GradientStop Color="#1C2130" Offset="1"/>
+                </LinearGradientBrush>
+            </GeometryDrawing.Brush>
+        </GeometryDrawing>
+        <DrawingGroup>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry><EllipseGeometry Center="880,110" RadiusX="560" RadiusY="240"/></GeometryDrawing.Geometry>
+                    <GeometryDrawing.Brush>
+                        <RadialGradientBrush>
+                            <GradientStop Color="#5AC08F5A" Offset="0"/>
+                            <GradientStop Color="#2DC08F5A" Offset="0.5"/>
+                            <GradientStop Color="#00C08F5A" Offset="1"/>
+                        </RadialGradientBrush>
+                    </GeometryDrawing.Brush>
+                </GeometryDrawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry><EllipseGeometry Center="1250,250" RadiusX="420" RadiusY="260"/></GeometryDrawing.Geometry>
+                    <GeometryDrawing.Brush>
+                        <RadialGradientBrush>
+                            <GradientStop Color="#30B07A48" Offset="0"/>
+                            <GradientStop Color="#18B07A48" Offset="0.5"/>
+                            <GradientStop Color="#00B07A48" Offset="1"/>
+                        </RadialGradientBrush>
+                    </GeometryDrawing.Brush>
+                </GeometryDrawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry><EllipseGeometry Center="260,820" RadiusX="520" RadiusY="200"/></GeometryDrawing.Geometry>
+                    <GeometryDrawing.Brush>
+                        <RadialGradientBrush>
+                            <GradientStop Color="#40594438" Offset="0"/>
+                            <GradientStop Color="#20594438" Offset="0.5"/>
+                            <GradientStop Color="#00594438" Offset="1"/>
+                        </RadialGradientBrush>
+                    </GeometryDrawing.Brush>
+                </GeometryDrawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry><EllipseGeometry Center="170,120" RadiusX="300" RadiusY="230"/></GeometryDrawing.Geometry>
+                    <GeometryDrawing.Brush>
+                        <RadialGradientBrush>
+                            <GradientStop Color="#70DCD2C6" Offset="0"/>
+                            <GradientStop Color="#38DCD2C6" Offset="0.45"/>
+                            <GradientStop Color="#00DCD2C6" Offset="1"/>
+                        </RadialGradientBrush>
+                    </GeometryDrawing.Brush>
+                </GeometryDrawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry><EllipseGeometry Center="420,240" RadiusX="330" RadiusY="170"/></GeometryDrawing.Geometry>
+                    <GeometryDrawing.Brush>
+                        <RadialGradientBrush>
+                            <GradientStop Color="#8CC9A084" Offset="0"/>
+                            <GradientStop Color="#46C9A084" Offset="0.45"/>
+                            <GradientStop Color="#00C9A084" Offset="1"/>
+                        </RadialGradientBrush>
+                    </GeometryDrawing.Brush>
+                </GeometryDrawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry><EllipseGeometry Center="560,360" RadiusX="150" RadiusY="120"/></GeometryDrawing.Geometry>
+                    <GeometryDrawing.Brush>
+                        <RadialGradientBrush>
+                            <GradientStop Color="#7AC79A7C" Offset="0"/>
+                            <GradientStop Color="#3DC79A7C" Offset="0.45"/>
+                            <GradientStop Color="#00C79A7C" Offset="1"/>
+                        </RadialGradientBrush>
+                    </GeometryDrawing.Brush>
+                </GeometryDrawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry><EllipseGeometry Center="470,170" RadiusX="140" RadiusY="90"/></GeometryDrawing.Geometry>
+                    <GeometryDrawing.Brush>
+                        <RadialGradientBrush>
+                            <GradientStop Color="#5AE6C6AE" Offset="0"/>
+                            <GradientStop Color="#2DE6C6AE" Offset="0.5"/>
+                            <GradientStop Color="#00E6C6AE" Offset="1"/>
+                        </RadialGradientBrush>
+                    </GeometryDrawing.Brush>
+                </GeometryDrawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry><EllipseGeometry Center="720,720" RadiusX="600" RadiusY="170"/></GeometryDrawing.Geometry>
+                    <GeometryDrawing.Brush>
+                        <RadialGradientBrush>
+                            <GradientStop Color="#D8EEECE8" Offset="0"/>
+                            <GradientStop Color="#6CEEECE8" Offset="0.4"/>
+                            <GradientStop Color="#00EEECE8" Offset="1"/>
+                        </RadialGradientBrush>
+                    </GeometryDrawing.Brush>
+                </GeometryDrawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry><EllipseGeometry Center="720,700" RadiusX="430" RadiusY="110"/></GeometryDrawing.Geometry>
+                    <GeometryDrawing.Brush>
+                        <RadialGradientBrush>
+                            <GradientStop Color="#AAD9D4CC" Offset="0"/>
+                            <GradientStop Color="#55D9D4CC" Offset="0.45"/>
+                            <GradientStop Color="#00D9D4CC" Offset="1"/>
+                        </RadialGradientBrush>
+                    </GeometryDrawing.Brush>
+                </GeometryDrawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry><EllipseGeometry Center="700,680" RadiusX="330" RadiusY="80"/></GeometryDrawing.Geometry>
+                    <GeometryDrawing.Brush>
+                        <RadialGradientBrush>
+                            <GradientStop Color="#80857B70" Offset="0"/>
+                            <GradientStop Color="#40857B70" Offset="0.5"/>
+                            <GradientStop Color="#00857B70" Offset="1"/>
+                        </RadialGradientBrush>
+                    </GeometryDrawing.Brush>
+                </GeometryDrawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry><EllipseGeometry Center="690,630" RadiusX="250" RadiusY="120"/></GeometryDrawing.Geometry>
+                    <GeometryDrawing.Brush>
+                        <RadialGradientBrush>
+                            <GradientStop Color="#EEDDAA55" Offset="0"/>
+                            <GradientStop Color="#77DDAA55" Offset="0.45"/>
+                            <GradientStop Color="#00DDAA55" Offset="1"/>
+                        </RadialGradientBrush>
+                    </GeometryDrawing.Brush>
+                </GeometryDrawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry><EllipseGeometry Center="640,600" RadiusX="150" RadiusY="80"/></GeometryDrawing.Geometry>
+                    <GeometryDrawing.Brush>
+                        <RadialGradientBrush>
+                            <GradientStop Color="#CCF0C774" Offset="0"/>
+                            <GradientStop Color="#66F0C774" Offset="0.45"/>
+                            <GradientStop Color="#00F0C774" Offset="1"/>
+                        </RadialGradientBrush>
+                    </GeometryDrawing.Brush>
+                </GeometryDrawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry><EllipseGeometry Center="760,650" RadiusX="140" RadiusY="70"/></GeometryDrawing.Geometry>
+                    <GeometryDrawing.Brush>
+                        <RadialGradientBrush>
+                            <GradientStop Color="#C0E7B865" Offset="0"/>
+                            <GradientStop Color="#60E7B865" Offset="0.45"/>
+                            <GradientStop Color="#00E7B865" Offset="1"/>
+                        </RadialGradientBrush>
+                    </GeometryDrawing.Brush>
+                </GeometryDrawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry><EllipseGeometry Center="700,610" RadiusX="110" RadiusY="55"/></GeometryDrawing.Geometry>
+                    <GeometryDrawing.Brush>
+                        <RadialGradientBrush>
+                            <GradientStop Color="#B8FFF3D6" Offset="0"/>
+                            <GradientStop Color="#5CFFF3D6" Offset="0.4"/>
+                            <GradientStop Color="#00FFF3D6" Offset="1"/>
+                        </RadialGradientBrush>
+                    </GeometryDrawing.Brush>
+                </GeometryDrawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry><EllipseGeometry Center="590,610" RadiusX="62" RadiusY="50"/></GeometryDrawing.Geometry>
+                    <GeometryDrawing.Brush>
+                        <RadialGradientBrush>
+                            <GradientStop Color="#F2C9402C" Offset="0"/>
+                            <GradientStop Color="#79C9402C" Offset="0.5"/>
+                            <GradientStop Color="#00C9402C" Offset="1"/>
+                        </RadialGradientBrush>
+                    </GeometryDrawing.Brush>
+                </GeometryDrawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry><EllipseGeometry Center="735,585" RadiusX="58" RadiusY="46"/></GeometryDrawing.Geometry>
+                    <GeometryDrawing.Brush>
+                        <RadialGradientBrush>
+                            <GradientStop Color="#F2D24C36" Offset="0"/>
+                            <GradientStop Color="#79D24C36" Offset="0.5"/>
+                            <GradientStop Color="#00D24C36" Offset="1"/>
+                        </RadialGradientBrush>
+                    </GeometryDrawing.Brush>
+                </GeometryDrawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry><EllipseGeometry Center="555,665" RadiusX="48" RadiusY="40"/></GeometryDrawing.Geometry>
+                    <GeometryDrawing.Brush>
+                        <RadialGradientBrush>
+                            <GradientStop Color="#E6B5382A" Offset="0"/>
+                            <GradientStop Color="#73B5382A" Offset="0.5"/>
+                            <GradientStop Color="#00B5382A" Offset="1"/>
+                        </RadialGradientBrush>
+                    </GeometryDrawing.Brush>
+                </GeometryDrawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry><EllipseGeometry Center="800,625" RadiusX="44" RadiusY="36"/></GeometryDrawing.Geometry>
+                    <GeometryDrawing.Brush>
+                        <RadialGradientBrush>
+                            <GradientStop Color="#E6C8432F" Offset="0"/>
+                            <GradientStop Color="#73C8432F" Offset="0.5"/>
+                            <GradientStop Color="#00C8432F" Offset="1"/>
+                        </RadialGradientBrush>
+                    </GeometryDrawing.Brush>
+                </GeometryDrawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry><EllipseGeometry Center="640,535" RadiusX="78" RadiusY="42"/></GeometryDrawing.Geometry>
+                    <GeometryDrawing.Brush>
+                        <RadialGradientBrush>
+                            <GradientStop Color="#C0548A35" Offset="0"/>
+                            <GradientStop Color="#60548A35" Offset="0.5"/>
+                            <GradientStop Color="#00548A35" Offset="1"/>
+                        </RadialGradientBrush>
+                    </GeometryDrawing.Brush>
+                </GeometryDrawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry><EllipseGeometry Center="705,560" RadiusX="46" RadiusY="32"/></GeometryDrawing.Geometry>
+                    <GeometryDrawing.Brush>
+                        <RadialGradientBrush>
+                            <GradientStop Color="#B0699C42" Offset="0"/>
+                            <GradientStop Color="#58699C42" Offset="0.5"/>
+                            <GradientStop Color="#00699C42" Offset="1"/>
+                        </RadialGradientBrush>
+                    </GeometryDrawing.Brush>
+                </GeometryDrawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry><EllipseGeometry Center="600,560" RadiusX="34" RadiusY="26"/></GeometryDrawing.Geometry>
+                    <GeometryDrawing.Brush>
+                        <RadialGradientBrush>
+                            <GradientStop Color="#A0478030" Offset="0"/>
+                            <GradientStop Color="#50478030" Offset="0.5"/>
+                            <GradientStop Color="#00478030" Offset="1"/>
+                        </RadialGradientBrush>
+                    </GeometryDrawing.Brush>
+                </GeometryDrawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry><EllipseGeometry Center="675,505" RadiusX="30" RadiusY="40"/></GeometryDrawing.Geometry>
+                    <GeometryDrawing.Brush>
+                        <RadialGradientBrush>
+                            <GradientStop Color="#995A9040" Offset="0"/>
+                            <GradientStop Color="#4C5A9040" Offset="0.5"/>
+                            <GradientStop Color="#005A9040" Offset="1"/>
+                        </RadialGradientBrush>
+                    </GeometryDrawing.Brush>
+                </GeometryDrawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry><EllipseGeometry Center="1250,170" RadiusX="72" RadiusY="72"/></GeometryDrawing.Geometry>
+                    <GeometryDrawing.Brush>
+                        <RadialGradientBrush>
+                            <GradientStop Color="#48F2B66B" Offset="0"/>
+                            <GradientStop Color="#24F2B66B" Offset="0.7"/>
+                            <GradientStop Color="#00F2B66B" Offset="1"/>
+                        </RadialGradientBrush>
+                    </GeometryDrawing.Brush>
+                </GeometryDrawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry><EllipseGeometry Center="1405,320" RadiusX="52" RadiusY="52"/></GeometryDrawing.Geometry>
+                    <GeometryDrawing.Brush>
+                        <RadialGradientBrush>
+                            <GradientStop Color="#40F7C98A" Offset="0"/>
+                            <GradientStop Color="#20F7C98A" Offset="0.7"/>
+                            <GradientStop Color="#00F7C98A" Offset="1"/>
+                        </RadialGradientBrush>
+                    </GeometryDrawing.Brush>
+                </GeometryDrawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry><EllipseGeometry Center="1150,390" RadiusX="40" RadiusY="40"/></GeometryDrawing.Geometry>
+                    <GeometryDrawing.Brush>
+                        <RadialGradientBrush>
+                            <GradientStop Color="#38EAA868" Offset="0"/>
+                            <GradientStop Color="#1CEAA868" Offset="0.7"/>
+                            <GradientStop Color="#00EAA868" Offset="1"/>
+                        </RadialGradientBrush>
+                    </GeometryDrawing.Brush>
+                </GeometryDrawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry><EllipseGeometry Center="1500,130" RadiusX="92" RadiusY="92"/></GeometryDrawing.Geometry>
+                    <GeometryDrawing.Brush>
+                        <RadialGradientBrush>
+                            <GradientStop Color="#2EFFD9A0" Offset="0"/>
+                            <GradientStop Color="#17FFD9A0" Offset="0.7"/>
+                            <GradientStop Color="#00FFD9A0" Offset="1"/>
+                        </RadialGradientBrush>
+                    </GeometryDrawing.Brush>
+                </GeometryDrawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry><EllipseGeometry Center="1330,520" RadiusX="62" RadiusY="62"/></GeometryDrawing.Geometry>
+                    <GeometryDrawing.Brush>
+                        <RadialGradientBrush>
+                            <GradientStop Color="#2AE89B5A" Offset="0"/>
+                            <GradientStop Color="#15E89B5A" Offset="0.7"/>
+                            <GradientStop Color="#00E89B5A" Offset="1"/>
+                        </RadialGradientBrush>
+                    </GeometryDrawing.Brush>
+                </GeometryDrawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry><EllipseGeometry Center="1530,470" RadiusX="44" RadiusY="44"/></GeometryDrawing.Geometry>
+                    <GeometryDrawing.Brush>
+                        <RadialGradientBrush>
+                            <GradientStop Color="#30FFE0B0" Offset="0"/>
+                            <GradientStop Color="#18FFE0B0" Offset="0.7"/>
+                            <GradientStop Color="#00FFE0B0" Offset="1"/>
+                        </RadialGradientBrush>
+                    </GeometryDrawing.Brush>
+                </GeometryDrawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry><EllipseGeometry Center="1080,140" RadiusX="36" RadiusY="36"/></GeometryDrawing.Geometry>
+                    <GeometryDrawing.Brush>
+                        <RadialGradientBrush>
+                            <GradientStop Color="#30FFD7A0" Offset="0"/>
+                            <GradientStop Color="#18FFD7A0" Offset="0.7"/>
+                            <GradientStop Color="#00FFD7A0" Offset="1"/>
+                        </RadialGradientBrush>
+                    </GeometryDrawing.Brush>
+                </GeometryDrawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry><EllipseGeometry Center="150,110" RadiusX="280" RadiusY="170"><EllipseGeometry.Transform><RotateTransform Angle="20" CenterX="150" CenterY="110"/></EllipseGeometry.Transform></EllipseGeometry></GeometryDrawing.Geometry>
+                    <GeometryDrawing.Brush><RadialGradientBrush><GradientStop Color="#90E4DDD4" Offset="0"/><GradientStop Color="#48E4DDD4" Offset="0.55"/><GradientStop Color="#00E4DDD4" Offset="1"/></RadialGradientBrush></GeometryDrawing.Brush>
+                </GeometryDrawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry><EllipseGeometry Center="390,230" RadiusX="210" RadiusY="120"><EllipseGeometry.Transform><RotateTransform Angle="28" CenterX="390" CenterY="230"/></EllipseGeometry.Transform></EllipseGeometry></GeometryDrawing.Geometry>
+                    <GeometryDrawing.Brush><RadialGradientBrush><GradientStop Color="#B0D9AE8E" Offset="0"/><GradientStop Color="#58D9AE8E" Offset="0.55"/><GradientStop Color="#00D9AE8E" Offset="1"/></RadialGradientBrush></GeometryDrawing.Brush>
+                </GeometryDrawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry><EllipseGeometry Center="520,300" RadiusX="120" RadiusY="30"><EllipseGeometry.Transform><RotateTransform Angle="52" CenterX="520" CenterY="300"/></EllipseGeometry.Transform></EllipseGeometry></GeometryDrawing.Geometry>
+                    <GeometryDrawing.Brush><RadialGradientBrush><GradientStop Color="#B8DDB394" Offset="0"/><GradientStop Color="#5CDDB394" Offset="0.55"/><GradientStop Color="#00DDB394" Offset="1"/></RadialGradientBrush></GeometryDrawing.Brush>
+                </GeometryDrawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry><EllipseGeometry Center="545,275" RadiusX="125" RadiusY="28"><EllipseGeometry.Transform><RotateTransform Angle="42" CenterX="545" CenterY="275"/></EllipseGeometry.Transform></EllipseGeometry></GeometryDrawing.Geometry>
+                    <GeometryDrawing.Brush><RadialGradientBrush><GradientStop Color="#B8E2B898" Offset="0"/><GradientStop Color="#5CE2B898" Offset="0.55"/><GradientStop Color="#00E2B898" Offset="1"/></RadialGradientBrush></GeometryDrawing.Brush>
+                </GeometryDrawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry><EllipseGeometry Center="555,245" RadiusX="115" RadiusY="26"><EllipseGeometry.Transform><RotateTransform Angle="32" CenterX="555" CenterY="245"/></EllipseGeometry.Transform></EllipseGeometry></GeometryDrawing.Geometry>
+                    <GeometryDrawing.Brush><RadialGradientBrush><GradientStop Color="#B0E0B696" Offset="0"/><GradientStop Color="#58E0B696" Offset="0.55"/><GradientStop Color="#00E0B696" Offset="1"/></RadialGradientBrush></GeometryDrawing.Brush>
+                </GeometryDrawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry><EllipseGeometry Center="540,215" RadiusX="95" RadiusY="24"><EllipseGeometry.Transform><RotateTransform Angle="22" CenterX="540" CenterY="215"/></EllipseGeometry.Transform></EllipseGeometry></GeometryDrawing.Geometry>
+                    <GeometryDrawing.Brush><RadialGradientBrush><GradientStop Color="#A8DCB292" Offset="0"/><GradientStop Color="#54DCB292" Offset="0.55"/><GradientStop Color="#00DCB292" Offset="1"/></RadialGradientBrush></GeometryDrawing.Brush>
+                </GeometryDrawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry><EllipseGeometry Center="600,395" RadiusX="60" RadiusY="24"><EllipseGeometry.Transform><RotateTransform Angle="62" CenterX="600" CenterY="395"/></EllipseGeometry.Transform></EllipseGeometry></GeometryDrawing.Geometry>
+                    <GeometryDrawing.Brush><RadialGradientBrush><GradientStop Color="#B0D8AC8C" Offset="0"/><GradientStop Color="#58D8AC8C" Offset="0.55"/><GradientStop Color="#00D8AC8C" Offset="1"/></RadialGradientBrush></GeometryDrawing.Brush>
+                </GeometryDrawing>
+        </DrawingGroup>
+        <!-- vignette -->
+        <GeometryDrawing>
+            <GeometryDrawing.Geometry><RectangleGeometry Rect="0,0,1600,900"/></GeometryDrawing.Geometry>
+            <GeometryDrawing.Brush>
+                <RadialGradientBrush Center="0.45,0.5" GradientOrigin="0.45,0.5" RadiusX="0.75" RadiusY="0.8">
+                    <GradientStop Color="#00121826" Offset="0.45"/>
+                    <GradientStop Color="#B3121826" Offset="1"/>
+                </RadialGradientBrush>
+            </GeometryDrawing.Brush>
+        </GeometryDrawing>
+    </DrawingGroup>
+
+    <!-- Full-screen backdrop (Select Employee) -->
+    <DrawingBrush x:Key="ND.FoodBackdrop" Drawing="{StaticResource ND.FoodDrawing}" Stretch="UniformToFill" Viewbox="0,0,1600,900" ViewboxUnits="Absolute"
+                  AlignmentX="Left" AlignmentY="Center"/>
+    <!-- Close-up on the bowl and hand (Manage Register hero) -->
+    <DrawingBrush x:Key="ND.FoodHero" Drawing="{StaticResource ND.FoodDrawing}" Stretch="UniformToFill"
+                  Viewbox="250,150,800,620" ViewboxUnits="Absolute"/>
+
+    <!-- ===================== POS options (PDF page 4) ===================== -->
+    <Geometry x:Key="ND.Icon.Percent">M19,5 L5,19 M6.5,9 A2.5,2.5 0 1 0 6.5,4 A2.5,2.5 0 1 0 6.5,9 Z M17.5,20 A2.5,2.5 0 1 0 17.5,15 A2.5,2.5 0 1 0 17.5,20 Z</Geometry>
+    <Geometry x:Key="ND.Icon.Tag">M3,12 V4 A1,1 0 0 1 4,3 H12 L21,12 L12,21 Z M7.5,9 A1.5,1.5 0 1 0 7.5,6 A1.5,1.5 0 1 0 7.5,9 Z</Geometry>
+    <Geometry x:Key="ND.Icon.History">M3.5,12 A8.5,8.5 0 1 0 6,6 M3,3.5 V8.5 H8 M12,7.5 V12 L15,14</Geometry>
+    <Geometry x:Key="ND.Icon.Pause">M9,5 V19 M15,5 V19</Geometry>
+    <Geometry x:Key="ND.Icon.Cash">M2,6 H22 V18 H2 Z M12,15 A3,3 0 1 0 12,9 A3,3 0 1 0 12,15 Z M5.5,9 V15 M18.5,9 V15</Geometry>
+    <Geometry x:Key="ND.Icon.Card">M2,5 H22 V19 H2 Z M2,10 H22 M6,15 H10</Geometry>
+    <Geometry x:Key="ND.Icon.Plus">M12,4 V20 M4,12 H20</Geometry>
+    <Geometry x:Key="ND.Icon.Minus">M4,12 H20</Geometry>
+    <Geometry x:Key="ND.Icon.Refresh">M20,12 A8,8 0 1 1 17.6,6.3 M20,3 V8 H15</Geometry>
+    <Geometry x:Key="ND.Icon.Help">M12,21 A9,9 0 1 0 12,3 A9,9 0 1 0 12,21 Z M9.5,9.5 A2.5,2.5 0 1 1 13,11.8 C12.3,12.2 12,12.7 12,13.5 M12,17 V17.3</Geometry>
+    <Geometry x:Key="ND.Icon.Wallet">M3,7 H20 V20 H3 Z M3,7 L15,3 V7 M15,13.5 H20</Geometry>
+    <Geometry x:Key="ND.Icon.Trash">M4,6 H20 M9,6 V4 H15 V6 M6,6 L7,21 H17 L18,6 M10,10 V17 M14,10 V17</Geometry>
+    <Geometry x:Key="ND.Icon.Sliders">M4,6 H20 M4,12 H20 M4,18 H20 M8,4 V8 M15,10 V14 M10,16 V20</Geometry>
+    <Geometry x:Key="ND.Icon.List">M9,6 H20 M9,12 H20 M9,18 H20 M4.5,6 H5 M4.5,12 H5 M4.5,18 H5</Geometry>
+    <Geometry x:Key="ND.Icon.Check">M5,12.5 L10,17.5 L19.5,7</Geometry>
+    <Geometry x:Key="ND.Icon.Send">M3,11 L21,3 L13,21 L11,13 Z M11,13 L21,3</Geometry>
+
+    <!-- Fallback icon for a function tile; POSControl sets a per-button "ND.TileIcon" resource -->
+    <Geometry x:Key="ND.TileIcon">M3,3 H10 V10 H3 Z M14,3 H21 V10 H14 Z M3,14 H10 V21 H3 Z M14,14 H21 V21 H14 Z</Geometry>
+
+    <!-- Function tile: light card, icon above the label (the label is the button's TextBlock content) -->
+    <Style x:Key="ND.PosOptionTile" TargetType="{x:Type Button}">
+        <Style.Resources>
+            <Style TargetType="{x:Type TextBlock}"/>
+        </Style.Resources>
+        <Setter Property="Background" Value="#EEF2F7"/>
+        <Setter Property="Foreground" Value="{StaticResource ND.TextDark}"/>
+        <Setter Property="FontFamily" Value="{StaticResource ND.Font.Medium}"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="8" SnapsToDevicePixels="True" Padding="6,8,6,6">
+                        <StackPanel VerticalAlignment="Center">
+                            <Path Data="{DynamicResource ND.TileIcon}" Style="{StaticResource ND.IconPath}"
+                                  Stroke="{TemplateBinding Foreground}" Width="21" Height="21" Margin="0,0,0,7"/>
+                            <ContentPresenter HorizontalAlignment="Center">
+                                <ContentPresenter.Resources><Style TargetType="{x:Type TextBlock}"/></ContentPresenter.Resources>
+                            </ContentPresenter>
+                        </StackPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="#E3E9F2"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="{StaticResource ND.KeyPressed}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="bd" Property="Opacity" Value="0.5"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Red outlined full-width action (Clear Order) -->
+    <Style x:Key="ND.DangerOutlineButton" TargetType="{x:Type Button}">
+        <Style.Resources>
+            <Style TargetType="{x:Type TextBlock}"/>
+        </Style.Resources>
+        <Setter Property="Background" Value="#FFFFFF"/>
+        <Setter Property="Foreground" Value="#C0392B"/>
+        <Setter Property="BorderBrush" Value="#C0392B"/>
+        <Setter Property="FontFamily" Value="{StaticResource ND.Font.SemiBold}"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1.2" CornerRadius="10">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <ContentPresenter.Resources><Style TargetType="{x:Type TextBlock}"/></ContentPresenter.Resources>
+                        </ContentPresenter>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="#FDF0EE"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="#F9DEDA"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Navy outlined button on light backgrounds ("POS options" opener) -->
+    <Style x:Key="ND.OutlineNavyButton" TargetType="{x:Type Button}">
+        <Style.Resources>
+            <Style TargetType="{x:Type TextBlock}"/>
+        </Style.Resources>
+        <Setter Property="Background" Value="#FFFFFF"/>
+        <Setter Property="Foreground" Value="{StaticResource ND.TextDark}"/>
+        <Setter Property="FontFamily" Value="{StaticResource ND.Font.Medium}"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="bd" Background="{TemplateBinding Background}" BorderBrush="{StaticResource ND.Navy}" BorderThickness="1.5" CornerRadius="8" Padding="16,0">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <ContentPresenter.Resources><Style TargetType="{x:Type TextBlock}"/></ContentPresenter.Resources>
+                        </ContentPresenter>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="#EEF2F7"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="{StaticResource ND.KeyBg}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Plain X close button for light modals -->
+    <Style x:Key="ND.ModalCloseButton" TargetType="{x:Type Button}">
+        <Setter Property="Width" Value="34"/>
+        <Setter Property="Height" Value="34"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="8">
+                        <Path Data="{StaticResource ND.Icon.Close}" Style="{StaticResource ND.IconPath}" Stroke="{StaticResource ND.TextDark}" StrokeThickness="1.8" Width="13" Height="13"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="#EEF2F7"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Text toggle used for "More functions" in the POS options modal -->
+    <Style x:Key="ND.LinkToggle" TargetType="{x:Type ToggleButton}">
+        <Setter Property="Foreground" Value="{StaticResource ND.TextBody}"/>
+        <Setter Property="FontFamily" Value="{StaticResource ND.Font.Medium}"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <StackPanel Orientation="Horizontal" Background="Transparent">
+                        <ContentPresenter VerticalAlignment="Center">
+                            <ContentPresenter.Resources><Style TargetType="{x:Type TextBlock}"/></ContentPresenter.Resources>
+                        </ContentPresenter>
+                        <Path x:Name="chev" Data="{StaticResource ND.Icon.ChevronDown}" Style="{StaticResource ND.IconPath}" Stroke="{TemplateBinding Foreground}"
+                              Width="10" Height="6" Margin="7,1,0,0" RenderTransformOrigin="0.5,0.5"/>
+                    </StackPanel>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="chev" Property="RenderTransform">
+                                <Setter.Value><RotateTransform Angle="180"/></Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!-- White card used for POS category / product tiles (applied from code) -->
+    <ControlTemplate x:Key="ND.PosCardTemplate" TargetType="{x:Type Button}">
+        <Border x:Name="bd" Margin="3" Background="{TemplateBinding Background}" CornerRadius="10"
+                BorderBrush="#E1E7EF" BorderThickness="1" SnapsToDevicePixels="True">
+            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                <ContentPresenter.Resources><Style TargetType="{x:Type TextBlock}"/></ContentPresenter.Resources>
+            </ContentPresenter>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="bd" Property="BorderBrush" Value="#C3CDDB"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter TargetName="bd" Property="Background" Value="#EEF2F7"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    <!-- Navy Pay button (POS) -->
+    <Style x:Key="ND.PayButton" TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="{StaticResource ND.NavyButton}"/>
+        <Setter Property="Foreground" Value="#FFFFFF"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="10" Padding="14,0">
+                        <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="#3C4769"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="{StaticResource ND.NavyPressed}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="bd" Property="Opacity" Value="0.55"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!-- Login photo (chef plating pasta). Viewbox crops the navy band at the top of the source image. -->
+    <BitmapImage x:Key="ND.LoginPhotoSource" UriSource="/Resources/Images/LoginBackground.jpg"/>
+    <ImageBrush x:Key="ND.LoginPhoto" ImageSource="{StaticResource ND.LoginPhotoSource}" Stretch="UniformToFill"
+                AlignmentX="Left" AlignmentY="Center" Viewbox="0,0.035,1,0.965" ViewboxUnits="RelativeToBoundingBox"/>
+    <!-- Close-up on hand + plate for the Manage Register hero -->
+    <ImageBrush x:Key="ND.LoginPhotoHero" ImageSource="{StaticResource ND.LoginPhotoSource}" Stretch="UniformToFill"
+                Viewbox="0.05,0.05,0.72,0.9" ViewboxUnits="RelativeToBoundingBox"/>
+</ResourceDictionary>
