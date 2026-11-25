@@ -5,57 +5,13 @@
         xmlns:cc="clr-namespace:OfflineRetailV2.Controls"
         xmlns:prop="clr-namespace:OfflineRetailV2.Properties"
         xmlns:uc="clr-namespace:OfflineRetailV2.UserControls"
-        xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+        xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"  
         xmlns:dxn="http://schemas.devexpress.com/winfx/2008/xaml/navbar"
         xmlns:dxdo="http://schemas.devexpress.com/winfx/2008/xaml/docking"
         xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
         Title="XEPOS Retail 2024"   Height="768" Width="1024" FontFamily="{StaticResource OSRegular}"
-        WindowStartupLocation="CenterScreen" Background="#26324F" MinHeight="768" MinWidth="1024" Loaded="Window_Loaded" Closing="Window_Closing">
+        WindowStartupLocation="CenterScreen" Background="#292F41" MinHeight="768" MinWidth="1024" Loaded="Window_Loaded" Closing="Window_Closing">
     <!--WindowStyle="None" AllowsTransparency="True" WindowState="Maximized" MinHeight="768" MinWidth="1024"-->
-
-    <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Resources/NewDesignStyles.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-
-            <!-- Header info (user / till / time) is hidden while the login screen is showing -->
-            <Style x:Key="ND.HideOnLogin" TargetType="{x:Type StackPanel}">
-                <Style.Triggers>
-                    <DataTrigger Binding="{Binding Visibility, ElementName=LoginGrid}" Value="Visible">
-                        <Setter Property="Visibility" Value="Collapsed"/>
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
-            <Style x:Key="ND.HeaderText" TargetType="{x:Type TextBlock}">
-                <Setter Property="Foreground" Value="#FFFFFF"/>
-                <Setter Property="FontFamily" Value="{StaticResource ND.Font.Medium}"/>
-                <Setter Property="FontSize" Value="13"/>
-                <Setter Property="VerticalAlignment" Value="Center"/>
-                <Setter Property="Margin" Value="0,0,18,0"/>
-            </Style>
-            <Style x:Key="ND.SupportTitle" TargetType="{x:Type TextBlock}">
-                <Setter Property="FontFamily" Value="{StaticResource ND.Font.SemiBold}"/>
-                <Setter Property="FontSize" Value="14"/>
-                <Setter Property="Foreground" Value="{StaticResource ND.TextDark}"/>
-                <Setter Property="Margin" Value="10,0,0,0"/>
-                <Setter Property="VerticalAlignment" Value="Center"/>
-            </Style>
-            <Style x:Key="ND.SupportText" TargetType="{x:Type TextBlock}">
-                <Setter Property="FontFamily" Value="{StaticResource ND.Font.Medium}"/>
-                <Setter Property="FontSize" Value="12"/>
-                <Setter Property="Foreground" Value="{StaticResource ND.TextBody}"/>
-                <Setter Property="TextWrapping" Value="Wrap"/>
-                <Setter Property="LineHeight" Value="18"/>
-            </Style>
-            <Style x:Key="ND.SupportNumber" TargetType="{x:Type TextBlock}">
-                <Setter Property="FontFamily" Value="{StaticResource ND.Font.SemiBold}"/>
-                <Setter Property="FontSize" Value="18"/>
-                <Setter Property="Foreground" Value="{StaticResource ND.TextDark}"/>
-                <Setter Property="Margin" Value="0,4,0,0"/>
-            </Style>
-        </ResourceDictionary>
-    </Window.Resources>
 
     <Grid Margin="-5" x:Name="Grid">
         <Grid.RowDefinitions>
@@ -64,32 +20,37 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- ===================== Header ===================== -->
-        <Border Background="{StaticResource ND.Navy}" Height="55" BorderBrush="#33FFFFFF" BorderThickness="0,0,0,1">
-            <Grid Margin="18,0,6,0" VerticalAlignment="Center">
+        <Border Background="#323749">
+            <Grid Margin="15,0,5,0" VerticalAlignment="Center">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="15" />
                     <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="15"/>
                     <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="15"/>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="15"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="15"/>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="9"/>
+                    <ColumnDefinition Width="Auto" MinWidth="27"/>
                 </Grid.ColumnDefinitions>
-
-                <!-- Logo, page title, cloud status pill -->
                 <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-                    <Image Width="35.56" Height="27" Source="{StaticResource Logo}" VerticalAlignment="Center"/>
-                    <TextBlock Text="XEPOS" Margin="12,0,0,0" FontFamily="{StaticResource ND.Font.Bold}" FontSize="15" Foreground="#FFFFFF" VerticalAlignment="Center"/>
-                    <TextBlock x:Name="txtHeaderPageTitle" Text="|  Select Employee" Margin="10,0,0,0" FontFamily="{StaticResource ND.Font.Medium}" FontSize="15"
-                               Foreground="#FFFFFF" VerticalAlignment="Center" Visibility="{Binding Visibility, ElementName=LoginGrid}"/>
+                    <Image Width="35.56" Height="27"
+                        Source="{StaticResource Logo}" VerticalAlignment="Center"/>
                     <Border x:Name="pnlCloudSyncStatus"
                             Visibility="Collapsed"
-                            Background="#1AFFFFFF"
-                            BorderBrush="#80FFFFFF"
+                            Background="#2D64C0D9"
+                            BorderBrush="#64C0D9"
                             BorderThickness="1"
-                            Height="28"
-                            CornerRadius="14"
-                            Padding="10,0"
-                            Margin="12,0,0,0"
+                            Height="27"
+                            CornerRadius="13"
+                            Padding="8,0"
+                            Margin="8,0,0,0"
                             VerticalAlignment="Center"
                             IsHitTestVisible="False"
                             Focusable="False"
@@ -100,20 +61,19 @@
                                   Width="14"
                                   Height="10"
                                   Stretch="Uniform"
-                                  Margin="0,0,6,0"
+                                  Margin="0,0,5,0"
                                   VerticalAlignment="Center"
                                   Fill="White"
                                   Data="M 2,8 C 0.5,8 0,7 0,5.5 C 0,4 1,2.5 2.5,2 C 3,0.5 4.5,0 6.5,0 C 8.8,0 10.5,1.5 11,3.5 C 12.5,4 13.5,5.5 13.5,7.5 C 13.5,9.5 11.5,10.5 9.5,10.5 L 2,10.5 Z"/>
                             <Ellipse x:Name="cloudSyncStatusDot"
                                      Width="7"
                                      Height="7"
-                                     Fill="#9CA3AF"
-                                     Margin="0,0,6,0"
+                                     Fill="#4F9DAD"
+                                     Margin="0,0,5,0"
                                      VerticalAlignment="Center"/>
                             <TextBlock x:Name="txtCloudSyncStatus"
                                        Text="Connected"
                                        FontSize="13"
-                                       FontFamily="{StaticResource ND.Font.Medium}"
                                        Foreground="White"
                                        VerticalAlignment="Center"
                                        TextTrimming="CharacterEllipsis"/>
@@ -126,241 +86,370 @@
                                Margin="8,0,0,0"
                                Visibility="Collapsed"/>
                 </StackPanel>
-
-                <cc:CustomTextBox Grid.Column="1" HorizontalAlignment="Left" Height="27" BorderThickness="0" Background="#2D64C0D9" CornerRadius="15" Margin="15,0,0,0"
+                <cc:CustomTextBox Grid.Column="2" HorizontalAlignment="Left" Height="27" BorderThickness="0" Background="#2D64C0D9" CornerRadius="15"
                                   InfoText="Find Customer" FontSize="14" Icon="{StaticResource Search}" Visibility="Hidden" x:Name="SearchMemberTextBox" />
-                <Button Grid.Column="1" HorizontalAlignment="Right" Margin="0,0,15,0" Style="{DynamicResource FrontOffice}" Width="130" Height="27" Content="FRONT OFFICE" Visibility="Hidden" x:Name="btnFrontOffice" ></Button>
-
-                <!-- Signed-in information (shown after login) -->
-                <StackPanel Grid.Column="2" Orientation="Horizontal" x:Name="pnlHeaderInfo" Style="{StaticResource ND.HideOnLogin}">
-                    <TextBlock Foreground="#64C0D9" FontSize="12" x:Name="SoftwareNameTextBlock" VerticalAlignment="Center" Margin="0,0,18,0"
-                               FontFamily="{StaticResource ND.Font.Regular}" Text="XEPOS Retail 2000 - Demo Version"/>
-                    <TextBlock x:Name="LoggedInUserTextBlock" Style="{StaticResource ND.HeaderText}" Text="{x:Static prop:Resources.NoLoggedInUser}"/>
-                    <TextBlock x:Name="TillTextBlock" Style="{StaticResource ND.HeaderText}" Text="{x:Static prop:Resources.Till}"/>
-                    <TextBlock x:Name="TimeTextBlock" Style="{StaticResource ND.HeaderText}" Text="13:59"/>
-                    <TextBlock x:Name="DateTextBlock" Style="{StaticResource ND.HeaderText}" Text=""/>
-                    <Image x:Name="btnFullScreen" Width="24" Height="24" Source="{StaticResource FullScreenOut}" Stretch="UniformToFill"
-                           Cursor="Hand" VerticalAlignment="Center" MouseLeftButtonUp="BtnFullScreen_MouseLeftButtonUp"/>
-                </StackPanel>
-
-                <!-- Login navigation (new design) - only while the login screen is showing -->
-                <StackPanel Grid.Column="3" Orientation="Horizontal" x:Name="pnlLoginNav" VerticalAlignment="Center"
-                            Visibility="{Binding Visibility, ElementName=LoginGrid}">
-                    <RadioButton x:Name="rbNavAdmin" GroupName="LoginNav" Style="{StaticResource ND.NavRadio}" Checked="RbNavAdmin_Checked">
-                        <StackPanel Orientation="Horizontal">
-                            <Path Data="{StaticResource ND.Icon.Person}" Style="{StaticResource ND.IconPath}" Width="13" Height="15"
-                                  Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}"/>
-                            <TextBlock Text="Admin" Margin="8,0,0,0" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </RadioButton>
-                    <RadioButton x:Name="rbNavOrdering" GroupName="LoginNav" Style="{StaticResource ND.NavRadio}" Checked="RbNavOrdering_Checked">
-                        <StackPanel Orientation="Horizontal">
-                            <Path Data="{StaticResource ND.Icon.Cart}" Style="{StaticResource ND.IconPath}" Width="15" Height="15"
-                                  Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}"/>
-                            <TextBlock Text="Ordering" Margin="8,0,0,0" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </RadioButton>
-                    <RadioButton x:Name="rbNavRegister" GroupName="LoginNav" Style="{StaticResource ND.NavRadio}" Checked="RbNavRegister_Checked">
-                        <StackPanel Orientation="Horizontal">
-                            <Path Data="{StaticResource ND.Icon.Layers}" Style="{StaticResource ND.IconPath}" Width="15" Height="15"
-                                  Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}"/>
-                            <TextBlock Text="Manage Register" Margin="8,0,0,0" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </RadioButton>
-                    <Button x:Name="btnModule_T" Style="{StaticResource ND.NavButton}" Click="btnModule_T_Click">
-                        <StackPanel Orientation="Horizontal">
-                            <Path Data="{StaticResource ND.Icon.Headset}" Style="{StaticResource ND.IconPath}" Width="15" Height="15"
-                                  Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
-                            <TextBlock Text="Technical Support" Margin="8,0,0,0" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
-                    <Button x:Name="btnLoginExit" Style="{StaticResource ND.HeaderIconButton}" Click="ExitButton_Click" ToolTip="{x:Static prop:Resources.ExitSoftware}">
-                        <Path Data="{StaticResource ND.Icon.Close}" Style="{StaticResource ND.IconPath}" Stroke="#FFFFFF" StrokeThickness="2" Width="14" Height="14"/>
-                    </Button>
-                </StackPanel>
-
-
-                <!-- ===================== Technical Support popup ===================== -->
-                <Popup x:Name="popupTooltip" AllowsTransparency="True" PlacementTarget="{Binding ElementName=pnlLoginNav}" Placement="Bottom"
-                       VerticalOffset="4" Width="572" StaysOpen="False" Opened="PopupTooltip_Opened" Closed="PopupTooltip_Closed">
-                    <Border Background="#FFFFFF" CornerRadius="10" Margin="8,0,8,12" Padding="20,18,20,20" Effect="{StaticResource ND.Shadow}">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="20"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="20"/>
-                                <ColumnDefinition Width="1.15*"/>
-                            </Grid.ColumnDefinitions>
-
-                            <!-- Live chat -->
-                            <StackPanel Grid.Column="0">
-                                <StackPanel Orientation="Horizontal">
-                                    <Path Data="{StaticResource ND.Icon.Grid}" Style="{StaticResource ND.IconPath}" Stroke="{StaticResource ND.Blue}" Width="18" Height="18"/>
-                                    <TextBlock Text="Live Chat" Style="{StaticResource ND.SupportTitle}"/>
-                                </StackPanel>
-                                <TextBlock Text="To speak to us online please click below to open our live chat" Style="{StaticResource ND.SupportText}" Margin="0,10,0,16"/>
-                                <Button Style="{StaticResource ND.PrimaryButton}" HorizontalAlignment="Left" Height="40" Width="130" FontSize="13" Click="Button_Click_3">
-                                    <StackPanel Orientation="Horizontal">
-                                        <Path Data="{StaticResource ND.Icon.Person}" Style="{StaticResource ND.IconPath}" Stroke="{StaticResource ND.Blue}" Width="11" Height="13"/>
-                                        <TextBlock Text="Live Chat" Margin="8,0,0,0" VerticalAlignment="Center"/>
-                                    </StackPanel>
-                                </Button>
-                            </StackPanel>
-
-                            <!-- Telephone -->
-                            <StackPanel Grid.Column="2">
-                                <StackPanel Orientation="Horizontal">
-                                    <Path Data="{StaticResource ND.Icon.Grid}" Style="{StaticResource ND.IconPath}" Stroke="{StaticResource ND.Blue}" Width="18" Height="18"/>
-                                    <TextBlock Text="Telephone" Style="{StaticResource ND.SupportTitle}"/>
-                                </StackPanel>
-                                <TextBlock Text="Call our Technical Support team on" Style="{StaticResource ND.SupportText}" Margin="0,10,0,0"/>
-                                <TextBlock Text="0121 387 0007" Style="{StaticResource ND.SupportNumber}"/>
-                            </StackPanel>
-
-                            <!-- WhatsApp -->
-                            <StackPanel Grid.Column="4">
-                                <StackPanel Orientation="Horizontal">
-                                    <Path Data="{StaticResource ND.Icon.Grid}" Style="{StaticResource ND.IconPath}" Stroke="{StaticResource ND.Blue}" Width="18" Height="18"/>
-                                    <TextBlock Text="WhatsApp" Style="{StaticResource ND.SupportTitle}"/>
-                                </StackPanel>
-                                <TextBlock Text="WhatsApp us on" Style="{StaticResource ND.SupportText}" Margin="0,10,0,0"/>
-                                <TextBlock Text="01213 870 007" Style="{StaticResource ND.SupportNumber}"/>
-                                <TextBlock Text="Or scan the QR code below" Style="{StaticResource ND.SupportText}" Margin="0,12,0,8"/>
-                                <!-- QR code with corner brackets -->
-                                <Grid Width="132" Height="132" HorizontalAlignment="Left">
-                                    <Path Stroke="{StaticResource ND.NavyButton}" StrokeThickness="3" Data="M0,22 V0 H22 M110,0 H132 V22 M132,110 V132 H110 M22,132 H0 V110"/>
-                                    <Image Source="{DynamicResource qrcode}" Margin="8"/>
-                                </Grid>
-                            </StackPanel>
-                        </Grid>
-                    </Border>
-                </Popup>
+                <Button Grid.Column="2" HorizontalAlignment="Right" Style="{DynamicResource FrontOffice}" Width="130" Height="27" Content="FRONT OFFICE" Visibility="Hidden" x:Name="btnFrontOffice" ></Button>
+                <TextBlock Grid.Column="4" Foreground="#64C0D9" FontSize="12" x:Name="SoftwareNameTextBlock" VerticalAlignment="Center"
+                    Text="XEPOS Retail 2000 - Demo Version"/>
+                <TextBlock Grid.Column="6" FontSize="13" x:Name="LoggedInUserTextBlock" VerticalAlignment="Center"
+                    Text="{x:Static prop:Resources.NoLoggedInUser}" Style="{DynamicResource DefaultText}"/>
+                <TextBlock Grid.Column="8" FontSize="13" x:Name="TillTextBlock" VerticalAlignment="Center"
+                    Text="{x:Static prop:Resources.Till}" Style="{DynamicResource DefaultText}"/>
+                <TextBlock Grid.Column="10" FontSize="13" x:Name="TimeTextBlock" VerticalAlignment="Center"
+                    Text="13:59" Style="{DynamicResource DefaultText}"/>
+                <TextBlock Grid.Column="12" FontSize="13" x:Name="DateTextBlock" VerticalAlignment="Center" 
+                    Text=""   Style="{DynamicResource DefaultText}"/>
+                <Image x:Name="btnFullScreen" Grid.Column="14" Width="27" Height="27" Source="{StaticResource FullScreenOut}" Stretch="UniformToFill" MouseLeftButtonUp="BtnFullScreen_MouseLeftButtonUp"></Image>
             </Grid>
         </Border>
         <!--<Ellipse VerticalAlignment="Top" HorizontalAlignment="Right" Fill="#49AC3D" Width="10.08" Height="10.08" Margin="3,0,3,0"/>-->
 
-        <Grid Grid.Row="2" Visibility="Visible" x:Name="LoginGrid" Background="{StaticResource ND.Navy}">
+        <Grid Grid.Row="2" Visibility="Visible" x:Name="LoginGrid" >
+            <Grid Grid.Row="1" VerticalAlignment="top" HorizontalAlignment="Right" Background="Transparent" Margin="0,30,10,0">
+                <Button Margin="5,0"  x:Name="btnModule_T" Style="{DynamicResource ModuleButtonT}" Height="45" Click="btnModule_T_Click" Content="Technical Support" Width="150" FontFamily="{StaticResource OSRegular}" ></Button>
+                <Popup  Grid.Column="0" Grid.ColumnSpan="4" x:Name="popupTooltip" AllowsTransparency="True"  PlacementTarget="{Binding btnModule_T}" Placement="Bottom" HorizontalOffset="70"  VerticalOffset="-7" HorizontalAlignment="Right" Width="570" Height="300" StaysOpen="False">
 
-            <!-- ===================== Select Employee (new design) ===================== -->
-            <Border VerticalAlignment="Stretch" HorizontalAlignment="Stretch" x:Name="LoginBorder" Visibility="Collapsed" BorderThickness="0" SizeChanged="LoginBorder_SizeChanged"
-                    Background="{StaticResource ND.Navy}" ClipToBounds="True">
-                <Grid>
-                    <!-- Photo background with navy overlay -->
-                    <Rectangle Fill="{StaticResource ND.LoginPhoto}"/>
-                    <Rectangle>
-                        <Rectangle.Fill>
-                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                <GradientStop Color="#8026324F" Offset="0"/>
-                                <GradientStop Color="#3326324F" Offset="0.6"/>
-                                <GradientStop Color="#1A26324F" Offset="1"/>
-                            </LinearGradientBrush>
-                        </Rectangle.Fill>
-                    </Rectangle>
+                    <Border Background="Transparent"  Panel.ZIndex="1" ClipToBounds="False">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="6"></RowDefinition>
+                                <RowDefinition Height="*"></RowDefinition>
+                            </Grid.RowDefinitions>
 
-                    <!-- Design canvas: laid out at the PDF's 1024 x 712 (below the header) and scaled to the
-                         screen height by MainWindow (LoginBorder_SizeChanged). Width stretches so the keypad
-                         stays on the right edge on wide screens. -->
-                    <Grid x:Name="LoginCanvas" Width="1024" Height="712" HorizontalAlignment="Left" VerticalAlignment="Top">
-
-                        <!-- Bottom wave with orange accent lines (traced from the PDF) -->
-                        <Viewbox Stretch="Fill" VerticalAlignment="Bottom" Height="112" IsHitTestVisible="False">
-                            <Canvas Width="1024" Height="112">
-                                <Path Fill="{StaticResource ND.Navy}"
-                                      Data="M0,28 C21.3,26.7 85.3,18.7 128,20 C170.7,21.3 218.7,31.8 256,36 C293.3,40.2 320.0,45.5 352,45 C384.0,44.5 410.7,40.0 448,33 C485.3,26.0 538.7,8.3 576,3 C613.3,-2.3 640.0,0.2 672,1 C704.0,1.8 730.7,4.7 768,8 C805.3,11.3 864.0,19.8 896,21 C928.0,22.2 938.7,17.8 960,15 C981.3,12.2 1013.3,5.8 1024,4 L1024,112 L0,112 Z"/>
-                                <Path Stroke="{StaticResource ND.Orange}" StrokeThickness="2"
-                                      Data="M0,68 C21.3,66.7 96.0,61.3 128,60 C160.0,58.7 154.7,59.0 192,60 C229.3,61.0 309.3,65.7 352,66 C394.7,66.3 410.7,66.3 448,62 C485.3,57.7 538.7,44.2 576,40 C613.3,35.8 640.0,36.5 672,37 C704.0,37.5 730.7,40.5 768,43 C805.3,45.5 864.0,50.2 896,52 C928.0,53.8 938.7,55.3 960,54 C981.3,52.7 1013.3,45.7 1024,44"/>
-                                <Path Stroke="{StaticResource ND.Orange}" StrokeThickness="1" Opacity="0.75"
-                                      Data="M0,75 C21.3,73.7 96.0,68.3 128,67 C160.0,65.7 154.7,66.0 192,67 C229.3,68.0 309.3,72.7 352,73 C394.7,73.3 410.7,73.3 448,69 C485.3,64.7 538.7,51.2 576,47 C613.3,42.8 640.0,43.5 672,44 C704.0,44.5 730.7,47.5 768,50 C805.3,52.5 864.0,57.2 896,59 C928.0,60.8 938.7,62.3 960,61 C981.3,59.7 1013.3,52.7 1024,51"/>
+                            <Canvas Margin="450,0,0,0" >
+                                <Polygon Points="2,8 6,2 10,8"
+Fill="White"
+Stroke="White"
+StrokeThickness="1"/>
                             </Canvas>
-                        </Viewbox>
 
-                        <!-- Welcome text (PDF: x 46, "WELCOME" centre y 181, title cap centre y 242) -->
-                        <StackPanel Margin="46,172,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
-                            <TextBlock Text="WELCOME TO XEPOS" FontFamily="{StaticResource ND.Font.SemiBold}" FontSize="11.5" Foreground="#FFFFFF"/>
-                            <Rectangle Width="42" Height="3" Fill="{StaticResource ND.Orange}" HorizontalAlignment="Left" Margin="0,9,0,16" RadiusX="1.5" RadiusY="1.5"/>
-                            <TextBlock Text="Select Employee" FontFamily="{StaticResource ND.Font.Bold}" FontSize="34" Foreground="#FFFFFF"/>
-                            <TextBlock Text="Choose your user account to continue." FontFamily="{StaticResource ND.Font.Medium}" FontSize="14" Foreground="#FFFFFF" Margin="0,4,0,0"/>
-                        </StackPanel>
+                            <Border Grid.Row="1" Background="White" BorderBrush="White" CornerRadius="10" BorderThickness="1" ClipToBounds="False"  >
+                                <Grid Margin="10,10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"></ColumnDefinition>
+                                        <ColumnDefinition Width="20"></ColumnDefinition>
+                                        <ColumnDefinition Width="*"></ColumnDefinition>
+                                        <ColumnDefinition Width="20"></ColumnDefinition>
+                                        <ColumnDefinition Width="1.3*"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid Grid.Column="0">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"></RowDefinition>
+                                            <RowDefinition Height="7"></RowDefinition>
+                                            <RowDefinition Height="Auto"></RowDefinition>
+                                            <RowDefinition Height="15"></RowDefinition>
+                                            <RowDefinition Height="Auto"></RowDefinition>
+                                        </Grid.RowDefinitions>
+                                        <Grid Grid.Row="0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                            </Grid.ColumnDefinitions>
+                                            <Image Margin="0,0,10,0" Source="{DynamicResource 4square}" Width="20" Height="20"></Image>
+                                            <TextBlock Grid.Column="1" Text="Live Chat" FontFamily="{StaticResource OSRegular}" FontSize="13" Foreground="#3db6eb"></TextBlock>
 
-                        <!-- Employee carousel (PDF: arrows x 38 / 586, cards 142x165 from x 99, y 333) -->
-                        <Grid Margin="38,325,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+
+
+                                        </Grid>
+
+
+                                        <TextBlock Grid.Row="2" Text="To speak to us online please click below to open our live chat" TextWrapping="Wrap" FontFamily="{StaticResource OSRegular}" FontSize="12" Foreground="#686868"></TextBlock>
+
+                                        <Button Grid.Row="4" FontFamily="{StaticResource OSRegular}" Style="{DynamicResource LiveChatButton}" HorizontalAlignment="Left" Height="40" Width="130" Click="Button_Click_3"></Button>
+                                    </Grid>
+
+
+
+
+
+
+                                    <Grid Grid.Column="2">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"></RowDefinition>
+                                            <RowDefinition Height="7"></RowDefinition>
+                                            <RowDefinition Height="Auto"></RowDefinition>
+                                            <RowDefinition Height="Auto"></RowDefinition>
+                                        </Grid.RowDefinitions>
+                                        <Grid Grid.Row="0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                            </Grid.ColumnDefinitions>
+                                            <Image Margin="0,0,10,0" Source="{DynamicResource 4square}" Width="20" Height="20"></Image>
+                                            <TextBlock Grid.Column="1" Text="Telephone" FontFamily="{StaticResource OSRegular}" FontSize="13" Foreground="#3db6eb"></TextBlock>
+                                        </Grid>
+
+                                        <TextBlock Grid.Row="2"  Text="Call our Technical Support team on" TextWrapping="Wrap" FontFamily="{StaticResource OSRegular}" FontSize="12" Foreground="#686868"></TextBlock>
+
+                                        <TextBlock Grid.Row="3" Text="44121 387 0007" Margin="0,3,0,0" TextWrapping="Wrap" FontFamily="{StaticResource OSRegular}" FontSize="18" Foreground="#3db6eb"></TextBlock>
+
+
+                                    </Grid>
+
+
+
+                                    <Grid Grid.Column="4">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"></RowDefinition>
+                                            <RowDefinition Height="7"></RowDefinition>
+                                            <RowDefinition Height="Auto"></RowDefinition>
+                                            <RowDefinition Height="Auto"></RowDefinition>
+                                            <RowDefinition Height="9"></RowDefinition>
+                                            <RowDefinition Height="Auto"></RowDefinition>
+                                            <RowDefinition Height="9"></RowDefinition>
+                                            <RowDefinition Height="Auto"></RowDefinition>
+                                        </Grid.RowDefinitions>
+                                        <Grid Grid.Row="0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                            </Grid.ColumnDefinitions>
+                                            <Image Margin="0,0,10,0" Source="{DynamicResource 4square}" Width="20" Height="20"></Image>
+                                            <TextBlock Grid.Column="1" Text="WhatsApp" FontFamily="{StaticResource OSRegular}" FontSize="13" Foreground="#3db6eb"></TextBlock>
+                                        </Grid>
+
+                                        <TextBlock Grid.Row="2" Text="WhatsApp us on" TextWrapping="Wrap" FontFamily="{StaticResource OSRegular}" FontSize="12" Foreground="#686868"></TextBlock>
+
+                                        <TextBlock Grid.Row="3" Margin="0,3,0,0" Text="44121 387 0007" TextWrapping="Wrap" FontFamily="{StaticResource OSRegular}" FontSize="18" Foreground="#3db6eb"></TextBlock>
+
+                                        <TextBlock Grid.Row="5" Text="Or scan the QR code below" TextWrapping="Wrap" FontFamily="{StaticResource OSRegular}" FontSize="12" Foreground="#686868"></TextBlock>
+
+                                        <Grid Grid.Row="7" Height="130" Width="130" HorizontalAlignment="Left">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="5"></RowDefinition>
+                                                <RowDefinition Height="120"></RowDefinition>
+                                                <RowDefinition Height="5"></RowDefinition>
+                                            </Grid.RowDefinitions>
+
+                                            <Grid Grid.Row="0">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="20"></ColumnDefinition>
+                                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                                    <ColumnDefinition Width="20"></ColumnDefinition>
+                                                </Grid.ColumnDefinitions>
+                                                <Border Grid.Column="0" Background="#3db6eb"></Border>
+                                                <Border Grid.Column="2" Background="#3db6eb"></Border>
+                                            </Grid>
+
+
+                                            <Grid Grid.Row="1">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="5"></ColumnDefinition>
+                                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                                    <ColumnDefinition Width="5"></ColumnDefinition>
+                                                </Grid.ColumnDefinitions>
+                                                <Grid Grid.Column="0" Margin="0,-1,0,0">
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="15"></RowDefinition>
+                                                        <RowDefinition Height="*"></RowDefinition>
+                                                        <RowDefinition Height="15"></RowDefinition>
+                                                    </Grid.RowDefinitions>
+
+                                                    <Border Grid.Row="0" Background="#3db6eb"></Border>
+                                                    <Border Grid.Row="2" Background="#3db6eb"></Border>
+
+                                                </Grid>
+
+                                                <Grid Grid.Column="2" Margin="0,0,0,-1">
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="15"></RowDefinition>
+                                                        <RowDefinition Height="*"></RowDefinition>
+                                                        <RowDefinition Height="15"></RowDefinition>
+                                                    </Grid.RowDefinitions>
+
+                                                    <Border Grid.Row="0" Background="#3db6eb"></Border>
+                                                    <Border Grid.Row="2" Background="#3db6eb"></Border>
+
+                                                </Grid>
+
+                                            </Grid>
+
+
+
+
+                                            <Grid Grid.Row="2">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="20"></ColumnDefinition>
+                                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                                    <ColumnDefinition Width="20"></ColumnDefinition>
+                                                </Grid.ColumnDefinitions>
+                                                <Border Grid.Column="0" Background="#3db6eb"></Border>
+                                                <Border Grid.Column="2" Background="#3db6eb"></Border>
+                                            </Grid>
+
+                                        </Grid>
+
+                                        <Image Grid.Row="7" Height="120" Width="120" HorizontalAlignment="Left" Margin="7,7" Source="{DynamicResource qrcode}"></Image>
+
+                                    </Grid>
+
+                                </Grid>
+
+                            </Border>
+
+                        </Grid>
+                    </Border>
+
+                </Popup>
+
+
+            </Grid>
+
+
+
+
+
+
+            <!--<Grid.Background>
+                <ImageBrush ImageSource="{StaticResource MainBackground}" Stretch="Fill" Opacity="0.8"/>
+            </Grid.Background>-->
+
+            <Border VerticalAlignment="Center" HorizontalAlignment="Center" Width="423" BorderThickness="0"
+                    Background="#1D212E" CornerRadius="9" x:Name="pnlAutoUpdateCheck" Visibility="Collapsed">
+
+                <Grid Margin="0,10,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="9"/>
+
+                    </Grid.RowDefinitions>
+                    <TextBlock HorizontalAlignment="Center" FontSize="16" x:Name="txtVersionUpdateCaptionAA"
+                               Text="Checking for New Version ..." Style="{DynamicResource DefaultText}"/>
+                </Grid>
+
+            </Border>
+
+            <Border VerticalAlignment="Center" HorizontalAlignment="Center" Width="423" BorderThickness="0"
+                    Background="#1D212E" CornerRadius="9" x:Name="pnlAutoUpdate" Visibility="Collapsed">
+
+                <Grid Margin="0,10,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="9"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="9"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="9"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="9"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="9"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="9"/>
+                        <RowDefinition Height="*"/>
+
+                    </Grid.RowDefinitions>
+                    <TextBlock HorizontalAlignment="Center" FontSize="20" x:Name="txtVersionUpdateCaption"
+                               Text="Downloading XEPOS Retail 2024" Style="{DynamicResource DefaultText}"/>
+
+
+
+                    <dxe:ProgressBarEdit Grid.Row="2" x:Name="barProgress" ContentDisplayMode="Value" Value="0" IsPercent="False" DisplayFormatString="{}{0}%" Background="#1D212E" ProgressBrush="DodgerBlue" Height="30" >
+                        <dxe:ProgressBarEdit.ContentTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}" Foreground="White" HorizontalAlignment="Center"/>
+                            </DataTemplate>
+                        </dxe:ProgressBarEdit.ContentTemplate>
+                    </dxe:ProgressBarEdit>
+                    <TextBlock HorizontalAlignment="Center" FontSize="12" Grid.Row="4" x:Name="lblProgress"
+                               Text="" Style="{DynamicResource DefaultText}"/>
+                </Grid>
+
+            </Border>
+
+            <Border VerticalAlignment="Center" HorizontalAlignment="Center" Width="423" BorderThickness="0"
+                    Background="#1D212E" CornerRadius="9" x:Name="LoginMenuBorder" Visibility="Visible">
+                <Grid Margin="0,10,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="9"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="9"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="9"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="9"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="9"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="9"/>
+                        <RowDefinition Height="*"/>
+
+                    </Grid.RowDefinitions>
+                    <TextBlock HorizontalAlignment="Center" FontSize="31"
+                               Text="{x:Static prop:Resources.Login}" Style="{DynamicResource DefaultText}"/>
+                    <cc:ListButton Grid.Row="2" Background="#70763E98" x:Name="PointOfSaleButton" Height="62.07"
+                                   Content="{x:Static prop:Resources.PointOfSale}"  Click="PointOfSaleButton_Click"/>
+                    <cc:ListButton Grid.Row="4" Background="#56763E98" x:Name="AdminButton" Height="62.07"
+                                   Content="{x:Static prop:Resources.Admin}" Click="AdminButton_Click"/>
+                    <cc:ListButton Grid.Row="6" Background="#3D763E98" x:Name="ClockButton" Height="62.07"
+                                   Content="{x:Static prop:Resources.ClockInClockOut}" Click="ClockButton_Click"/>
+                    <cc:ListButton Grid.Row="8" Background="#23763E98" x:Name="CashOutButton" Height="62.07"
+                                   Content="Manage Register" Click="CashOutButton_Click"/>
+                    <cc:ListButton Grid.Row="10"  Background="#0F763E98" x:Name="SalesSnapShotButton" Height="62.07"
+                                   Content="{x:Static prop:Resources.SalesSnapShot}" Click="SalesSnapShotButton_Click"/>
+                    <cc:LinkButton Grid.Row="12" VerticalContentAlignment="Center" x:Name="ExitButton" Height="42" FontSize="13"
+                                   Content="{x:Static prop:Resources.ExitSoftware}" Click="ExitButton_Click"/>
+
+                </Grid>
+            </Border>
+            <Border VerticalAlignment="Stretch" Style="{DynamicResource LoginBackcolor}" HorizontalAlignment="Stretch"  CornerRadius="9" x:Name="LoginBorder" Visibility="Collapsed" BorderThickness="0">
+
+                <Grid Margin="-5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="1"/>
+                        <ColumnDefinition Width="350"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Margin="0,0,0,0" Style="{DynamicResource LoginEmployeeBackcolor}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="0"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <ScrollViewer x:Name="ScrollViewerEmp" HorizontalContentAlignment="Center"
+                                  HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" PanningMode="Both" PanningRatio="1" PanningDeceleration="2" ManipulationBoundaryFeedback="ScrlViewer_ManipulationBoundaryFeedback">
+                            <WrapPanel x:Name="pnlEmp" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"></WrapPanel>
+                        </ScrollViewer>
+                        <Grid Grid.Row="2" HorizontalAlignment="Left" Margin="0,0,0,0">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="40"/>
-                                <ColumnDefinition Width="492"/>
-                                <ColumnDefinition Width="40"/>
+                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                <ColumnDefinition Width="6"></ColumnDefinition>
+                                <ColumnDefinition Width="Auto"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
-                            <Button x:Name="btnEmpPrev" Grid.Column="0" Style="{StaticResource ND.RoundArrowButton}" Click="BtnEmpPrev_Click">
-                                <Path Data="{StaticResource ND.Icon.ChevronLeft}" Style="{StaticResource ND.IconPath}" Stroke="{StaticResource ND.Navy}" StrokeThickness="2.2" Width="8" Height="13"/>
-                            </Button>
-                            <ScrollViewer x:Name="ScrollViewerEmp" Grid.Column="1" Margin="10,0,-10,0" HorizontalContentAlignment="Center"
-                                          HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Disabled"
-                                          PanningMode="HorizontalOnly" PanningRatio="1" PanningDeceleration="2"
-                                          ManipulationBoundaryFeedback="ScrlViewer_ManipulationBoundaryFeedback" ScrollChanged="ScrollViewerEmp_ScrollChanged">
-                                <StackPanel x:Name="pnlEmp" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                            </ScrollViewer>
-                            <Button x:Name="btnEmpNext" Grid.Column="2" Style="{StaticResource ND.RoundArrowButton}" Margin="16,0,-16,0" Click="BtnEmpNext_Click">
-                                <Path Data="{StaticResource ND.Icon.ChevronRight}" Style="{StaticResource ND.IconPath}" Stroke="{StaticResource ND.Navy}" StrokeThickness="2.2" Width="8" Height="13"/>
-                            </Button>
+                            <Grid Grid.Column="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="0"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                            </Grid>
+                            <Grid Grid.Column="2" x:Name="pnllogininfo" Visibility="Hidden">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="3"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="3"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" TextAlignment="Center" Text="Password: 1111" Style="{DynamicResource DefaultText}"></TextBlock>
+                                <TextBlock Grid.Row="2" TextWrapping="WrapWithOverflow" Text="Please remember password. It is the password of the Store Owner user." Style="{DynamicResource DefaultText}"></TextBlock>
+                                <TextBlock Grid.Row="4" TextWrapping="WrapWithOverflow" Text="You may change it anytime from the Employee Setup." Style="{DynamicResource DefaultText}"></TextBlock>
+
+                            </Grid>
                         </Grid>
 
-                        <!-- First-run hint (no employees yet), under the carousel -->
-                        <StackPanel x:Name="pnllogininfo" Visibility="Hidden" Margin="46,512,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" MaxWidth="540">
-                            <TextBlock Text="Password: 1111" Foreground="#FFFFFF" FontFamily="{StaticResource ND.Font.SemiBold}" FontSize="14"/>
-                            <TextBlock TextWrapping="Wrap" Foreground="#E6FFFFFF" FontFamily="{StaticResource ND.Font.Regular}" FontSize="12" Margin="0,4,0,0"
-                                       Text="Please remember password. It is the password of the Store Owner user."/>
-                            <TextBlock TextWrapping="Wrap" Foreground="#E6FFFFFF" FontFamily="{StaticResource ND.Font.Regular}" FontSize="12"
-                                       Text="You may change it anytime from the Employee Setup."/>
-                        </StackPanel>
-
-                        <!-- Passcode card (PDF: 338 wide, top 29, right margin 32, 525 tall) -->
-                        <Border Width="338" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,29,32,0" Background="#FFFFFF" CornerRadius="16" Padding="18"
-                                Effect="{StaticResource ND.Shadow}">
-                            <StackPanel>
-                                <cc:KeyPadPasswordControl x:Name="KeyPadPasswordControl" PasswordChanged="KeyPadPasswordControl_PasswordChanged"
-                                                          MenuRequested="KeyPadPasswordControl_MenuRequested"/>
-                                <Button x:Name="btnLogin" Style="{StaticResource ND.PrimaryButton}" Height="51" Margin="0,13,0,0" IsEnabled="False" Click="BtnLogin_Click">
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="LOGIN" VerticalAlignment="Center"/>
-                                        <Path Data="{StaticResource ND.Icon.ArrowRight}" Style="{StaticResource ND.IconPath}" Stroke="#FFFFFF" StrokeThickness="2" Width="15" Height="12" Margin="10,0,0,0"/>
-                                    </StackPanel>
-                                </Button>
-                                <Grid Margin="0,11,0,0" Height="55">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="8"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="8"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Button x:Name="btnClockIn" Grid.Column="0" Style="{StaticResource ND.SoftButton}" Background="{StaticResource ND.GreenTint}" Foreground="{StaticResource ND.Green}"
-                                            IsEnabled="False" Click="BtnClockAction_Click">
-                                        <StackPanel>
-                                            <Path Data="{StaticResource ND.Icon.Clock}" Style="{StaticResource ND.IconPath}" Stroke="{StaticResource ND.Green}" Width="16" Height="16"/>
-                                            <TextBlock Text="Clock In" Margin="0,4,0,0" HorizontalAlignment="Center"/>
-                                        </StackPanel>
-                                    </Button>
-                                    <Button x:Name="btnStartBreak" Grid.Column="2" Style="{StaticResource ND.SoftButton}" Background="{StaticResource ND.AmberTint}" Foreground="{StaticResource ND.Amber}"
-                                            IsEnabled="False" Click="BtnClockAction_Click">
-                                        <StackPanel>
-                                            <Path Data="{StaticResource ND.Icon.Coffee}" Style="{StaticResource ND.IconPath}" Stroke="{StaticResource ND.Amber}" Width="16" Height="16"/>
-                                            <TextBlock Text="Start Break" Margin="0,4,0,0" HorizontalAlignment="Center"/>
-                                        </StackPanel>
-                                    </Button>
-                                    <Button x:Name="btnClockOut" Grid.Column="4" Style="{StaticResource ND.SoftButton}" Background="{StaticResource ND.RedTint}" Foreground="{StaticResource ND.Red}"
-                                            IsEnabled="False" Click="BtnClockAction_Click">
-                                        <StackPanel>
-                                            <Path Data="{StaticResource ND.Icon.Clock}" Style="{StaticResource ND.IconPath}" Stroke="{StaticResource ND.Red}" Width="16" Height="16"/>
-                                            <TextBlock Text="Clock Out" Margin="0,4,0,0" HorizontalAlignment="Center"/>
-                                        </StackPanel>
-                                    </Button>
-                                </Grid>
-                            </StackPanel>
-                        </Border>
+                    </Grid>
+                    <Grid Grid.Column="2" Style="{DynamicResource KeypadBackcolor}">
+                        <cc:KeyPadPasswordControl x:Name="KeyPadPasswordControl" Grid.Column="2" VerticalAlignment="Center" PasswordChanged="KeyPadPasswordControl_PasswordChanged"/>
                     </Grid>
 
-                    <!-- Legacy side menu (Show/Hide + Exit). Kept for code-behind references; the header X replaces it. -->
-                    <Grid x:Name="GridB" Visibility="Collapsed" Style="{DynamicResource GrdBkColor}" Grid.Column="3" Margin="0,0,0,5"  >
+
+
+
+                    <Grid x:Name="GridB" Style="{DynamicResource GrdBkColor}" Grid.Column="3" Margin="0,0,0,5"  >
 
 
                         <Grid  Panel.ZIndex="3">
@@ -444,101 +533,8 @@
 
 
                     </Grid>
-                </Grid>
-            </Border>
-
-            <!--<Grid.Background>
-                <ImageBrush ImageSource="{StaticResource MainBackground}" Stretch="Fill" Opacity="0.8"/>
-            </Grid.Background>-->
-
-            <Border VerticalAlignment="Center" HorizontalAlignment="Center" Width="423" BorderThickness="0"
-                    Background="#1D212E" CornerRadius="9" x:Name="pnlAutoUpdateCheck" Visibility="Collapsed">
-
-                <Grid Margin="0,10,0,0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="9"/>
-
-                    </Grid.RowDefinitions>
-                    <TextBlock HorizontalAlignment="Center" FontSize="16" x:Name="txtVersionUpdateCaptionAA"
-                               Text="Checking for New Version ..." Style="{DynamicResource DefaultText}"/>
-                </Grid>
-
-            </Border>
-
-            <Border VerticalAlignment="Center" HorizontalAlignment="Center" Width="423" BorderThickness="0"
-                    Background="#1D212E" CornerRadius="9" x:Name="pnlAutoUpdate" Visibility="Collapsed">
-
-                <Grid Margin="0,10,0,0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="9"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="9"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="9"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="9"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="9"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="9"/>
-                        <RowDefinition Height="*"/>
-
-                    </Grid.RowDefinitions>
-                    <TextBlock HorizontalAlignment="Center" FontSize="20" x:Name="txtVersionUpdateCaption"
-                               Text="Downloading XEPOS Retail 2024" Style="{DynamicResource DefaultText}"/>
 
 
-
-                    <dxe:ProgressBarEdit Grid.Row="2" x:Name="barProgress" ContentDisplayMode="Value" Value="0" IsPercent="False" DisplayFormatString="{}{0}%" Background="#1D212E" ProgressBrush="DodgerBlue" Height="30" >
-                        <dxe:ProgressBarEdit.ContentTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding}" Foreground="White" HorizontalAlignment="Center"/>
-                            </DataTemplate>
-                        </dxe:ProgressBarEdit.ContentTemplate>
-                    </dxe:ProgressBarEdit>
-                    <TextBlock HorizontalAlignment="Center" FontSize="12" Grid.Row="4" x:Name="lblProgress"
-                               Text="" Style="{DynamicResource DefaultText}"/>
-                </Grid>
-
-            </Border>
-
-            <!-- Legacy module menu. Never shown any more: whenever code makes it Visible, MainWindow
-                 redirects to the new Select Employee screen (see LoginMenuBorder_VisibilityChanged). -->
-            <Border VerticalAlignment="Center" HorizontalAlignment="Center" Width="423" BorderThickness="0"
-                    Background="#1D212E" CornerRadius="9" x:Name="LoginMenuBorder" Visibility="Collapsed">
-                <Grid Margin="0,10,0,0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="9"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="9"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="9"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="9"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="9"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="9"/>
-                        <RowDefinition Height="*"/>
-
-                    </Grid.RowDefinitions>
-                    <TextBlock HorizontalAlignment="Center" FontSize="31"
-                               Text="{x:Static prop:Resources.Login}" Style="{DynamicResource DefaultText}"/>
-                    <cc:ListButton Grid.Row="2" Background="#70763E98" x:Name="PointOfSaleButton" Height="62.07"
-                                   Content="{x:Static prop:Resources.PointOfSale}"  Click="PointOfSaleButton_Click"/>
-                    <cc:ListButton Grid.Row="4" Background="#56763E98" x:Name="AdminButton" Height="62.07"
-                                   Content="{x:Static prop:Resources.Admin}" Click="AdminButton_Click"/>
-                    <cc:ListButton Grid.Row="6" Background="#3D763E98" x:Name="ClockButton" Height="62.07"
-                                   Content="{x:Static prop:Resources.ClockInClockOut}" Click="ClockButton_Click"/>
-                    <cc:ListButton Grid.Row="8" Background="#23763E98" x:Name="CashOutButton" Height="62.07"
-                                   Content="Manage Register" Click="CashOutButton_Click"/>
-                    <cc:ListButton Grid.Row="10"  Background="#0F763E98" x:Name="SalesSnapShotButton" Height="62.07"
-                                   Content="{x:Static prop:Resources.SalesSnapShot}" Click="SalesSnapShotButton_Click"/>
-                    <cc:LinkButton Grid.Row="12" VerticalContentAlignment="Center" x:Name="ExitButton" Height="42" FontSize="13"
-                                   Content="{x:Static prop:Resources.ExitSoftware}" Click="ExitButton_Click"/>
 
                 </Grid>
             </Border>

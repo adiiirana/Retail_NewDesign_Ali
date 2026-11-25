@@ -45,12 +45,12 @@ namespace OfflineRetailV2.UserControls
             if (Settings.IsWholesaleActive == 1)
             {
                 cmbSaleType.Visibility = Visibility.Visible;
-                
+
             }
             else
             {
                 cmbSaleType.Visibility = Visibility.Collapsed;
-                
+
             }
             cmbSaleType.SelectedIndex = 0;
         }
@@ -182,17 +182,6 @@ namespace OfflineRetailV2.UserControls
         {
             (Window.GetWindow(this) as MainWindow).btnFrontOffice.PreviewMouseLeftButtonDown += BtnFrontOffice_PreviewMouseLeftButtonDown;
             //Title.Text = "Manage Register";
-
-            // New design hero + print toggle (defaults to the "Default Closeout Printer" setting)
-            txtWelcomeName.Text = SystemVariables.CurrentUserName;
-            chkReceiptPrinter.IsChecked = Settings.DefaultCloseoutPrinter == "Receipt Printer";
-            UpdateHeroClock();
-            if (_heroClock == null)
-            {
-                _heroClock = new System.Windows.Threading.DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
-                _heroClock.Tick += (s, a) => UpdateHeroClock();
-            }
-            _heroClock.Start();
             dtblCloseout = new DataTable();
             dtblCloseout.Columns.Add("ID", System.Type.GetType("System.String"));
             dtblCloseout.Columns.Add("TenderName", System.Type.GetType("System.String"));
@@ -237,13 +226,13 @@ namespace OfflineRetailV2.UserControls
         {
             if (Settings.IsWholesaleActive == 1)
             {
-                cmbSaleType.Visibility=Visibility.Visible;
+                cmbSaleType.Visibility = Visibility.Visible;
             }
             else
             {
-                cmbSaleType.Visibility= Visibility.Collapsed;
+                cmbSaleType.Visibility = Visibility.Collapsed;
             }
-                RefreshSaleType();
+            RefreshSaleType();
         }
 
         private void BtnEdit_Click(object sender, RoutedEventArgs e)
@@ -390,10 +379,10 @@ namespace OfflineRetailV2.UserControls
         private void BtnBD_Click(object sender, RoutedEventArgs e)
         {
             if ((SystemVariables.CurrentUserID > 0) && (!SecurityPermission.AccessCashInOut))
-           {
-               DocMessage.MsgPermission();
-               return;
-           }
+            {
+                DocMessage.MsgPermission();
+                return;
+            }
 
             blurGrid.Visibility = Visibility.Visible;
             frm_CashInOutDlg frm = new frm_CashInOutDlg();
@@ -413,9 +402,9 @@ namespace OfflineRetailV2.UserControls
 
             PosDataObject.Closeout objCloseoutM = new PosDataObject.Closeout();
             objCloseoutM.Connection = new SqlConnection(SystemVariables.ConnectionString);
-            objCloseoutM.ExecuteCloseoutReportProc(CTYPE, COUTID, Settings.TerminalName, Settings.TaxInclusive,"N");
+            objCloseoutM.ExecuteCloseoutReportProc(CTYPE, COUTID, Settings.TerminalName, Settings.TaxInclusive, "N");
 
-            if (chkReceiptPrinter.IsChecked == true)
+            if (Settings.DefaultCloseoutPrinter == "Receipt Printer")
             {
                 blurGrid.Visibility = Visibility.Visible;
                 POSSection.frmPOSInvoicePrintDlg frm_POSInvoicePrintDlg = new POSSection.frmPOSInvoicePrintDlg();
@@ -1554,7 +1543,7 @@ namespace OfflineRetailV2.UserControls
                 finally { frm_CloseoutCountDlg.Close(); }
 
                 // 5. Generate the Final Z-Report
-                
+
 
                 if (isTradeCustomer)
                 {
@@ -1648,7 +1637,8 @@ namespace OfflineRetailV2.UserControls
             {
                 btnBD.Visibility = Visibility.Collapsed;
                 btnEdit.Visibility = Visibility.Collapsed;
-                btnReprint.Visibility=Visibility.Collapsed;
+                btnReprint.Visibility = Visibility.Collapsed;
+                CashInOutColumn.Width = new GridLength(0);
 
 
 
@@ -1658,6 +1648,7 @@ namespace OfflineRetailV2.UserControls
                 btnBD.Visibility = Visibility.Visible;
                 btnEdit.Visibility = Visibility.Visible;
                 btnReprint.Visibility = Visibility.Visible;
+                CashInOutColumn.Width = new GridLength(1, GridUnitType.Star);
             }
         }
 
@@ -1677,17 +1668,6 @@ namespace OfflineRetailV2.UserControls
             {
                 RefreshSaleType();
             }
-            else
-            {
-                _heroClock?.Stop();
-            }
-        }
-
-        private System.Windows.Threading.DispatcherTimer _heroClock;
-
-        private void UpdateHeroClock()
-        {
-            txtDateTime.Text = DateTime.Now.ToString("d MMM yyyy | HH:mm:ss");
         }
     }
 }

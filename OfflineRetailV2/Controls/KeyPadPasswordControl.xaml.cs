@@ -24,14 +24,7 @@ namespace OfflineRetailV2.Controls
     {
         public event EventHandler PasswordChanged;
 
-        /// <summary>
-        /// Raised by the bottom-left menu key (new design). The sender is the key, so a host can
-        /// anchor a menu to it. With no subscriber the key clears the passcode (old Clear button).
-        /// </summary>
-        public event EventHandler MenuRequested;
-
-        private SolidColorBrush PassFillColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#26324F"));
-        private SolidColorBrush PassEmptyColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D3D9E3"));
+        private SolidColorBrush PassFillColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#B364C2DB"));
         public KeyPadPasswordControl()
         {
             InitializeComponent();
@@ -44,7 +37,7 @@ namespace OfflineRetailV2.Controls
         string _pass4 = "";
         private void FillPassEllipse()
         {
-            Pass1.Fill = Pass2.Fill = Pass3.Fill = Pass4.Fill = PassEmptyColor;
+            Pass1.Fill = Pass2.Fill = Pass3.Fill = Pass4.Fill = new SolidColorBrush(SystemVariables.SelectedTheme == "Dark" ? Colors.Transparent : (Color)ColorConverter.ConvertFromString("#EFF4F4"));
             Password = "";
 
             if (_pass1 != "")
@@ -213,17 +206,6 @@ namespace OfflineRetailV2.Controls
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            if (MenuRequested != null)
-            {
-                MenuRequested(sender, EventArgs.Empty);
-                return;
-            }
-            ClearPassCode();
-        }
-
-        /// <summary>Clears the passcode and the selected employee (the old "Clear" button).</summary>
-        public void ClearPassCode()
-        {
             if (_pass4 != "")
             {
                 _pass4 = "";
@@ -249,7 +231,7 @@ namespace OfflineRetailV2.Controls
                 //return;
             }
 
-            (Window.GetWindow(this) as MainWindow)?.ResetSeletionStyle();
+            (Window.GetWindow(this) as MainWindow).ResetSeletionStyle();
         }
 
 

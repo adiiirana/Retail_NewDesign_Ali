@@ -18,10 +18,6 @@
     <!--Width="1024" Height="768"-->
     <UserControl.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Resources/NewDesignStyles.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-            <BooleanToVisibilityConverter x:Key="ND.BoolToVis"/>
             <dxre:HtmlToContentConverter x:Key="htmlToContentConverter"></dxre:HtmlToContentConverter>
             <dxre:RtfToContentConverter x:Key="rtfToContentConverter" />
             <Style x:Key="richEditStyle" TargetType="dxre:RichEditControl">
@@ -1206,29 +1202,29 @@
                                 </Grid>
 
                                 <Grid Grid.Row="1">
-                                <DockPanel x:Name="EmptyCart">
-                                    <Grid DockPanel.Dock="Top" Margin="50,100">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto"></RowDefinition>
-                                            <RowDefinition Height="15"></RowDefinition>
-                                            <RowDefinition Height="Auto"></RowDefinition>
-                                        </Grid.RowDefinitions>
-                                        <Image Source="{DynamicResource POSCartMenu}" Width="30" Height="25" Grid.Row="2"></Image>
-                                        <TextBlock  Grid.Row="0" FontFamily="{StaticResource OSLight}" Text="Cart is empty. Click an item to add to the Cart!" TextAlignment="Center" TextWrapping="WrapWithOverflow"></TextBlock>
-                                    </Grid>
+                                    <DockPanel x:Name="EmptyCart">
+                                        <Grid DockPanel.Dock="Top" Margin="50,100">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"></RowDefinition>
+                                                <RowDefinition Height="15"></RowDefinition>
+                                                <RowDefinition Height="Auto"></RowDefinition>
+                                            </Grid.RowDefinitions>
+                                            <Image Source="{DynamicResource POSCartMenu}" Width="30" Height="25" Grid.Row="2"></Image>
+                                            <TextBlock  Grid.Row="0" FontFamily="{StaticResource OSLight}" Text="Cart is empty. Click an item to add to the Cart!" TextAlignment="Center" TextWrapping="WrapWithOverflow"></TextBlock>
+                                        </Grid>
 
-                                </DockPanel>
+                                    </DockPanel>
 
-                                <!--<StackPanel  Grid.RowSpan="2" >-->
-                                <dxg:GridControl  x:Name="gridControl1" Visibility="Visible"
+                                    <!--<StackPanel  Grid.RowSpan="2" >-->
+                                    <dxg:GridControl  x:Name="gridControl1" Visibility="Visible"
                                                  IsKeyboardFocusedChanged="gridControl1_IsKeyboardFocusedChanged" Padding="0" Background="White" Foreground="Wheat" >
-                                    <!--<dxg:GridControl.Resources>
+                                        <!--<dxg:GridControl.Resources>
                                         <Style TargetType="{x:Type dxg:GridColumnHeader}">
                                             <Setter Property="Height" Value="0"/>
                                         </Style>
                                     </dxg:GridControl.Resources>-->
-                                    <dxg:GridControl.View>
-                                        <!--   <dxg:TableView x:Name="gridView1" Margin="0" NavigationStyle="Row" ShowFocusedRectangle="True" ShowColumnHeaders="False" AllowColumnFiltering="False" AllowResizing="False" AllowColumnMoving="False" AllowSorting="False" ShowGroupPanel="False" BorderThickness="9" Style="{StaticResource POSGridStyle}"  Background="White" >
+                                        <dxg:GridControl.View>
+                                            <!--   <dxg:TableView x:Name="gridView1" Margin="0" NavigationStyle="Row" ShowFocusedRectangle="True" ShowColumnHeaders="False" AllowColumnFiltering="False" AllowResizing="False" AllowColumnMoving="False" AllowSorting="False" ShowGroupPanel="False" BorderThickness="9" Style="{StaticResource POSGridStyle}"  Background="White" >
                                            <dxg:TableView.RowStyle>
                                                     <Style TargetType="dxg:RowControl">
                                                         <Style.Triggers>
@@ -1242,8 +1238,8 @@
                                         </dxg:TableView>-->
 
 
-                                        <dxg:TableView x:Name="gridView1" Margin="0" NavigationStyle="Row" ShowFocusedRectangle="True" ShowColumnHeaders="False" AllowColumnFiltering="False" AllowResizing="False" AllowColumnMoving="False" AllowSorting="False" ShowGroupPanel="False" BorderThickness="12" Style="{StaticResource POSGridStyle}"  Background="White" >
-                                            <!--<dxg:TableView.RowStyle>
+                                            <dxg:TableView x:Name="gridView1" Margin="0" NavigationStyle="Row" ShowFocusedRectangle="True" ShowColumnHeaders="False" AllowColumnFiltering="False" AllowResizing="False" AllowColumnMoving="False" AllowSorting="False" ShowGroupPanel="False" BorderThickness="12" Style="{StaticResource POSGridStyle}"  Background="White" >
+                                                <!--<dxg:TableView.RowStyle>
                                                 <Style TargetType="dxg:RowControl">
                                                     <Setter Property="Background" Value="#C9E1E5"/>
                                                     <Setter Property="BorderBrush" Value="#C9BDE0" />
@@ -1267,208 +1263,208 @@
                                                 </Style>
                                             </dxg:TableView.RowStyle>-->
 
-                                        </dxg:TableView>
+                                            </dxg:TableView>
 
 
-                                    </dxg:GridControl.View>
-                                    <dxg:GridColumn x:Name="colID" FieldName="ID" Header="ID" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        </dxg:GridControl.View>
+                                        <dxg:GridColumn x:Name="colID" FieldName="ID" Header="ID" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
 
-                                    <dxg:GridColumn x:Name="colProduct" FieldName="PRODUCT" Header="Item" Width="2*" HorizontalHeaderContentAlignment="Center" Visible="False"
+                                        <dxg:GridColumn x:Name="colProduct" FieldName="PRODUCT" Header="Item" Width="2*" HorizontalHeaderContentAlignment="Center" Visible="False"
                                             >
-                                        <dxg:GridColumn.EditSettings>
-                                            <dxe:TextEditSettings HorizontalContentAlignment="Center" />
-                                        </dxg:GridColumn.EditSettings>
-                                    </dxg:GridColumn>
+                                            <dxg:GridColumn.EditSettings>
+                                                <dxe:TextEditSettings HorizontalContentAlignment="Center" />
+                                            </dxg:GridColumn.EditSettings>
+                                        </dxg:GridColumn>
 
-                                    <dxg:GridColumn x:Name="colQty" FieldName="QTY" Header="QTY" Width="*"  HorizontalHeaderContentAlignment="Center" Visible="False">
-                                        <dxg:GridColumn.EditSettings>
-                                            <dxe:TextEditSettings HorizontalContentAlignment="Center" />
-                                        </dxg:GridColumn.EditSettings>
-                                    </dxg:GridColumn>
-                                    <dxg:GridColumn x:Name="colRate" FieldName="RATE" Header="Price" Width="*"  HorizontalHeaderContentAlignment="Center" Visible="False">
-                                        <dxg:GridColumn.EditSettings>
-                                            <dxe:TextEditSettings HorizontalContentAlignment="Center" />
-                                        </dxg:GridColumn.EditSettings>
-                                    </dxg:GridColumn>
-                                    <dxg:GridColumn x:Name="colPrice" FieldName="PRICE" Header="EXT. Price" Width="*"  
+                                        <dxg:GridColumn x:Name="colQty" FieldName="QTY" Header="QTY" Width="*"  HorizontalHeaderContentAlignment="Center" Visible="False">
+                                            <dxg:GridColumn.EditSettings>
+                                                <dxe:TextEditSettings HorizontalContentAlignment="Center" />
+                                            </dxg:GridColumn.EditSettings>
+                                        </dxg:GridColumn>
+                                        <dxg:GridColumn x:Name="colRate" FieldName="RATE" Header="Price" Width="*"  HorizontalHeaderContentAlignment="Center" Visible="False">
+                                            <dxg:GridColumn.EditSettings>
+                                                <dxe:TextEditSettings HorizontalContentAlignment="Center" />
+                                            </dxg:GridColumn.EditSettings>
+                                        </dxg:GridColumn>
+                                        <dxg:GridColumn x:Name="colPrice" FieldName="PRICE" Header="EXT. Price" Width="*"  
                                     HorizontalHeaderContentAlignment="Center" Visible="False">
-                                        <dxg:GridColumn.EditSettings>
-                                            <dxe:TextEditSettings DisplayFormat="f" MaskType="Numeric" HorizontalContentAlignment="Center"/>
-                                        </dxg:GridColumn.EditSettings>
-                                    </dxg:GridColumn>
-                                    <dxg:GridColumn x:Name="colProductType" FieldName="PRODUCTTYPE" Header="Type" Width="*" HorizontalHeaderContentAlignment="Center"
+                                            <dxg:GridColumn.EditSettings>
+                                                <dxe:TextEditSettings DisplayFormat="f" MaskType="Numeric" HorizontalContentAlignment="Center"/>
+                                            </dxg:GridColumn.EditSettings>
+                                        </dxg:GridColumn>
+                                        <dxg:GridColumn x:Name="colProductType" FieldName="PRODUCTTYPE" Header="Type" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colMID" FieldName="MATRIXOID" Header="MatxID" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colMID" FieldName="MATRIXOID" Header="MatxID" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colMOV1" FieldName="MATRIXOV1" Header="MatxOV1" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colMOV1" FieldName="MATRIXOV1" Header="MatxOV1" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colMOV2" FieldName="MATRIXOV2" Header="MatxOV2" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colMOV2" FieldName="MATRIXOV2" Header="MatxOV2" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colMOV3" FieldName="MATRIXOV3" Header="MatxOV3" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colMOV3" FieldName="MATRIXOV3" Header="MatxOV3" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colDP" FieldName="DP" Header="Decimal place" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colDP" FieldName="DP" Header="Decimal place" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colUOMC" FieldName="UOMCount" Header="UOM Count" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colUOMC" FieldName="UOMCount" Header="UOM Count" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colNotes" FieldName="NOTES" Header="Notes" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colNotes" FieldName="NOTES" Header="Notes" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colDisc" FieldName="DISCOUNT" Header="Discount" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colDisc" FieldName="DISCOUNT" Header="Discount" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colDiscountID" FieldName="DISCOUNTID" Header="Discount ID" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colDiscountID" FieldName="DISCOUNTID" Header="Discount ID" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colDiscountText" FieldName="DISCOUNTTEXT" Header="Discount Text" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colDiscountText" FieldName="DISCOUNTTEXT" Header="Discount Text" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colIndex" FieldName="ITEMINDEX" Header="Top Index" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colIndex" FieldName="ITEMINDEX" Header="Top Index" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colDLogic" FieldName="DISCLOGIC" Header="Discount Logic" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colDLogic" FieldName="DISCLOGIC" Header="Discount Logic" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colDVal" FieldName="DISCVALUE" Header="Discount Value" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colDVal" FieldName="DISCVALUE" Header="Discount Value" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colService" FieldName="SERVICE" Header="Service" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colService" FieldName="SERVICE" Header="Service" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colRentType" FieldName="RENTTYPE" Header="Rental Type" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colRentType" FieldName="RENTTYPE" Header="Rental Type" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colRentDuration" FieldName="RENTDURATION" Header="Rental Duration" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colRentDuration" FieldName="RENTDURATION" Header="Rental Duration" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colRentAmount" FieldName="RENTAMOUNT" Header="Rental Amount" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colRentAmount" FieldName="RENTAMOUNT" Header="Rental Amount" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colrepairsl" FieldName="REPAIRITEMSLNO" Header="gridColumn1" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colrepairsl" FieldName="REPAIRITEMSLNO" Header="gridColumn1" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colrepairtag" FieldName="REPAIRITEMTAG" Header="gridColumn2" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colrepairtag" FieldName="REPAIRITEMTAG" Header="gridColumn2" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colrepairpurchase" FieldName="REPAIRITEMPURCHASEDATE" Header="gridColumn3" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colrepairpurchase" FieldName="REPAIRITEMPURCHASEDATE" Header="gridColumn3" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colMixID" FieldName="MIXMATCHID" Header="gridColumn1" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colMixID" FieldName="MIXMATCHID" Header="gridColumn1" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colMixFlag" FieldName="MIXMATCHFLAG" Header="gridColumn1" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colMixFlag" FieldName="MIXMATCHFLAG" Header="gridColumn1" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colMixType" FieldName="MIXMATCHTYPE" Header="gridColumn1" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colMixType" FieldName="MIXMATCHTYPE" Header="gridColumn1" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colMixVal" FieldName="MIXMATCHVALUE" Header="gridColumn2" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colMixVal" FieldName="MIXMATCHVALUE" Header="gridColumn2" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colMixQty" FieldName="MIXMATCHQTY" Header="gridColumn3" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colMixQty" FieldName="MIXMATCHQTY" Header="gridColumn3" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colMixUnique" FieldName="MIXMATCHUNIQUE" Header="gridColumn1" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colMixUnique" FieldName="MIXMATCHUNIQUE" Header="gridColumn1" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colMixLast" FieldName="MIXMATCHLAST" Header="gridColumn2" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colMixLast" FieldName="MIXMATCHLAST" Header="gridColumn2" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colFeeID" FieldName="FEESID" Header="Fees ID" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colFeeID" FieldName="FEESID" Header="Fees ID" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colFeeType" FieldName="FEESLOGIC" Header="Fees Type" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colFeeType" FieldName="FEESLOGIC" Header="Fees Type" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colFeeVal" FieldName="FEESVALUE" Header="Fees Value" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colFeeVal" FieldName="FEESVALUE" Header="Fees Value" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colFeeTaxRate" FieldName="FEESTAXRATE" Header="gridColumn1" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colFeeTaxRate" FieldName="FEESTAXRATE" Header="gridColumn1" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colFee" FieldName="FEES" Header="Fees" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colFee" FieldName="FEES" Header="Fees" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colFeeTax" FieldName="FEESTAX" Header="Tax on Fees" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colFeeTax" FieldName="FEESTAX" Header="Tax on Fees" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colFeeText" FieldName="FEESTEXT" Header="Fees Text" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colFeeText" FieldName="FEESTEXT" Header="Fees Text" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colTx1Selected" FieldName="TX1ID" Header="gridColumn2" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colTx1Selected" FieldName="TX1ID" Header="gridColumn2" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colTx2Selected" FieldName="TX2ID" Header="gridColumn3" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colTx2Selected" FieldName="TX2ID" Header="gridColumn3" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colTx3Selected" FieldName="TX3ID" Header="gridColumn4" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colTx3Selected" FieldName="TX3ID" Header="gridColumn4" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colTaxID1" FieldName="TAXID1" Header="gridColumn5" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colTaxID1" FieldName="TAXID1" Header="gridColumn5" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colTaxID2" FieldName="TAXID2" Header="gridColumn6" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colTaxID2" FieldName="TAXID2" Header="gridColumn6" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colTaxID3" FieldName="TAXID3" Header="gridColumn7" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colTaxID3" FieldName="TAXID3" Header="gridColumn7" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colTaxName1" FieldName="TAXNAME1" Header="gridColumn8" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colTaxName1" FieldName="TAXNAME1" Header="gridColumn8" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colTaxName2" FieldName="TAXNAME2" Header="gridColumn9" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colTaxName2" FieldName="TAXNAME2" Header="gridColumn9" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colTaxName3" FieldName="TAXNAME3" Header="gridColumn10" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colTaxName3" FieldName="TAXNAME3" Header="gridColumn10" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colTaxRate1" FieldName="TAXRATE1" Header="gridColumn11" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colTaxRate1" FieldName="TAXRATE1" Header="gridColumn11" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colTaxRate2" FieldName="TAXRATE2" Header="gridColumn12" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colTaxRate2" FieldName="TAXRATE2" Header="gridColumn12" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colTaxRate3" FieldName="TAXRATE3" Header="gridColumn13" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colTaxRate3" FieldName="TAXRATE3" Header="gridColumn13" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colTaxable1" FieldName="TAXABLE1" Header="gridColumn14" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colTaxable1" FieldName="TAXABLE1" Header="gridColumn14" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colTaxable2" FieldName="TAXABLE2" Header="gridColumn15" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colTaxable2" FieldName="TAXABLE2" Header="gridColumn15" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colTaxable3" FieldName="TAXABLE3" Header="gridColumn16" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colTaxable3" FieldName="TAXABLE3" Header="gridColumn16" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colEdit" FieldName="EDITF" Header="gridColumn2" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colEdit" FieldName="EDITF" Header="gridColumn2" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colFeeQty" FieldName="FEESQTY" Header="Fees On Qty" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colFeeQty" FieldName="FEESQTY" Header="Fees On Qty" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colBuyGetFreeHeader" FieldName="BUYNGETFREEHEADERID" Header="BuyNGetFee" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colBuyGetFreeHeader" FieldName="BUYNGETFREEHEADERID" Header="BuyNGetFee" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colBuyGetFreeCat" FieldName="BUYNGETFREECATEGORY" Header="BuyNGetFee" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colBuyGetFreeCat" FieldName="BUYNGETFREECATEGORY" Header="BuyNGetFee" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colSL" FieldName="SL" Header="SL" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colSL" FieldName="SL" Header="SL" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colPromotion" FieldName="BUYNGETFREENAME" Header="BuyNGetFree" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colPromotion" FieldName="BUYNGETFREENAME" Header="BuyNGetFree" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colAge" FieldName="AGE" Header="Age" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colAge" FieldName="AGE" Header="Age" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
-                                    <dxg:GridColumn x:Name="colGRate" FieldName="GRATE"  Header="Price" Width="*" 
+                                        <dxg:GridColumn x:Name="colGRate" FieldName="GRATE"  Header="Price" Width="*" 
                                     HorizontalHeaderContentAlignment="Center" Visible="False"/>
 
-                                    <dxg:GridColumn x:Name="colGPrice" FieldName="GPRICE" Header="Total" Width="*" 
+                                        <dxg:GridColumn x:Name="colGPrice" FieldName="GPRICE" Header="Total" Width="*" 
                                     HorizontalHeaderContentAlignment="Center" RoundDateDisplayFormat="" Visible="False">
-                                        <dxg:GridColumn.EditSettings>
-                                            <dxe:TextEditSettings DisplayFormat="f" MaskType="Numeric"
+                                            <dxg:GridColumn.EditSettings>
+                                                <dxe:TextEditSettings DisplayFormat="f" MaskType="Numeric"
                                                                   HorizontalContentAlignment="Center"/>
-                                        </dxg:GridColumn.EditSettings>
-                                    </dxg:GridColumn>
+                                            </dxg:GridColumn.EditSettings>
+                                        </dxg:GridColumn>
 
-                                    <dxg:GridColumn x:Name="colUOM" FieldName="UOM" Header="Age" Width="*" HorizontalHeaderContentAlignment="Center"
+                                        <dxg:GridColumn x:Name="colUOM" FieldName="UOM" Header="Age" Width="*" HorizontalHeaderContentAlignment="Center"
                                         Visible="False"/>
 
-                                    <dxg:GridColumn  FieldName="DISPLAY_ITEM" x:Name="colDispItem" Header="Item" Width="4*" >
+                                        <dxg:GridColumn  FieldName="DISPLAY_ITEM" x:Name="colDispItem" Header="Item" Width="4*" >
 
-                                        <dxg:GridColumn.CellDisplayTemplate>
-                                            <DataTemplate>
-                                                <dxre:RichEditControl x:Name="PART_Editor" Height="48" Margin="0,0,0,1" Style="{DynamicResource richEditStyle}"  IsEnabled="False"  
+                                            <dxg:GridColumn.CellDisplayTemplate>
+                                                <DataTemplate>
+                                                    <dxre:RichEditControl x:Name="PART_Editor" Height="48" Margin="0,0,0,1" Style="{DynamicResource richEditStyle}"  IsEnabled="False"  
                                                   Content="{Binding Path=Value, Mode=OneWay, Converter={StaticResource htmlToContentConverter}}" Loaded="PART_Editor_Loaded_1" />
-                                            </DataTemplate>
-                                        </dxg:GridColumn.CellDisplayTemplate>
+                                                </DataTemplate>
+                                            </dxg:GridColumn.CellDisplayTemplate>
 
-                                    </dxg:GridColumn>
-
-
-
-                                    <dxg:GridColumn FieldName="PM" x:Name="colMinus" Header=" " Width="30" HorizontalHeaderContentAlignment="Center" >
-                                        <dxg:GridColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <Grid  Height="48" Margin="0,0,0,0" Style="{DynamicResource POSRowGrid}" VerticalAlignment="Center">
-                                                    <Grid.RowDefinitions>
-                                                        <RowDefinition Height="0"></RowDefinition>
-                                                        <RowDefinition Height="48"></RowDefinition>
-                                                        <RowDefinition Height="0"></RowDefinition>
-                                                    </Grid.RowDefinitions>
-
-                                                    <Button Margin="0,4,0,0" Grid.Row="1" Padding="0" HorizontalAlignment="Center" Cursor="Hand" Focusable="False" x:Name="btnMinus" Visibility="Hidden" Style="{DynamicResource {x:Static ToolBar.ButtonStyleKey}}" Click="BtnMinus_Click" >
-                                                        <Image Source="{DynamicResource POSMinusQty}" Stretch="Uniform" Height="28" Width="28" ></Image>
-                                                    </Button>
-                                                </Grid>
-                                                <DataTemplate.Triggers>
-
-                                                    <DataTrigger Binding="{Binding Value}" Value="Y">
-                                                        <Setter Property="Visibility" TargetName="btnMinus" Value="Visible"/>
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding Value}" Value="N">
-                                                        <Setter Property="Visibility" TargetName="btnMinus" Value="Hidden"/>
-                                                    </DataTrigger>
-
-                                                </DataTemplate.Triggers>
-                                            </DataTemplate>
-                                        </dxg:GridColumn.CellTemplate>
-
-                                    </dxg:GridColumn>
+                                        </dxg:GridColumn>
 
 
-                                    <!--<dxg:GridColumn FieldName="DISPLAY_QTY" x:Name="colDispQty" Visible="False"  Header="Item"  MinWidth="25"  Width="Auto">
+
+                                        <dxg:GridColumn FieldName="PM" x:Name="colMinus" Header=" " Width="30" HorizontalHeaderContentAlignment="Center" >
+                                            <dxg:GridColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <Grid  Height="48" Margin="0,0,0,0" Style="{DynamicResource POSRowGrid}" VerticalAlignment="Center">
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="0"></RowDefinition>
+                                                            <RowDefinition Height="48"></RowDefinition>
+                                                            <RowDefinition Height="0"></RowDefinition>
+                                                        </Grid.RowDefinitions>
+
+                                                        <Button Margin="0,4,0,0" Grid.Row="1" Padding="0" HorizontalAlignment="Center" Cursor="Hand" Focusable="False" x:Name="btnMinus" Visibility="Hidden" Style="{DynamicResource {x:Static ToolBar.ButtonStyleKey}}" Click="BtnMinus_Click" >
+                                                            <Image Source="{DynamicResource POSMinusQty}" Stretch="Uniform" Height="28" Width="28" ></Image>
+                                                        </Button>
+                                                    </Grid>
+                                                    <DataTemplate.Triggers>
+
+                                                        <DataTrigger Binding="{Binding Value}" Value="Y">
+                                                            <Setter Property="Visibility" TargetName="btnMinus" Value="Visible"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Value}" Value="N">
+                                                            <Setter Property="Visibility" TargetName="btnMinus" Value="Hidden"/>
+                                                        </DataTrigger>
+
+                                                    </DataTemplate.Triggers>
+                                                </DataTemplate>
+                                            </dxg:GridColumn.CellTemplate>
+
+                                        </dxg:GridColumn>
+
+
+                                        <!--<dxg:GridColumn FieldName="DISPLAY_QTY" x:Name="colDispQty" Visible="False"  Header="Item"  MinWidth="25"  Width="Auto">
                                         <dxg:GridColumn.CellDisplayTemplate>
                                             <DataTemplate>
                                                 <dxre:RichEditControl Grid.Row="0"  Background="White"  x:Name="PART_Editor" Height="48" Margin="0,0,0,1" Style="{DynamicResource richEditStyle}"  HorizontalContentAlignment="Center"  IsEnabled="False"  
@@ -1477,74 +1473,74 @@
                                         </dxg:GridColumn.CellDisplayTemplate>
                                     </dxg:GridColumn>-->
 
-                                    <dxg:GridColumn FieldName="DISPLAY_QTY"  x:Name="colDispQty1" Header="Item" MinWidth="35"  Width="Auto">
-                                        <dxg:GridColumn.CellDisplayTemplate>
-                                            <DataTemplate>
-                                                <Grid  Height="48" Margin="0,0,0,0" Name="txtQTYSimple">
-                                                    <Grid.RowDefinitions>
-                                                        <!--<RowDefinition Height="50"/>
+                                        <dxg:GridColumn FieldName="DISPLAY_QTY"  x:Name="colDispQty1" Header="Item" MinWidth="35"  Width="Auto">
+                                            <dxg:GridColumn.CellDisplayTemplate>
+                                                <DataTemplate>
+                                                    <Grid  Height="48" Margin="0,0,0,0" Name="txtQTYSimple">
+                                                        <Grid.RowDefinitions>
+                                                            <!--<RowDefinition Height="50"/>
                                                             <RowDefinition Height="5"/> 
                                                             <RowDefinition Height="30"></RowDefinition>-->
 
-                                                        <RowDefinition Height="49"></RowDefinition>
+                                                            <RowDefinition Height="49"></RowDefinition>
 
-                                                    </Grid.RowDefinitions>
-                                                    <!--<StackPanel  Background="White" Grid.Row="1">-->
-                                                    <dxre:RichEditControl Grid.ColumnSpan="3" Grid.Row="0" x:Name="PART_Editor" Margin="0,0,0,0" Style="{DynamicResource richEditStyle}" VerticalAlignment="Center"  HorizontalContentAlignment="Left"  IsEnabled="False"  
+                                                        </Grid.RowDefinitions>
+                                                        <!--<StackPanel  Background="White" Grid.Row="1">-->
+                                                        <dxre:RichEditControl Grid.ColumnSpan="3" Grid.Row="0" x:Name="PART_Editor" Margin="0,0,0,0" Style="{DynamicResource richEditStyle}" VerticalAlignment="Center"  HorizontalContentAlignment="Left"  IsEnabled="False"  
                                                              Height="50"  Content="{Binding Path=Value, Mode=OneWay, Converter={StaticResource htmlToContentConverter}}" Loaded="PART_Editor_Loaded_1" />
-                                                    <!--</StackPanel>-->
-                                                    <!--<TextBlock Visibility="Visible" Text="{Binding Path=Data.UOM}" Background="White"  Grid.Row="1" Grid.RowSpan="1"  Margin="0,0,-40,0"
+                                                        <!--</StackPanel>-->
+                                                        <!--<TextBlock Visibility="Visible" Text="{Binding Path=Data.UOM}" Background="White"  Grid.Row="1" Grid.RowSpan="1"  Margin="0,0,-40,0"
                                                            Height="30" VerticalAlignment="Center" HorizontalAlignment="Left" Padding="0" Grid.ColumnSpan="1" MinWidth="80" FlowDirection="LeftToRight"  />-->
 
-                                                    <!--<dxre:RichEditControl Grid.Row="2" Margin="0" Background="Black"  x:Name="PART_Edito3r1" Height="35"   Style="{DynamicResource richEditStyle}" HorizontalContentAlignment="Center"  IsEnabled="False"  
+                                                        <!--<dxre:RichEditControl Grid.Row="2" Margin="0" Background="Black"  x:Name="PART_Edito3r1" Height="35"   Style="{DynamicResource richEditStyle}" HorizontalContentAlignment="Center"  IsEnabled="False"  
                                                   Content="{Binding Path=Value, Mode=OneWay, Converter={StaticResource htmlToContentConverter}}" Loaded="PART_Editor_Loaded_1"  VerticalAlignment="Top" Grid.RowSpan="2" />-->
 
-                                                </Grid>
+                                                    </Grid>
 
-                                                <!--<DataTemplate.Triggers>
+                                                    <!--<DataTemplate.Triggers>
                                                     <DataTrigger Binding="{Binding Path=RowData.Row.PRODUCTTYPE}" Value="W">
                                                         <Setter Property="Visibility" TargetName="txtQTYSimple" Value="Hidden"/>
                                                     </DataTrigger>
                                                     -->
-                                                <!--<DataTrigger Binding="{Binding Path=RowData.Row.PRODUCTTYPE}" Value="W">
+                                                    <!--<DataTrigger Binding="{Binding Path=RowData.Row.PRODUCTTYPE}" Value="W">
                                                         <Setter Property="Visibility" TargetName="txtQTYSimpleUOM1" Value="Visible"/>
                                                     </DataTrigger>-->
-                                                <!-- 
+                                                    <!-- 
                                                 </DataTemplate.Triggers>-->
-                                            </DataTemplate>
-                                        </dxg:GridColumn.CellDisplayTemplate>
-                                    </dxg:GridColumn>
+                                                </DataTemplate>
+                                            </dxg:GridColumn.CellDisplayTemplate>
+                                        </dxg:GridColumn>
 
 
 
-                                    <dxg:GridColumn FieldName="PM" x:Name="colPlusMinus" Header=" " Width="30" HorizontalHeaderContentAlignment="Center">
-                                        <dxg:GridColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <Grid VerticalAlignment="Center"  Height="48" Margin="0,0,0,0" Style="{DynamicResource POSRowGrid}">
-                                                    <Grid.RowDefinitions>
-                                                        <RowDefinition Height="15"></RowDefinition>
-                                                        <RowDefinition Height="Auto"></RowDefinition>
-                                                        <RowDefinition Height="15"></RowDefinition>
-                                                    </Grid.RowDefinitions>
-                                                    <Button Margin="0,-4,0,0" Grid.Row="1" Padding="0"  HorizontalAlignment="Center"  Cursor="Hand" Focusable="False"  x:Name="btnPlus" Visibility="Hidden" Style="{DynamicResource {x:Static ToolBar.ButtonStyleKey}}" Click="BtnPlus_Click" >
-                                                        <Image Source="{DynamicResource POSAddQty}" Stretch="Uniform" Height="28" Width="28" ></Image>
-                                                    </Button>
-                                                </Grid>
-                                                <DataTemplate.Triggers>
-                                                    <DataTrigger Binding="{Binding Value}" Value="Y">
-                                                        <Setter Property="Visibility" TargetName="btnPlus" Value="Visible"/>
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding Value}" Value="N">
-                                                        <Setter Property="Visibility" TargetName="btnPlus" Value="Hidden"/>
-                                                    </DataTrigger>
-                                                </DataTemplate.Triggers>
-                                            </DataTemplate>
+                                        <dxg:GridColumn FieldName="PM" x:Name="colPlusMinus" Header=" " Width="30" HorizontalHeaderContentAlignment="Center">
+                                            <dxg:GridColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <Grid VerticalAlignment="Center"  Height="48" Margin="0,0,0,0" Style="{DynamicResource POSRowGrid}">
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="15"></RowDefinition>
+                                                            <RowDefinition Height="Auto"></RowDefinition>
+                                                            <RowDefinition Height="15"></RowDefinition>
+                                                        </Grid.RowDefinitions>
+                                                        <Button Margin="0,-4,0,0" Grid.Row="1" Padding="0"  HorizontalAlignment="Center"  Cursor="Hand" Focusable="False"  x:Name="btnPlus" Visibility="Hidden" Style="{DynamicResource {x:Static ToolBar.ButtonStyleKey}}" Click="BtnPlus_Click" >
+                                                            <Image Source="{DynamicResource POSAddQty}" Stretch="Uniform" Height="28" Width="28" ></Image>
+                                                        </Button>
+                                                    </Grid>
+                                                    <DataTemplate.Triggers>
+                                                        <DataTrigger Binding="{Binding Value}" Value="Y">
+                                                            <Setter Property="Visibility" TargetName="btnPlus" Value="Visible"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Value}" Value="N">
+                                                            <Setter Property="Visibility" TargetName="btnPlus" Value="Hidden"/>
+                                                        </DataTrigger>
+                                                    </DataTemplate.Triggers>
+                                                </DataTemplate>
 
-                                        </dxg:GridColumn.CellTemplate>
+                                            </dxg:GridColumn.CellTemplate>
 
-                                    </dxg:GridColumn>
+                                        </dxg:GridColumn>
 
-                                    <!--<dxg:GridColumn FieldName="DISPLAY_RATE" x:Name="colDispRate" Header="Item" Width="2*" Visible="False" >
+                                        <!--<dxg:GridColumn FieldName="DISPLAY_RATE" x:Name="colDispRate" Header="Item" Width="2*" Visible="False" >
 
                                         <dxg:GridColumn.CellDisplayTemplate>
                                             <DataTemplate>
@@ -1555,172 +1551,172 @@
 
                                     </dxg:GridColumn>-->
 
-                                    <dxg:GridColumn FieldName="DISPLAY_TOTAL" x:Name="colDispTotal" Header="Item" Width="2*" HorizontalHeaderContentAlignment="Left" >
-                                        <dxg:GridColumn.CellDisplayTemplate>
-                                            <DataTemplate>
-                                                <dxre:RichEditControl x:Name="PART_Editor"  Height="48" Margin="0,0,0,1" HorizontalContentAlignment="Left"  Style="{DynamicResource richEditStyle}"  IsEnabled="False"  
+                                        <dxg:GridColumn FieldName="DISPLAY_TOTAL" x:Name="colDispTotal" Header="Item" Width="2*" HorizontalHeaderContentAlignment="Left" >
+                                            <dxg:GridColumn.CellDisplayTemplate>
+                                                <DataTemplate>
+                                                    <dxre:RichEditControl x:Name="PART_Editor"  Height="48" Margin="0,0,0,1" HorizontalContentAlignment="Left"  Style="{DynamicResource richEditStyle}"  IsEnabled="False"  
                                                   Content="{Binding Path=Value, Mode=OneWay, Converter={StaticResource htmlToContentConverter}}" Loaded="PART_Editor_Loaded_1"/>
 
-                                            </DataTemplate>
-                                        </dxg:GridColumn.CellDisplayTemplate>
-                                    </dxg:GridColumn>
+                                                </DataTemplate>
+                                            </dxg:GridColumn.CellDisplayTemplate>
+                                        </dxg:GridColumn>
 
 
-                                    <dxg:GridColumn FieldName="" x:Name="colDelRow" Header=" " Width="39" HorizontalHeaderContentAlignment="Center">
+                                        <dxg:GridColumn FieldName="" x:Name="colDelRow" Header=" " Width="39" HorizontalHeaderContentAlignment="Center">
 
 
-                                        <dxg:GridColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <Grid VerticalAlignment="Center"  Height="48" Margin="0,0,0,0" Style="{DynamicResource POSRowGrid}">
-                                                    <Grid.RowDefinitions>
-                                                        <RowDefinition Height="15"></RowDefinition>
-                                                        <RowDefinition Height="Auto"></RowDefinition>
-                                                        <RowDefinition Height="15"></RowDefinition>
-                                                    </Grid.RowDefinitions>
-                                                    <Button Margin="1,-2,0,0" Grid.Row="1" Padding="0"  HorizontalAlignment="Left"  Cursor="Hand" Focusable="False"  x:Name="btnRowDelete" Visibility="Visible" Style="{DynamicResource {x:Static ToolBar.ButtonStyleKey}}" Click="BtnRowDelete_Click" >
-                                                        <Image Source="{StaticResource POSDeleteRow}" Stretch="Uniform" Height="24" Width="24" ></Image>
-                                                    </Button>
-                                                </Grid>
+                                            <dxg:GridColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <Grid VerticalAlignment="Center"  Height="48" Margin="0,0,0,0" Style="{DynamicResource POSRowGrid}">
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="15"></RowDefinition>
+                                                            <RowDefinition Height="Auto"></RowDefinition>
+                                                            <RowDefinition Height="15"></RowDefinition>
+                                                        </Grid.RowDefinitions>
+                                                        <Button Margin="1,-2,0,0" Grid.Row="1" Padding="0"  HorizontalAlignment="Left"  Cursor="Hand" Focusable="False"  x:Name="btnRowDelete" Visibility="Visible" Style="{DynamicResource {x:Static ToolBar.ButtonStyleKey}}" Click="BtnRowDelete_Click" >
+                                                            <Image Source="{StaticResource POSDeleteRow}" Stretch="Uniform" Height="24" Width="24" ></Image>
+                                                        </Button>
+                                                    </Grid>
 
-                                            </DataTemplate>
-                                        </dxg:GridColumn.CellTemplate>
+                                                </DataTemplate>
+                                            </dxg:GridColumn.CellTemplate>
 
-                                    </dxg:GridColumn>
+                                        </dxg:GridColumn>
 
-                                    <!-- Convenience View cart columns -->
-                                    <dxg:GridColumn FieldName="PRODUCT" x:Name="colConvProduct" Header="Product" Width="*" MinWidth="70" Visible="False"
+                                        <!-- Convenience View cart columns -->
+                                        <dxg:GridColumn FieldName="PRODUCT" x:Name="colConvProduct" Header="Product" Width="*" MinWidth="70" Visible="False"
                                                     HorizontalHeaderContentAlignment="Left">
-                                        <dxg:GridColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <Border BorderBrush="{DynamicResource ConvCartBorderBrush}" BorderThickness="0,0,0,1" Padding="2,0,2,0" Background="Transparent">
-                                                    <TextBlock FontFamily="{StaticResource OSSemiBold}" FontSize="12" FontWeight="SemiBold"
+                                            <dxg:GridColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <Border BorderBrush="{DynamicResource ConvCartBorderBrush}" BorderThickness="0,0,0,1" Padding="2,0,2,0" Background="Transparent">
+                                                        <TextBlock FontFamily="{StaticResource OSSemiBold}" FontSize="12" FontWeight="SemiBold"
                                                                Foreground="{DynamicResource ConvCartTextBrush}"
                                                                VerticalAlignment="Center" TextWrapping="NoWrap"
                                                                TextTrimming="CharacterEllipsis">
-                                                        <TextBlock.Text>
-                                                            <PriorityBinding>
-                                                                <Binding Path="Data.PRODUCT"/>
-                                                                <Binding Path="RowData.Row.PRODUCT"/>
-                                                                <Binding Path="Value"/>
-                                                            </PriorityBinding>
-                                                        </TextBlock.Text>
-                                                    </TextBlock>
-                                                </Border>
-                                            </DataTemplate>
-                                        </dxg:GridColumn.CellTemplate>
-                                    </dxg:GridColumn>
+                                                            <TextBlock.Text>
+                                                                <PriorityBinding>
+                                                                    <Binding Path="Data.PRODUCT"/>
+                                                                    <Binding Path="RowData.Row.PRODUCT"/>
+                                                                    <Binding Path="Value"/>
+                                                                </PriorityBinding>
+                                                            </TextBlock.Text>
+                                                        </TextBlock>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </dxg:GridColumn.CellTemplate>
+                                        </dxg:GridColumn>
 
-                                    <dxg:GridColumn FieldName="QTY" x:Name="colConvQty" Header="Qty" Width="112" MinWidth="112" FixedWidth="True" Visible="False"
+                                        <dxg:GridColumn FieldName="QTY" x:Name="colConvQty" Header="Qty" Width="112" MinWidth="112" FixedWidth="True" Visible="False"
                                                     HorizontalHeaderContentAlignment="Center">
-                                        <dxg:GridColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <Border BorderBrush="{DynamicResource ConvCartBorderBrush}" BorderThickness="0,0,0,1" Background="Transparent">
-                                                    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-                                                        <Grid x:Name="grdConvQtyStepper">
-                                                            <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="28"/>
-                                                                <ColumnDefinition Width="4"/>
-                                                                <ColumnDefinition Width="32"/>
-                                                                <ColumnDefinition Width="4"/>
-                                                                <ColumnDefinition Width="28"/>
-                                                            </Grid.ColumnDefinitions>
-                                                            <Button x:Name="btnMinus" Grid.Column="0" Style="{StaticResource ConvCartCircleBtnStyle}"
+                                            <dxg:GridColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <Border BorderBrush="{DynamicResource ConvCartBorderBrush}" BorderThickness="0,0,0,1" Background="Transparent">
+                                                        <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                            <Grid x:Name="grdConvQtyStepper">
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="28"/>
+                                                                    <ColumnDefinition Width="4"/>
+                                                                    <ColumnDefinition Width="32"/>
+                                                                    <ColumnDefinition Width="4"/>
+                                                                    <ColumnDefinition Width="28"/>
+                                                                </Grid.ColumnDefinitions>
+                                                                <Button x:Name="btnMinus" Grid.Column="0" Style="{StaticResource ConvCartCircleBtnStyle}"
                                                                     VerticalAlignment="Center" Visibility="Hidden" Click="BtnMinus_Click">
-                                                                <TextBlock Text="−" Foreground="{DynamicResource ConvCartAccentBlue}" FontSize="16" FontWeight="SemiBold"
+                                                                    <TextBlock Text="−" Foreground="{DynamicResource ConvCartAccentBlue}" FontSize="16" FontWeight="SemiBold"
                                                                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                                            </Button>
-                                                            <Border Grid.Column="2" Width="32" Height="32" BorderBrush="{DynamicResource ConvCartQtyBoxBorder}" BorderThickness="1"
+                                                                </Button>
+                                                                <Border Grid.Column="2" Width="32" Height="32" BorderBrush="{DynamicResource ConvCartQtyBoxBorder}" BorderThickness="1"
                                                                     CornerRadius="3" Background="{DynamicResource ConvCartQtyBoxBackground}" VerticalAlignment="Center"
                                                                     Padding="0" SnapsToDevicePixels="True">
-                                                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
                                                                            FontFamily="{StaticResource OSRegular}" FontSize="14"
                                                                            FontWeight="SemiBold" Foreground="{DynamicResource ConvCartTextBrush}"
                                                                            TextAlignment="Center" Padding="0">
-                                                                    <TextBlock.Text>
-                                                                        <PriorityBinding>
-                                                                            <Binding Path="Value" Converter="{StaticResource CartQtyDisplayConverter}"/>
-                                                                            <Binding Path="Data.QTY" Converter="{StaticResource CartQtyDisplayConverter}"/>
-                                                                        </PriorityBinding>
-                                                                    </TextBlock.Text>
-                                                                </TextBlock>
-                                                            </Border>
-                                                            <Button x:Name="btnPlus" Grid.Column="4" Style="{StaticResource ConvCartCircleBtnStyle}"
+                                                                        <TextBlock.Text>
+                                                                            <PriorityBinding>
+                                                                                <Binding Path="Value" Converter="{StaticResource CartQtyDisplayConverter}"/>
+                                                                                <Binding Path="Data.QTY" Converter="{StaticResource CartQtyDisplayConverter}"/>
+                                                                            </PriorityBinding>
+                                                                        </TextBlock.Text>
+                                                                    </TextBlock>
+                                                                </Border>
+                                                                <Button x:Name="btnPlus" Grid.Column="4" Style="{StaticResource ConvCartCircleBtnStyle}"
                                                                     VerticalAlignment="Center" Visibility="Hidden" Click="BtnPlus_Click">
-                                                                <TextBlock Text="+" Foreground="{DynamicResource ConvCartAccentBlue}" FontSize="16" FontWeight="SemiBold"
+                                                                    <TextBlock Text="+" Foreground="{DynamicResource ConvCartAccentBlue}" FontSize="16" FontWeight="SemiBold"
                                                                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                                            </Button>
-                                                        </Grid>
-                                                        <TextBlock x:Name="tbConvWeightQty" Visibility="Collapsed"
+                                                                </Button>
+                                                            </Grid>
+                                                            <TextBlock x:Name="tbConvWeightQty" Visibility="Collapsed"
                                                                    FontFamily="{StaticResource OSSemiBold}" FontSize="13" FontWeight="SemiBold"
                                                                    Foreground="{DynamicResource ConvCartTextBrush}"
                                                                    HorizontalAlignment="Center" VerticalAlignment="Center"
                                                                    TextAlignment="Center" TextWrapping="NoWrap">
-                                                            <TextBlock.Text>
-                                                                <MultiBinding StringFormat="{}{0} {1}">
-                                                                    <Binding Path="Data.QTY" Converter="{StaticResource CartQtyDisplayConverter}"/>
-                                                                    <Binding Path="Data.UOM"/>
-                                                                </MultiBinding>
-                                                            </TextBlock.Text>
-                                                        </TextBlock>
-                                                    </Grid>
-                                                </Border>
-                                                <DataTemplate.Triggers>
-                                                    <DataTrigger Binding="{Binding Data.PM}" Value="Y">
-                                                        <Setter Property="Visibility" TargetName="btnMinus" Value="Visible"/>
-                                                        <Setter Property="Visibility" TargetName="btnPlus" Value="Visible"/>
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding Data.PM}" Value="N">
-                                                        <Setter Property="Visibility" TargetName="btnMinus" Value="Hidden"/>
-                                                        <Setter Property="Visibility" TargetName="btnPlus" Value="Hidden"/>
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding Data.PRODUCTTYPE}" Value="W">
-                                                        <Setter Property="Visibility" TargetName="grdConvQtyStepper" Value="Collapsed"/>
-                                                        <Setter Property="Visibility" TargetName="tbConvWeightQty" Value="Visible"/>
-                                                    </DataTrigger>
-                                                </DataTemplate.Triggers>
-                                            </DataTemplate>
-                                        </dxg:GridColumn.CellTemplate>
-                                    </dxg:GridColumn>
+                                                                <TextBlock.Text>
+                                                                    <MultiBinding StringFormat="{}{0} {1}">
+                                                                        <Binding Path="Data.QTY" Converter="{StaticResource CartQtyDisplayConverter}"/>
+                                                                        <Binding Path="Data.UOM"/>
+                                                                    </MultiBinding>
+                                                                </TextBlock.Text>
+                                                            </TextBlock>
+                                                        </Grid>
+                                                    </Border>
+                                                    <DataTemplate.Triggers>
+                                                        <DataTrigger Binding="{Binding Data.PM}" Value="Y">
+                                                            <Setter Property="Visibility" TargetName="btnMinus" Value="Visible"/>
+                                                            <Setter Property="Visibility" TargetName="btnPlus" Value="Visible"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Data.PM}" Value="N">
+                                                            <Setter Property="Visibility" TargetName="btnMinus" Value="Hidden"/>
+                                                            <Setter Property="Visibility" TargetName="btnPlus" Value="Hidden"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Data.PRODUCTTYPE}" Value="W">
+                                                            <Setter Property="Visibility" TargetName="grdConvQtyStepper" Value="Collapsed"/>
+                                                            <Setter Property="Visibility" TargetName="tbConvWeightQty" Value="Visible"/>
+                                                        </DataTrigger>
+                                                    </DataTemplate.Triggers>
+                                                </DataTemplate>
+                                            </dxg:GridColumn.CellTemplate>
+                                        </dxg:GridColumn>
 
-                                    <dxg:GridColumn FieldName="DISPLAY_TOTAL" x:Name="colConvTotal" Header="Total" Width="120" MinWidth="120" FixedWidth="True" Visible="False"
+                                        <dxg:GridColumn FieldName="DISPLAY_TOTAL" x:Name="colConvTotal" Header="Total" Width="120" MinWidth="120" FixedWidth="True" Visible="False"
                                                     HorizontalHeaderContentAlignment="Right">
-                                        <dxg:GridColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <Border BorderBrush="{DynamicResource ConvCartBorderBrush}" BorderThickness="0,0,0,1" Background="Transparent">
-                                                    <Grid Margin="0,0,2,0">
-                                                        <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition Width="*"/>
-                                                            <ColumnDefinition Width="32"/>
-                                                            <ColumnDefinition Width="10"/>
-                                                        </Grid.ColumnDefinitions>
-                                                        <TextBlock Grid.Column="0"
+                                            <dxg:GridColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <Border BorderBrush="{DynamicResource ConvCartBorderBrush}" BorderThickness="0,0,0,1" Background="Transparent">
+                                                        <Grid Margin="0,0,2,0">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="32"/>
+                                                                <ColumnDefinition Width="10"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            <TextBlock Grid.Column="0"
                                                                    FontFamily="{StaticResource OSSemiBold}" FontSize="13" FontWeight="SemiBold"
                                                                    Foreground="{DynamicResource ConvCartTextBrush}" VerticalAlignment="Center" HorizontalAlignment="Right"
                                                                    Margin="0,0,4,0" TextWrapping="NoWrap">
-                                                            <TextBlock.Text>
-                                                                <PriorityBinding>
-                                                                    <Binding Path="Data.DISPLAY_TOTAL" Converter="{StaticResource CartHtmlToTextConverter}"/>
-                                                                    <Binding Path="Value" Converter="{StaticResource CartHtmlToTextConverter}"/>
-                                                                </PriorityBinding>
-                                                            </TextBlock.Text>
-                                                        </TextBlock>
-                                                        <Button Grid.Column="1" Style="{StaticResource ConvCartDeleteBtnStyle}"
+                                                                <TextBlock.Text>
+                                                                    <PriorityBinding>
+                                                                        <Binding Path="Data.DISPLAY_TOTAL" Converter="{StaticResource CartHtmlToTextConverter}"/>
+                                                                        <Binding Path="Value" Converter="{StaticResource CartHtmlToTextConverter}"/>
+                                                                    </PriorityBinding>
+                                                                </TextBlock.Text>
+                                                            </TextBlock>
+                                                            <Button Grid.Column="1" Style="{StaticResource ConvCartDeleteBtnStyle}"
                                                                 HorizontalAlignment="Center" VerticalAlignment="Center"
                                                                 Click="BtnRowDelete_Click">
-                                                            <TextBlock Text="×" Foreground="{DynamicResource ConvCartAccentRed}" FontSize="16" FontWeight="SemiBold"
+                                                                <TextBlock Text="×" Foreground="{DynamicResource ConvCartAccentRed}" FontSize="16" FontWeight="SemiBold"
                                                                        HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                                        </Button>
-                                                    </Grid>
-                                                </Border>
-                                            </DataTemplate>
-                                        </dxg:GridColumn.CellTemplate>
-                                    </dxg:GridColumn>
+                                                            </Button>
+                                                        </Grid>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </dxg:GridColumn.CellTemplate>
+                                        </dxg:GridColumn>
 
-                                    <dxg:GridColumn FieldName="" x:Name="colConvDelete" Header=" " Width="26" MinWidth="26" Visible="False"
+                                        <dxg:GridColumn FieldName="" x:Name="colConvDelete" Header=" " Width="26" MinWidth="26" Visible="False"
                                                     HorizontalHeaderContentAlignment="Center"/>
 
-                                </dxg:GridControl>
-                                <!--</StackPanel>-->
+                                    </dxg:GridControl>
+                                    <!--</StackPanel>-->
                                 </Grid>
 
 
@@ -2397,7 +2393,7 @@
                         </Grid>
                     </Grid>
 
-                    
+
 
                     <DockPanel Grid.Column="4" Style="{DynamicResource AdminMenuHeaderMainBackground}"  x:Name="pnlMenuHeader" Grid.RowSpan="3" Margin="0,0,0,0">
                         <Grid>
@@ -2582,17 +2578,7 @@
 
 
 
-                    <!-- New design: function buttons live in the POS options modal (pnlPosOptions) -->
-                    <Grid Grid.Row="2" Margin="0,7,9,5">
-                        <Button x:Name="btnPosOptions" Style="{StaticResource ND.OutlineNavyButton}" Height="44" MinWidth="180"
-                                HorizontalAlignment="Right" Click="BtnPosOptions_Click">
-                            <StackPanel Orientation="Horizontal">
-                                <Path Data="{StaticResource ND.Icon.Sliders}" Style="{StaticResource ND.IconPath}" Stroke="{StaticResource ND.Navy}" Width="16" Height="15" Margin="0,0,9,0"/>
-                                <TextBlock Text="POS options" VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </Button>
-                    </Grid>
-                    <Grid Grid.Row="2" Margin="0,7,9,5"  Background="#489DAC" Height="Auto" Visibility="Collapsed" >
+                    <Grid Grid.Row="2" Margin="0,7,9,5"  Background="#489DAC" Height="Auto"  >
 
                         <Grid  Margin="7"  >
 
@@ -2621,6 +2607,269 @@
                                     <ColumnDefinition Width="9"/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
+                                <ScrollViewer Grid.Column="0" x:Name="POSActionScrollViewer"
+                                  HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" OverridesDefaultStyle="False" Grid.ColumnSpan="3" PanningMode="Both" PanningRatio="1" PanningDeceleration="2" ManipulationBoundaryFeedback="ScrlViewer_ManipulationBoundaryFeedback" >
+                                    <WrapPanel Orientation="Horizontal" x:Name="pnlFB">
+
+
+                                        <RadioButton Visibility="Collapsed" x:Name="btnProductNote" Click="btnProductNote_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="Product Notes"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnViewPrice" Click="btnViewPrice_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="View Product Price"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnChangePrice" Click="btnChangePrice_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="Change Product Price"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnUsePrice" Click="btnUsePrice_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="Use Price Level"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnFastCash" Click="btnFastCash_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="Fast Cash"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+
+                                        <RadioButton Visibility="Collapsed" x:Name="btnGiftCertBalance" Click="btnGiftCertBalance_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="Gift Cert Balance"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnINVNotes" Click="btnINVNotes_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="Invoice Item Notes"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnWorkOrder" Click="btnWorkOrder_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="Word Order"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnPrintLabel" Click="btnPrintLabel_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="Print Cust. Label"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnPrintGiftReceipt" Click="btnPrintGiftReceipt_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="Print Gift Receipt"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnCoupon" Click="btnCoupon_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="Discount Ticket"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnRentRecall" Click="btnRentRecall_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="Recall Rent"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnFastCC" Click="btnFastCC_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="Fast CC"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnFees" Click="btnFees_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="Fees &amp; Charges Item"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnBottleRefund" Click="btnBottleRefund_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="Bottle Refund"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnDiscItem" Click="btnDiscItem_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="Discount Item"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnAddQty" Click="btnAddQty_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="QTY (+)"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnMinusQty" Click="btnMinusQty_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="QTY (-)"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnMoreFunctions" Click="btnMoreFunctions_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="More Apps"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnHelp" Click="btnHelp_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="Help"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnApptBook" Click="btnApptBook_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="Book Appt."/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnApptRecall" Click="btnApptRecall_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="Recall Appt."/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnPaidOut" Click="btnPaidOut_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="Paid Out"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnNoSale" Click="btnNoSale_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="No Sale"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnCancel" Click="btnCancel_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="Cancel"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnLayAway" Click="btnLayAway_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="Layaway"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnAcctPay" Click="btnAcctPay_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="Acct Pay"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnGiftCert" Click="btnGiftCert_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="Gift Cert"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnResumeSuspend" Click="btnResumeSuspend_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="Suspend"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnReprint" Click="btnReprint_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="Return Reprint"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnStockRefresh" Click="btnStockRefresh_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="Refresh Stock"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnCustomize" Click="btnCustomize_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="Select Apps"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnBoardingPassSalesReport" Click="btnBoardingPassReport_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="Boarding Pass Report"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnCustPhoto" Click="btnCustPhoto_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="Cust. Picture"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnCustNotes" Click="btnCustNotes_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="Cust. Notes"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnEmpPhoto" Click="btnEmpPhoto_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="Emp. Picture"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnProductPhoto" Click="btnProductPhoto_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="Product Picture"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnsrvSales" Click="btnsrvSales_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="Sales"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnsrvRent" Click="btnsrvRent_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="Rent"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnsrvRepair" Click="btnsrvRepair_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="Repair"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnSaveRepair" Click="btnSaveRepair_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="Save Invoice"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnOrdering" Click="btnOrdering_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="Customer Ordering"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnRepairRecall" Click="btnRepairRecall_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="Recall Repair"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnCardTran" Click="btnCardTran_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="Revert CARD Tran."/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnMcryGiftCard" Click="btnMcryGiftCard_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="Mercury Gift Card"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnEBTBal" Click="btnEBTBal_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="EBT/ Mercury Gift Card Balance"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnTare" Click="btnTare_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="Tare"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnFeesCoupon" Click="btnFeesCoupon_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="Fees &amp; Charges Ticket"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnCheckInOut" Click="btnCheckInOut_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="Check In/Out"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnPointToStoreCredit" Click="btnPointToStoreCredit_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="Points to Store Credit"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                        <RadioButton Visibility="Collapsed" x:Name="btnLottoPayout" Click="btnLottoPayout_Click">
+                                            <RadioButton.Content>
+                                                <TextBlock  Text="Lotto Payout"/>
+                                            </RadioButton.Content>
+                                        </RadioButton>
+                                    </WrapPanel>
+                                </ScrollViewer>
 
                                 <Grid Grid.Column="4" VerticalAlignment="Center" Margin="0,4">
                                     <Grid.RowDefinitions>
@@ -2647,353 +2896,6 @@
 
                 </Grid>
             </Grid>
-        </Grid>
-        <!-- ===================== POS options modal (new design, PDF page 4) =====================
-             Hosts the configurable function buttons (pnlFB, built in DisplayFunctionButtons) as tiles. -->
-        <Grid x:Name="pnlPosOptions" Visibility="Collapsed" Background="#7326324F" Panel.ZIndex="50"
-              MouseLeftButtonDown="PnlPosOptions_MouseLeftButtonDown">
-            <Border Width="560" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#FFFFFF" CornerRadius="14"
-                    Padding="18,14,18,18" Effect="{StaticResource ND.Shadow}">
-                <StackPanel>
-                    <Grid Margin="0,0,0,14">
-                        <TextBlock Text="POS options" FontFamily="{StaticResource ND.Font.SemiBold}" FontSize="19"
-                                   Foreground="{StaticResource ND.TextDark}" VerticalAlignment="Center"/>
-                        <Button Style="{StaticResource ND.ModalCloseButton}" HorizontalAlignment="Right" Click="BtnPosOptionsClose_Click" ToolTip="Close"/>
-                    </Grid>
-                    <!-- PDF page 4 tiles; Separate / Hold / Send / Re-fire / Mark Sent are hospitality-only and shown disabled -->
-                    <UniformGrid Columns="5" x:Name="pnlPosOptionTiles">
-                        <Button Style="{StaticResource ND.PosOptionTile}" Height="78" Margin="4" Tag="Print" Click="PosTile_Click">
-                            <Button.Resources><StaticResource x:Key="ND.TileIcon" ResourceKey="ND.Icon.Printer"/></Button.Resources>
-                            <TextBlock Text="Print" TextWrapping="Wrap" TextAlignment="Center"/>
-                        </Button>
-                        <Button Style="{StaticResource ND.PosOptionTile}" Height="78" Margin="4" Tag="Discount" Click="PosTile_Click">
-                            <Button.Resources><StaticResource x:Key="ND.TileIcon" ResourceKey="ND.Icon.List"/></Button.Resources>
-                            <TextBlock Text="Discount" TextWrapping="Wrap" TextAlignment="Center"/>
-                        </Button>
-                        <Button Style="{StaticResource ND.PosOptionTile}" Height="78" Margin="4" Tag="Notes" Click="PosTile_Click">
-                            <Button.Resources><StaticResource x:Key="ND.TileIcon" ResourceKey="ND.Icon.Edit"/></Button.Resources>
-                            <TextBlock Text="Notes" TextWrapping="Wrap" TextAlignment="Center"/>
-                        </Button>
-                        <Button Style="{StaticResource ND.PosOptionTile}" Height="78" Margin="4" Tag="Separate" Click="PosTile_Click" IsEnabled="False" ToolTip="Not available in Retail">
-                            <Button.Resources><StaticResource x:Key="ND.TileIcon" ResourceKey="ND.Icon.Swap"/></Button.Resources>
-                            <TextBlock Text="Separate" TextWrapping="Wrap" TextAlignment="Center"/>
-                        </Button>
-                        <Button Style="{StaticResource ND.PosOptionTile}" Height="78" Margin="4" Tag="CancelItem" Click="PosTile_Click">
-                            <Button.Resources><StaticResource x:Key="ND.TileIcon" ResourceKey="ND.Icon.Close"/></Button.Resources>
-                            <TextBlock Text="Cancel Item" TextWrapping="Wrap" TextAlignment="Center"/>
-                        </Button>
-                        <Button Style="{StaticResource ND.PosOptionTile}" Height="78" Margin="4" Tag="Edit" Click="PosTile_Click">
-                            <Button.Resources><StaticResource x:Key="ND.TileIcon" ResourceKey="ND.Icon.Edit"/></Button.Resources>
-                            <TextBlock Text="Edit" TextWrapping="Wrap" TextAlignment="Center"/>
-                        </Button>
-                        <Button Style="{StaticResource ND.PosOptionTile}" Height="78" Margin="4" Tag="Retrieve" Click="PosTile_Click">
-                            <Button.Resources><StaticResource x:Key="ND.TileIcon" ResourceKey="ND.Icon.Refresh"/></Button.Resources>
-                            <TextBlock Text="Retrieve" TextWrapping="Wrap" TextAlignment="Center"/>
-                        </Button>
-                        <Button Style="{StaticResource ND.PosOptionTile}" Height="78" Margin="4" Tag="Recall" Click="PosTile_Click">
-                            <Button.Resources><StaticResource x:Key="ND.TileIcon" ResourceKey="ND.Icon.History"/></Button.Resources>
-                            <TextBlock Text="Recall" TextWrapping="Wrap" TextAlignment="Center"/>
-                        </Button>
-                        <Button Style="{StaticResource ND.PosOptionTile}" Height="78" Margin="4" Tag="ManualDiscount" Click="PosTile_Click">
-                            <Button.Resources><StaticResource x:Key="ND.TileIcon" ResourceKey="ND.Icon.Percent"/></Button.Resources>
-                            <TextBlock Text="Manual Discount" TextWrapping="Wrap" TextAlignment="Center"/>
-                        </Button>
-                        <Button Style="{StaticResource ND.PosOptionTile}" Height="78" Margin="4" Tag="AddMisc" Click="PosTile_Click">
-                            <Button.Resources><StaticResource x:Key="ND.TileIcon" ResourceKey="ND.Icon.Plus"/></Button.Resources>
-                            <TextBlock Text="Add Misc" TextWrapping="Wrap" TextAlignment="Center"/>
-                        </Button>
-                        <Button Style="{StaticResource ND.PosOptionTile}" Height="78" Margin="4" Tag="VoidOrder" Click="PosTile_Click">
-                            <Button.Resources><StaticResource x:Key="ND.TileIcon" ResourceKey="ND.Icon.Trash"/></Button.Resources>
-                            <TextBlock Text="Void Order" TextWrapping="Wrap" TextAlignment="Center"/>
-                        </Button>
-                        <Button Style="{StaticResource ND.PosOptionTile}" Height="78" Margin="4" Tag="Hold" Click="PosTile_Click" IsEnabled="False" ToolTip="Not available in Retail">
-                            <Button.Resources><StaticResource x:Key="ND.TileIcon" ResourceKey="ND.Icon.Pause"/></Button.Resources>
-                            <TextBlock Text="Hold Item" TextWrapping="Wrap" TextAlignment="Center"/>
-                        </Button>
-                        <Button Style="{StaticResource ND.PosOptionTile}" Height="78" Margin="4" Tag="Send" Click="PosTile_Click" IsEnabled="False" ToolTip="Not available in Retail">
-                            <Button.Resources><StaticResource x:Key="ND.TileIcon" ResourceKey="ND.Icon.Send"/></Button.Resources>
-                            <TextBlock Text="Send Item" TextWrapping="Wrap" TextAlignment="Center"/>
-                        </Button>
-                        <Button Style="{StaticResource ND.PosOptionTile}" Height="78" Margin="4" Tag="Refire" Click="PosTile_Click" IsEnabled="False" ToolTip="Not available in Retail">
-                            <Button.Resources><StaticResource x:Key="ND.TileIcon" ResourceKey="ND.Icon.Refresh"/></Button.Resources>
-                            <TextBlock Text="Re-fire Item" TextWrapping="Wrap" TextAlignment="Center"/>
-                        </Button>
-                        <Button Style="{StaticResource ND.PosOptionTile}" Height="78" Margin="4" Tag="MarkSent" Click="PosTile_Click" IsEnabled="False" ToolTip="Not available in Retail">
-                            <Button.Resources><StaticResource x:Key="ND.TileIcon" ResourceKey="ND.Icon.Check"/></Button.Resources>
-                            <TextBlock Text="Mark Sent" TextWrapping="Wrap" TextAlignment="Center"/>
-                        </Button>
-                    </UniformGrid>
-                    <ToggleButton x:Name="tglMoreFunctions" Style="{StaticResource ND.LinkToggle}" Content="More functions" Margin="6,10,0,4" HorizontalAlignment="Left"/>
-                    <ScrollViewer x:Name="POSActionScrollViewer" MaxHeight="200"
-                                  Visibility="{Binding IsChecked, ElementName=tglMoreFunctions, Converter={StaticResource ND.BoolToVis}}" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"
-                                  PanningMode="VerticalOnly" PanningRatio="1" PanningDeceleration="2" ManipulationBoundaryFeedback="ScrlViewer_ManipulationBoundaryFeedback">
-                        <WrapPanel Orientation="Horizontal" x:Name="pnlFB" ButtonBase.Click="PnlFB_Click">
-                                            <RadioButton Visibility="Collapsed" x:Name="btnProductNote" Click="btnProductNote_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="Product Notes"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnViewPrice" Click="btnViewPrice_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="View Product Price"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnChangePrice" Click="btnChangePrice_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="Change Product Price"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnUsePrice" Click="btnUsePrice_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="Use Price Level"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnFastCash" Click="btnFastCash_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="Fast Cash"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-
-                                            <RadioButton Visibility="Collapsed" x:Name="btnGiftCertBalance" Click="btnGiftCertBalance_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="Gift Cert Balance"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnINVNotes" Click="btnINVNotes_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="Invoice Item Notes"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnWorkOrder" Click="btnWorkOrder_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="Word Order"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnPrintLabel" Click="btnPrintLabel_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="Print Cust. Label"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnPrintGiftReceipt" Click="btnPrintGiftReceipt_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="Print Gift Receipt"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnCoupon" Click="btnCoupon_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="Discount Ticket"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnRentRecall" Click="btnRentRecall_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="Recall Rent"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnFastCC" Click="btnFastCC_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="Fast CC"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnFees" Click="btnFees_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="Fees &amp; Charges Item"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnBottleRefund" Click="btnBottleRefund_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="Bottle Refund"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnDiscItem" Click="btnDiscItem_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="Discount Item"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnAddQty" Click="btnAddQty_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="QTY (+)"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnMinusQty" Click="btnMinusQty_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="QTY (-)"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnMoreFunctions" Click="btnMoreFunctions_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="More Apps"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnHelp" Click="btnHelp_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="Help"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnApptBook" Click="btnApptBook_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="Book Appt."/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnApptRecall" Click="btnApptRecall_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="Recall Appt."/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnPaidOut" Click="btnPaidOut_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="Paid Out"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnNoSale" Click="btnNoSale_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="No Sale"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnCancel" Click="btnCancel_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="Cancel"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnLayAway" Click="btnLayAway_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="Layaway"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnAcctPay" Click="btnAcctPay_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="Acct Pay"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnGiftCert" Click="btnGiftCert_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="Gift Cert"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnResumeSuspend" Click="btnResumeSuspend_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="Suspend"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnReprint" Click="btnReprint_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="Return Reprint"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnStockRefresh" Click="btnStockRefresh_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="Refresh Stock"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnCustomize" Click="btnCustomize_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="Select Apps"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnBoardingPassSalesReport" Click="btnBoardingPassReport_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="Boarding Pass Report"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnCustPhoto" Click="btnCustPhoto_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="Cust. Picture"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnCustNotes" Click="btnCustNotes_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="Cust. Notes"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnEmpPhoto" Click="btnEmpPhoto_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="Emp. Picture"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnProductPhoto" Click="btnProductPhoto_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="Product Picture"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnsrvSales" Click="btnsrvSales_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="Sales"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnsrvRent" Click="btnsrvRent_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="Rent"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnsrvRepair" Click="btnsrvRepair_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="Repair"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnSaveRepair" Click="btnSaveRepair_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="Save Invoice"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnOrdering" Click="btnOrdering_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="Customer Ordering"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnRepairRecall" Click="btnRepairRecall_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="Recall Repair"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnCardTran" Click="btnCardTran_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="Revert CARD Tran."/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnMcryGiftCard" Click="btnMcryGiftCard_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="Mercury Gift Card"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnEBTBal" Click="btnEBTBal_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="EBT/ Mercury Gift Card Balance"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnTare" Click="btnTare_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="Tare"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnFeesCoupon" Click="btnFeesCoupon_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="Fees &amp; Charges Ticket"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnCheckInOut" Click="btnCheckInOut_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="Check In/Out"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnPointToStoreCredit" Click="btnPointToStoreCredit_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="Points to Store Credit"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                                            <RadioButton Visibility="Collapsed" x:Name="btnLottoPayout" Click="btnLottoPayout_Click">
-                                                <RadioButton.Content>
-                                                    <TextBlock  Text="Lotto Payout"/>
-                                                </RadioButton.Content>
-                                            </RadioButton>
-                        </WrapPanel>
-                    </ScrollViewer>
-                    <Button Style="{StaticResource ND.DangerOutlineButton}" Height="46" Margin="4,14,4,0" Click="BtnPosOptionsClearOrder_Click">
-                        <StackPanel Orientation="Horizontal">
-                            <Path Data="{StaticResource ND.Icon.Trash}" Style="{StaticResource ND.IconPath}" Stroke="#C0392B" Width="15" Height="16" Margin="0,0,8,0"/>
-                            <TextBlock Text="Clear Order" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
-                </StackPanel>
-            </Border>
         </Grid>
         <Grid Background="#3D000000" x:Name="blurGrid" Visibility="Collapsed"/>
         <Grid Background="#3D000000" x:Name="menuGrid" Visibility="Collapsed" >
