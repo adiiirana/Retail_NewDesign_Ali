@@ -5125,6 +5125,7 @@
   <ItemGroup>
     <Resource Include="Resources\Images\Background.png" />
     <Resource Include="Resources\Images\LoginBackground.jpg" />
+    <Resource Include="Resources\Images\LoginStore.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\GreaterThan.png" />

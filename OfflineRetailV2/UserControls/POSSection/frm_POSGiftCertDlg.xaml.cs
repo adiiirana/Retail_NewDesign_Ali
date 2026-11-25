@@ -69,6 +69,10 @@ namespace OfflineRetailV2.UserControls.POSSection
             InitializeComponent();
 
             Loaded += Frm_POSGiftCertDlg_Loaded;
+            // new design: the certificate-number frame hides/shows with the number field
+            System.ComponentModel.DependencyPropertyDescriptor.FromProperty(UIElement.VisibilityProperty, typeof(DevExpress.Xpf.Editors.TextEdit))
+                .AddValueChanged(txtGiftCertNo, (s, e) => pnlGiftCertNo.Visibility = txtGiftCertNo.Visibility);
+            dlgBody.SizeChanged += (s, e) => dlgBody.Clip = new System.Windows.Media.RectangleGeometry(new Rect(dlgBody.RenderSize), 20, 20);   // new design: rounded corners
             ModalWindow.CloseCommand = new CommandBase(OnClose);
         }
 
@@ -150,6 +154,7 @@ namespace OfflineRetailV2.UserControls.POSSection
         {
             nkybrd = new NumKeyboard();
             Title.Text = Properties.Resources.Sell_a_Gift_Certificate;
+            if (!string.IsNullOrWhiteSpace(Settings.CurrencySymbol)) lbCurrency.Text = Settings.CurrencySymbol.Trim();   // new design: currency prefix
 
             if (Settings.SingleGC == "Y")
             {

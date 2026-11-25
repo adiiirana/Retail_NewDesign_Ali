@@ -15,6 +15,9 @@
 
     <Window.Resources>
         <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/NewDesignStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
             <Style x:Key="scTextEditStyle" TargetType="dxe:TextEdit">
                 <Setter Property="Height" Value="34"/>
                 <Setter Property="FontSize" Value="14"/>
@@ -202,6 +205,88 @@
                 <Setter Property="CornerRadius" Value="6"/>
                 <Setter Property="Height" Value="34"/>
                 <Setter Property="Cursor" Value="Hand"/>
+            </Style>
+            <!-- ===== new design (modern layout) ===== -->
+            <Style x:Key="NdLabel" TargetType="TextBlock">
+                <Setter Property="FontFamily" Value="{StaticResource ND.Font.Medium}"/>
+                <Setter Property="FontSize" Value="13"/>
+                <Setter Property="Foreground" Value="#1B1D33"/>
+                <Setter Property="Margin" Value="2,0,0,4"/>
+            </Style>
+            <Style x:Key="NdField" TargetType="Border">
+                <Setter Property="Height" Value="40"/>
+                <Setter Property="CornerRadius" Value="9"/>
+                <Setter Property="Background" Value="#F1F3F8"/>
+                <Setter Property="BorderBrush" Value="#DDE1EA"/>
+                <Setter Property="BorderThickness" Value="1.2"/>
+                <Setter Property="Padding" Value="8,0,6,0"/>
+            </Style>
+            <Style x:Key="NdAmountField" TargetType="Border" BasedOn="{StaticResource NdField}">
+                <Setter Property="Background" Value="#FFFFFF"/>
+                <Setter Property="Padding" Value="0"/>
+                <Setter Property="Cursor" Value="Hand"/>
+            </Style>
+            <Style x:Key="NdAmountCur" TargetType="TextBlock">
+                <Setter Property="FontFamily" Value="{StaticResource ND.Font.Medium}"/>
+                <Setter Property="FontSize" Value="15"/>
+                <Setter Property="Foreground" Value="#1B1D33"/>
+                <Setter Property="Margin" Value="0,0,12,0"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+            <Style x:Key="NdAmountText" TargetType="TextBlock" BasedOn="{StaticResource NdAmountCur}">
+                <Setter Property="Margin" Value="0"/>
+            </Style>
+            <Style x:Key="NdEditor" TargetType="dxe:BaseEdit">
+                <Setter Property="ShowBorder" Value="False"/>
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="FontFamily" Value="{StaticResource ND.Font.Regular}"/>
+                <Setter Property="FontSize" Value="15"/>
+                <Setter Property="Foreground" Value="#1B1D33"/>
+            </Style>
+            <Style x:Key="NdQtyButton" TargetType="Button">
+                <Setter Property="Width" Value="30"/>
+                <Setter Property="Height" Value="30"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Focusable" Value="False"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="bd" CornerRadius="15" Background="#EEF0F6">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="bd" Property="Background" Value="#E2E5EF"/></Trigger>
+                                <Trigger Property="IsPressed" Value="True"><Setter TargetName="bd" Property="Background" Value="#D3D8E6"/></Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="NdKey" TargetType="Button">
+                <Style.Resources><Style TargetType="TextBlock"/></Style.Resources>
+                <Setter Property="Foreground" Value="#1B1D33"/>
+                <Setter Property="FontFamily" Value="{StaticResource ND.Font.SemiBold}"/>
+                <Setter Property="FontSize" Value="19"/>
+                <Setter Property="Height" Value="42"/>
+                <Setter Property="Margin" Value="3"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Focusable" Value="False"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="bd" CornerRadius="9" Background="#F1F3F8" BorderBrush="#E1E5EE" BorderThickness="1">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <ContentPresenter.Resources><Style TargetType="TextBlock"/></ContentPresenter.Resources>
+                                </ContentPresenter>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="bd" Property="Background" Value="#E8EBF3"/></Trigger>
+                                <Trigger Property="IsPressed" Value="True"><Setter TargetName="bd" Property="Background" Value="#DADFEA"/></Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
             </Style>
         </ResourceDictionary>
     </Window.Resources>
@@ -546,212 +631,240 @@
                         </Grid>
                     </Grid>
 
-                    <Border x:Name="gridModern" Visibility="Collapsed"
-                            Background="{DynamicResource scWindowBackgroundBrush}"
-                            CornerRadius="15" Padding="14,12" VerticalAlignment="Center">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
-
-                            <StackPanel Grid.Row="0" Margin="0,0,0,8" HorizontalAlignment="Center">
-                                <TextBlock x:Name="txtModernTitle" Text="Weight Product" Foreground="{DynamicResource scTextSecondaryBrush}" FontSize="18" FontWeight="Bold" FontFamily="{StaticResource PoppinsBold}" HorizontalAlignment="Center"/>
-                                <TextBlock x:Name="txtModernSubtitle" Text="Enter details for weight" Foreground="{DynamicResource scTextSecondaryBrush}" FontSize="12" Margin="0,1,0,0" HorizontalAlignment="Center"/>
-                            </StackPanel>
-
-                            <StackPanel x:Name="pnlModernFields" Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Stretch">
-
-                                <StackPanel x:Name="pnlProductField" Margin="0,0,0,8">
-                                    <TextBlock Text="Product" Margin="0,0,0,2" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource scTextSecondaryBrush}"/>
-                                    <dxe:TextEdit x:Name="txtModernProduct"
-                                          Style="{StaticResource scTextEditStyle}"
-                                          HorizontalAlignment="Stretch"
-                                          FontSize="15"
-                                          FontWeight="SemiBold"
-                                          Foreground="{DynamicResource scTextSecondaryBrush}"
-                                          Height="34"
-                                          NullText="Enter item name..."
-                                          NullTextForeground="#808080"
-                                          ShowNullTextIfFocused="True"
-                                          GotFocus="Full_GotFocus"
-                                          LostFocus="Full_LostFocus"/>
-                                </StackPanel>
-
-                                <StackPanel x:Name="pnlWeightField" Margin="0,0,0,8">
-                                    <TextBlock Text="Weight" Margin="0,0,0,2" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource scTextSecondaryBrush}"/>
-                                    <Border x:Name="bdWeightHero" Style="{StaticResource scHeroInputBorderStyle}"
-                                            MouseLeftButtonDown="bdWeightHero_MouseLeftButtonDown">
-                                        <Grid>
-                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                                <Viewbox Width="22" Height="22" Margin="0,0,10,0">
-                                                    <Path Fill="{DynamicResource scTextSecondaryBrush}"
-                                                          Data="M12,3A4,4 0 0,1 16,7H8A4,4 0 0,1 12,3M4,9H20A1,1 0 0,1 21,10V11A1,1 0 0,1 20,12H19.5L18,21H6L4.5,12H4A1,1 0 0,1 3,11V10A1,1 0 0,1 4,9M12,5A2,2 0 0,0 10,7H14A2,2 0 0,0 12,5Z"/>
-                                                </Viewbox>
-                                                <TextBlock x:Name="txtWeightDisplay" Text="0.000" FontSize="24" FontWeight="Bold"
-                                                           Foreground="{DynamicResource scTextSecondaryBrush}" VerticalAlignment="Center"/>
-                                            </StackPanel>
-                                            <Border x:Name="bdWeightUomChip" Style="{StaticResource scWeightUomChipStyle}"
-                                                    HorizontalAlignment="Right" VerticalAlignment="Center"
-                                                    MouseLeftButtonDown="bdWeightUomChip_MouseLeftButtonDown"
-                                                    MouseLeftButtonUp="bdWeightUomChip_MouseLeftButtonUp">
-                                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                                    <TextBlock x:Name="txtWeightUom" Text="Kg" FontSize="20" FontWeight="Bold"
-                                                               Foreground="{DynamicResource scTextSecondaryBrush}" VerticalAlignment="Center"/>
-                                                    <Path x:Name="pathWeightUomCaret"
-                                                          Data="M7,10L12,15L17,10H7Z" Width="12" Height="9" Stretch="Uniform"
-                                                          Fill="{DynamicResource scTextSecondaryBrush}" Margin="6,3,0,0"
-                                                          VerticalAlignment="Center" Opacity="0.7"/>
-                                                </StackPanel>
-                                            </Border>
-                                        </Grid>
-                                    </Border>
-                                    <Popup x:Name="popupWeightUom"
-                                           PlacementTarget="{Binding ElementName=bdWeightUomChip}"
-                                           Placement="Bottom"
-                                           StaysOpen="False"
-                                           AllowsTransparency="True"
-                                           PopupAnimation="Fade"
-                                           HorizontalOffset="-8"
-                                           VerticalOffset="4">
-                                        <Border Background="{DynamicResource scWindowBackgroundBrush}"
-                                                BorderBrush="{DynamicResource scBorderBrush}"
-                                                BorderThickness="1"
-                                                CornerRadius="10"
-                                                Padding="6"
-                                                MinWidth="128">
-                                            <Border.Effect>
-                                                <DropShadowEffect BlurRadius="12" ShadowDepth="2" Opacity="0.18" Color="#000000"/>
-                                            </Border.Effect>
-                                            <StackPanel>
-                                                <Button x:Name="btnUomLb" Content="Lb" Tag="Lb" Style="{StaticResource scWeightUomOptionStyle}" Click="WeightUomOption_Click"/>
-                                                <Button x:Name="btnUomKg" Content="Kg" Tag="Kg" Style="{StaticResource scWeightUomOptionStyle}" Click="WeightUomOption_Click"/>
-                                                <Button x:Name="btnUomGrams" Content="Grams" Tag="Grams" Style="{StaticResource scWeightUomOptionStyle}" Click="WeightUomOption_Click"/>
-                                            </StackPanel>
-                                        </Border>
-                                    </Popup>
-                                </StackPanel>
-
-                                <StackPanel x:Name="pnlPriceHeroField" Margin="0,0,0,8">
-                                    <TextBlock Text="Price" Margin="0,0,0,2" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource scTextSecondaryBrush}"/>
-                                    <Border x:Name="bdPriceHero" Style="{StaticResource scFieldInputBorderStyle}"
-                                            MouseLeftButtonDown="bdPriceHero_MouseLeftButtonDown">
-                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0">
-                                            <TextBlock x:Name="txtHeroCurrency" Text="£" FontSize="16" FontWeight="SemiBold"
-                                                       Foreground="{DynamicResource scTextSecondaryBrush}" Margin="0,0,4,0"/>
-                                            <TextBlock x:Name="txtHeroPriceDisplay" Text="0.00" FontSize="16" FontWeight="SemiBold"
-                                                       Foreground="{DynamicResource scTextSecondaryBrush}"/>
-                                        </StackPanel>
-                                    </Border>
-                                </StackPanel>
-
-                                <Grid x:Name="pnlSecondaryAmounts" Margin="0,0,0,8">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="10"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <StackPanel x:Name="pnlPriceField" Grid.Column="0">
-                                        <TextBlock Text="Price" Margin="0,0,0,2" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource scTextSecondaryBrush}"/>
-                                        <Border x:Name="bdWeightPrice" Style="{StaticResource scFieldInputBorderStyle}"
-                                                MouseLeftButtonDown="bdWeightPrice_MouseLeftButtonDown">
-                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0">
-                                                <TextBlock x:Name="txtWeightPriceCurrency" Text="£" FontSize="16" FontWeight="SemiBold"
-                                                           Foreground="{DynamicResource scTextSecondaryBrush}" Margin="0,0,4,0"/>
-                                                <TextBlock x:Name="txtPriceDisplay" Text="0.00" FontSize="16" FontWeight="SemiBold"
-                                                           Foreground="{DynamicResource scTextSecondaryBrush}"/>
-                                            </StackPanel>
-                                        </Border>
-                                    </StackPanel>
-                                    <StackPanel x:Name="pnlCostField" Grid.Column="0">
-                                        <TextBlock Text="Cost" Margin="0,0,0,2" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource scTextSecondaryBrush}"/>
-                                        <Border x:Name="bdCost" Style="{StaticResource scFieldInputBorderStyle}"
-                                                MouseLeftButtonDown="bdCost_MouseLeftButtonDown">
-                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0">
-                                                <TextBlock x:Name="txtCostCurrency" Text="£" FontSize="16" FontWeight="SemiBold"
-                                                           Foreground="{DynamicResource scTextSecondaryBrush}" Margin="0,0,4,0"/>
-                                                <TextBlock x:Name="txtCostDisplay" Text="0.00" FontSize="16" FontWeight="SemiBold"
-                                                           Foreground="{DynamicResource scTextSecondaryBrush}"/>
-                                            </StackPanel>
-                                        </Border>
-                                    </StackPanel>
-                                    <StackPanel Grid.Column="2">
-                                        <TextBlock Text="Discount" Margin="0,0,0,2" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource scTextSecondaryBrush}"/>
-                                        <Border x:Name="bdDiscount" Style="{StaticResource scFieldInputBorderStyle}"
-                                                MouseLeftButtonDown="bdDiscount_MouseLeftButtonDown">
-                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0">
-                                                <TextBlock x:Name="txtDiscountCurrency" Text="£" FontSize="16" FontWeight="SemiBold"
-                                                           Foreground="{DynamicResource scTextSecondaryBrush}" Margin="0,0,4,0"/>
-                                                <TextBlock x:Name="txtDiscountDisplay" Text="0.00" FontSize="16" FontWeight="SemiBold"
-                                                           Foreground="{DynamicResource scTextSecondaryBrush}"/>
-                                            </StackPanel>
-                                        </Border>
-                                    </StackPanel>
-                                </Grid>
-
-                                <Grid x:Name="pnlQtyTaxRow" Margin="0,0,0,8">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition x:Name="colQty" Width="140"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-
-                                    <StackPanel x:Name="pnlQtyBox" Grid.Column="0" Orientation="Vertical" Margin="0,0,10,0">
-                                        <TextBlock Text="Qty" Margin="0,0,0,2" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource scTextSecondaryBrush}"/>
-                                        <Border Style="{StaticResource scInlineQtyBoxStyle}">
-                                            <Grid>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="Auto"/>
-                                                    <ColumnDefinition Width="*"/>
-                                                    <ColumnDefinition Width="Auto"/>
-                                                </Grid.ColumnDefinitions>
-                                                <Button x:Name="btnQtyMinus" Grid.Column="0" Content="−" Style="{StaticResource scInlineQtyButtonStyle}" Foreground="{DynamicResource scDestructiveBrush}" Click="btnQtyMinus_Click"/>
-                                                <TextBlock x:Name="txtModernQty" Grid.Column="1" Text="1" Foreground="{DynamicResource scTextSecondaryBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" FontWeight="SemiBold"/>
-                                                <Button x:Name="btnQtyPlus" Grid.Column="2" Content="+" Style="{StaticResource scInlineQtyButtonStyle}" Foreground="{DynamicResource scPrimaryGreenBrush}" Click="btnQtyPlus_Click"/>
-                                            </Grid>
-                                        </Border>
-                                    </StackPanel>
-
-                                    <StackPanel Grid.Column="1" Orientation="Vertical">
-                                        <TextBlock Text="Tax" Margin="0,0,0,2" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource scTextSecondaryBrush}"/>
-                                        <dxe:ComboBoxEdit x:Name="cmbModernTax"
-                                                          Style="{StaticResource scComboBoxEditStyle}"
-                                                          IsTextEditable="False"
-                                                          Foreground="{DynamicResource scTextSecondaryBrush}"/>
-                                    </StackPanel>
-                                </Grid>
-
-                                <UniformGrid x:Name="pnlModernKeypad" Columns="3" Rows="4" Margin="0,0,0,6">
-                                    <Button Content="7" Style="{StaticResource scKeypadButtonStyle}" Click="ModernKeypad_NumClick"/>
-                                    <Button Content="8" Style="{StaticResource scKeypadButtonStyle}" Click="ModernKeypad_NumClick"/>
-                                    <Button Content="9" Style="{StaticResource scKeypadButtonStyle}" Click="ModernKeypad_NumClick"/>
-                                    <Button Content="4" Style="{StaticResource scKeypadButtonStyle}" Click="ModernKeypad_NumClick"/>
-                                    <Button Content="5" Style="{StaticResource scKeypadButtonStyle}" Click="ModernKeypad_NumClick"/>
-                                    <Button Content="6" Style="{StaticResource scKeypadButtonStyle}" Click="ModernKeypad_NumClick"/>
-                                    <Button Content="1" Style="{StaticResource scKeypadButtonStyle}" Click="ModernKeypad_NumClick"/>
-                                    <Button Content="2" Style="{StaticResource scKeypadButtonStyle}" Click="ModernKeypad_NumClick"/>
-                                    <Button Content="3" Style="{StaticResource scKeypadButtonStyle}" Click="ModernKeypad_NumClick"/>
-                                    <Button Content="Clear" Style="{StaticResource scKeypadButtonStyle}" Click="ModernKeypad_ClearClick" Foreground="{DynamicResource scDestructiveBrush}" FontSize="16"/>
-                                    <Button Content="0" Style="{StaticResource scKeypadButtonStyle}" Click="ModernKeypad_NumClick"/>
-                                    <Button Style="{StaticResource scKeypadButtonStyle}" Click="ModernKeypad_BackspaceClick">
-                                        <Path Data="M19,15.59L17.59,17L14,13.41L10.41,17L9,15.59L12.59,12L9,8.41L10.41,7L14,10.59L17.59,7L19,8.41L15.41,12L19,15.59M22,3A2,2 0 0,1 24,5V19A2,2 0 0,1 22,21H7C6.31,21 5.77,20.64 5.41,20.11L0,12L5.41,3.88C5.77,3.35 6.31,3 7,3H22Z"
-                                              Fill="{DynamicResource scTextPrimaryBrush}" Height="16" Stretch="Uniform"/>
-                                    </Button>
-                                </UniformGrid>
-                            </StackPanel>
-
-                            <Grid Grid.Row="2" Margin="0,6,0,0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <Button Content="DONE" x:Name="btnModernOK" Style="{StaticResource scPrimaryButtonStyle}" Grid.Column="0" Foreground="White" Margin="0,0,10,0" Click="btnOK_Click"/>
-                                <Button Content="CANCEL" x:Name="btnModernCancel" Style="{StaticResource scSecondaryButtonStyle}" Grid.Column="1" Width="120" Click="btnCancel_Click"/>
-                            </Grid>
-                        </Grid>
-                    </Border>
                 </Grid>
             </cc:ModalWindow>
+
+        <!-- New design (Blank Line / Weight / Edit item): navy header, white body, light inputs, keypad, Done / Cancel.
+             Sits beside the classic ModalWindow, which the code collapses when this layout is used. -->
+        <Border x:Name="gridModern" Visibility="Collapsed" Background="#FFFFFF" CornerRadius="18" VerticalAlignment="Center"
+                Margin="10" Effect="{StaticResource ND.ShadowLarge}">
+            <Border x:Name="gridModernClip" CornerRadius="18">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- header -->
+                <Grid Grid.Row="0" Height="76">
+                    <Rectangle>
+                        <Rectangle.Fill>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#1E2246" Offset="0"/>
+                                <GradientStop Color="#2A2F5C" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Rectangle.Fill>
+                    </Rectangle>
+                    <Rectangle HorizontalAlignment="Right" Width="300" Opacity="0.8">
+                        <Rectangle.Fill>
+                            <ImageBrush ImageSource="pack://application:,,,/OfflineRetailV2;component/Resources/Images/LoginStore.jpg"
+                                        Stretch="UniformToFill" AlignmentX="Center" AlignmentY="Bottom" Viewbox="0.42,0.78,0.5,0.22"/>
+                        </Rectangle.Fill>
+                        <Rectangle.OpacityMask>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                <GradientStop Color="#00000000" Offset="0"/>
+                                <GradientStop Color="#FF000000" Offset="0.6"/>
+                            </LinearGradientBrush>
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                    <Grid Margin="20,0,16,0" VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Path Data="M12,2.5 L21,7.25 V16.75 L12,21.5 L3,16.75 V7.25 Z M3,7.25 L12,12 L21,7.25 M12,12 V21.5"
+                              Style="{StaticResource ND.IconPath}" Stroke="#FFFFFF" StrokeThickness="1.7" Width="32" Height="32" Margin="0,0,16,0" VerticalAlignment="Center"/>
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock x:Name="txtModernTitle" Text="Weight Product" Foreground="#FFFFFF" FontSize="21" FontFamily="{StaticResource ND.Font.Bold}" TextTrimming="CharacterEllipsis"/>
+                            <TextBlock x:Name="txtModernSubtitle" Text="Enter details for weight" Foreground="#D8DBF0" FontSize="13" FontFamily="{StaticResource ND.Font.Regular}" Margin="0,1,0,0"/>
+                        </StackPanel>
+                        <Button Grid.Column="2" Style="{StaticResource ND.DialogCloseButton}" Click="btnCancel_Click" ToolTip="Close"/>
+                    </Grid>
+                </Grid>
+
+                <!-- fields + keypad -->
+                <StackPanel x:Name="pnlModernFields" Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Stretch" Margin="18,14,18,0">
+
+                    <StackPanel x:Name="pnlProductField" Margin="0,0,0,10">
+                        <TextBlock Text="Product" Style="{StaticResource NdLabel}"/>
+                        <Border Style="{StaticResource NdField}">
+                            <dxe:TextEdit x:Name="txtModernProduct" Style="{StaticResource NdEditor}"
+                                          NullText="Enter item name..." NullTextForeground="#9AA1B5" ShowNullTextIfFocused="True"
+                                          GotFocus="Full_GotFocus" LostFocus="Full_LostFocus"/>
+                        </Border>
+                    </StackPanel>
+
+                    <StackPanel x:Name="pnlWeightField" Margin="0,0,0,10">
+                        <TextBlock Text="Weight" Style="{StaticResource NdLabel}"/>
+                        <Border x:Name="bdWeightHero" Style="{StaticResource NdField}" Height="48" Cursor="Hand"
+                                MouseLeftButtonDown="bdWeightHero_MouseLeftButtonDown">
+                            <Grid>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <Viewbox Width="22" Height="22" Margin="0,0,10,0">
+                                        <Path Fill="#1B1D33"
+                                              Data="M12,3A4,4 0 0,1 16,7H8A4,4 0 0,1 12,3M4,9H20A1,1 0 0,1 21,10V11A1,1 0 0,1 20,12H19.5L18,21H6L4.5,12H4A1,1 0 0,1 3,11V10A1,1 0 0,1 4,9M12,5A2,2 0 0,0 10,7H14A2,2 0 0,0 12,5Z"/>
+                                    </Viewbox>
+                                    <TextBlock x:Name="txtWeightDisplay" Text="0.000" FontSize="24" FontFamily="{StaticResource ND.Font.Bold}"
+                                               Foreground="#1B1D33" VerticalAlignment="Center"/>
+                                </StackPanel>
+                                <Border x:Name="bdWeightUomChip" Style="{StaticResource scWeightUomChipStyle}"
+                                        HorizontalAlignment="Right" VerticalAlignment="Center"
+                                        MouseLeftButtonDown="bdWeightUomChip_MouseLeftButtonDown"
+                                        MouseLeftButtonUp="bdWeightUomChip_MouseLeftButtonUp">
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <TextBlock x:Name="txtWeightUom" Text="Kg" FontSize="18" FontFamily="{StaticResource ND.Font.Bold}"
+                                                   Foreground="#1B1D33" VerticalAlignment="Center"/>
+                                        <Path x:Name="pathWeightUomCaret"
+                                              Data="M7,10L12,15L17,10H7Z" Width="12" Height="9" Stretch="Uniform"
+                                              Fill="#1B1D33" Margin="6,3,0,0"
+                                              VerticalAlignment="Center" Opacity="0.7"/>
+                                    </StackPanel>
+                                </Border>
+                            </Grid>
+                        </Border>
+                        <Popup x:Name="popupWeightUom"
+                               PlacementTarget="{Binding ElementName=bdWeightUomChip}"
+                               Placement="Bottom"
+                               StaysOpen="False"
+                               AllowsTransparency="True"
+                               PopupAnimation="Fade"
+                               HorizontalOffset="-8"
+                               VerticalOffset="4">
+                            <Border Background="#FFFFFF" BorderBrush="#DDE1EA" BorderThickness="1" CornerRadius="10" Padding="6" MinWidth="128">
+                                <Border.Effect>
+                                    <DropShadowEffect BlurRadius="12" ShadowDepth="2" Opacity="0.18" Color="#000000"/>
+                                </Border.Effect>
+                                <StackPanel>
+                                    <Button x:Name="btnUomLb" Content="Lb" Tag="Lb" Style="{StaticResource scWeightUomOptionStyle}" Click="WeightUomOption_Click"/>
+                                    <Button x:Name="btnUomKg" Content="Kg" Tag="Kg" Style="{StaticResource scWeightUomOptionStyle}" Click="WeightUomOption_Click"/>
+                                    <Button x:Name="btnUomGrams" Content="Grams" Tag="Grams" Style="{StaticResource scWeightUomOptionStyle}" Click="WeightUomOption_Click"/>
+                                </StackPanel>
+                            </Border>
+                        </Popup>
+                    </StackPanel>
+
+                    <StackPanel x:Name="pnlPriceHeroField" Margin="0,0,0,10">
+                        <TextBlock Text="Price" Style="{StaticResource NdLabel}"/>
+                        <Border x:Name="bdPriceHero" Style="{StaticResource NdAmountField}" MouseLeftButtonDown="bdPriceHero_MouseLeftButtonDown">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="12,0">
+                                <TextBlock x:Name="txtHeroCurrency" Text="£" Style="{StaticResource NdAmountCur}"/>
+                                <TextBlock x:Name="txtHeroPriceDisplay" Text="0.00" Style="{StaticResource NdAmountText}"/>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+
+                    <Grid x:Name="pnlSecondaryAmounts" Margin="0,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="12"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel x:Name="pnlPriceField" Grid.Column="0">
+                            <TextBlock Text="Price" Style="{StaticResource NdLabel}"/>
+                            <Border x:Name="bdWeightPrice" Style="{StaticResource NdAmountField}" MouseLeftButtonDown="bdWeightPrice_MouseLeftButtonDown">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="12,0">
+                                    <TextBlock x:Name="txtWeightPriceCurrency" Text="£" Style="{StaticResource NdAmountCur}"/>
+                                    <TextBlock x:Name="txtPriceDisplay" Text="0.00" Style="{StaticResource NdAmountText}"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                        <StackPanel x:Name="pnlCostField" Grid.Column="0">
+                            <TextBlock Text="Cost" Style="{StaticResource NdLabel}"/>
+                            <Border x:Name="bdCost" Style="{StaticResource NdAmountField}" MouseLeftButtonDown="bdCost_MouseLeftButtonDown">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="12,0">
+                                    <TextBlock x:Name="txtCostCurrency" Text="£" Style="{StaticResource NdAmountCur}"/>
+                                    <TextBlock x:Name="txtCostDisplay" Text="0.00" Style="{StaticResource NdAmountText}"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                        <StackPanel x:Name="pnlDiscountField" Grid.Column="2">
+                            <TextBlock Text="Discount" Style="{StaticResource NdLabel}"/>
+                            <Border x:Name="bdDiscount" Style="{StaticResource NdAmountField}" MouseLeftButtonDown="bdDiscount_MouseLeftButtonDown">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="12,0">
+                                    <TextBlock x:Name="txtDiscountCurrency" Text="£" Style="{StaticResource NdAmountCur}"/>
+                                    <TextBlock x:Name="txtDiscountDisplay" Text="0.00" Style="{StaticResource NdAmountText}"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid x:Name="pnlQtyTaxRow" Margin="0,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition x:Name="colQty" Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel x:Name="pnlQtyBox" Grid.Column="0" Orientation="Vertical" Margin="0,0,12,0">
+                            <TextBlock Text="Qty" Style="{StaticResource NdLabel}"/>
+                            <Border Style="{StaticResource NdField}" Background="#FFFFFF" Padding="6,0">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Button x:Name="btnQtyMinus" Grid.Column="0" Style="{StaticResource NdQtyButton}" Click="btnQtyMinus_Click" ToolTip="Less">
+                                        <Path Data="{StaticResource ND.Icon.Minus}" Style="{StaticResource ND.IconPath}" Stroke="#1B1D33" StrokeThickness="2.2" Width="11" Height="11"/>
+                                    </Button>
+                                    <TextBlock x:Name="txtModernQty" Grid.Column="1" Text="1" Foreground="#1B1D33" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" FontFamily="{StaticResource ND.Font.SemiBold}"/>
+                                    <Button x:Name="btnQtyPlus" Grid.Column="2" Style="{StaticResource NdQtyButton}" Click="btnQtyPlus_Click" ToolTip="More">
+                                        <Path Data="{StaticResource ND.Icon.Plus}" Style="{StaticResource ND.IconPath}" Stroke="#1B1D33" StrokeThickness="2.2" Width="11" Height="11"/>
+                                    </Button>
+                                </Grid>
+                            </Border>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1" Orientation="Vertical">
+                            <TextBlock Text="Tax" Style="{StaticResource NdLabel}"/>
+                            <Border Style="{StaticResource NdField}" Background="#FFFFFF">
+                                <dxe:ComboBoxEdit x:Name="cmbModernTax" Style="{StaticResource NdEditor}" IsTextEditable="False"/>
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+
+                    <UniformGrid x:Name="pnlModernKeypad" Columns="3" Rows="4" Margin="-3,2,-3,0">
+                        <Button Content="7" Style="{StaticResource NdKey}" Click="ModernKeypad_NumClick"/>
+                        <Button Content="8" Style="{StaticResource NdKey}" Click="ModernKeypad_NumClick"/>
+                        <Button Content="9" Style="{StaticResource NdKey}" Click="ModernKeypad_NumClick"/>
+                        <Button Content="4" Style="{StaticResource NdKey}" Click="ModernKeypad_NumClick"/>
+                        <Button Content="5" Style="{StaticResource NdKey}" Click="ModernKeypad_NumClick"/>
+                        <Button Content="6" Style="{StaticResource NdKey}" Click="ModernKeypad_NumClick"/>
+                        <Button Content="1" Style="{StaticResource NdKey}" Click="ModernKeypad_NumClick"/>
+                        <Button Content="2" Style="{StaticResource NdKey}" Click="ModernKeypad_NumClick"/>
+                        <Button Content="3" Style="{StaticResource NdKey}" Click="ModernKeypad_NumClick"/>
+                        <Button Content="Clear" Style="{StaticResource NdKey}" Click="ModernKeypad_ClearClick" FontSize="16"/>
+                        <Button Content="0" Style="{StaticResource NdKey}" Click="ModernKeypad_NumClick"/>
+                        <Button Style="{StaticResource NdKey}" Click="ModernKeypad_BackspaceClick" ToolTip="Back space">
+                            <Path Data="{StaticResource ND.Icon.Backspace}" Style="{StaticResource ND.IconPath}" Stroke="#1B1D33" StrokeThickness="1.8" Width="24" Height="17"/>
+                        </Button>
+                    </UniformGrid>
+                </StackPanel>
+
+                <!-- footer -->
+                <Grid Grid.Row="2" Margin="18,14,18,18">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1.5*"/>
+                        <ColumnDefinition Width="14"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button x:Name="btnModernOK" Grid.Column="0" Height="50" Style="{StaticResource ND.SuccessButton}" Click="btnOK_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <Path Data="{StaticResource ND.Icon.Check}" Style="{StaticResource ND.IconPath}" Stroke="#FFFFFF" StrokeThickness="2.4" Width="18" Height="16" Margin="0,0,12,0"/>
+                            <TextBlock Text="Done" VerticalAlignment="Center" FontSize="18"/>
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="btnModernCancel" Grid.Column="2" Height="50" Style="{StaticResource ND.PosSoftButton}" HorizontalContentAlignment="Center" Click="btnCancel_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <Path Data="{StaticResource ND.Icon.Close}" Style="{StaticResource ND.IconPath}" Stroke="#1B1D33" StrokeThickness="2.4" Width="13" Height="13" Margin="0,0,12,0"/>
+                            <TextBlock Text="Cancel" VerticalAlignment="Center" FontSize="18"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+            </Grid>
+            </Border>
+        </Border>
         </Grid>
     </Grid>
 </Window>

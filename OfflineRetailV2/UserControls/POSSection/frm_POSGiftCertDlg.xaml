@@ -6,117 +6,204 @@
         xmlns:lm="clr-namespace:OfflineRetailV2.LayoutManager"
            xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
          xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
-         xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" 
+         xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
         AllowsTransparency="True" WindowStyle="None" Background="Transparent" WindowStartupLocation="CenterScreen"
-        Title="" Foreground="White"    
-        Height="280" Width="700">
-    <cc:ModalWindow  x:Name="ModalWindow">
-        <Grid Margin="9">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="9"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="9"/>
-                <RowDefinition Height="*"/>
-                
-            </Grid.RowDefinitions>
-            <Grid Grid.Row="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="Sell a Gift Certificate"  x:Name="Title" VerticalAlignment="Center" Style="{DynamicResource BlueHeading}" />
-                <Grid Grid.Column="1" HorizontalAlignment="Right" Margin="0,0,20,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"></ColumnDefinition>
-                        <ColumnDefinition Width="9"></ColumnDefinition>
-                        <ColumnDefinition Width="Auto"></ColumnDefinition>
-                        <ColumnDefinition Width="9"></ColumnDefinition>
-                        <ColumnDefinition Width="Auto"></ColumnDefinition>
-                        <ColumnDefinition Width="9"></ColumnDefinition>
-                        <ColumnDefinition Width="Auto"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
+        Title="" Foreground="White"
+        Height="520" Width="660">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/NewDesignStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <Geometry x:Key="GcIconGift">M3,8 H21 V12 H3 Z M5,12 V21 H19 V12 M12,8 V21 M12,8 C10,4 6,3.5 6,6 C6,8 9,8 12,8 C15,8 18,8 18,6 C18,3.5 14,4 12,8</Geometry>
+            <Geometry x:Key="GcIconInfo">M3,12 A9,9 0 1 0 21,12 A9,9 0 1 0 3,12 Z M12,11 V16.5 M12,7.6 V7.7</Geometry>
+            <Style x:Key="GcLabel" TargetType="{x:Type TextBlock}">
+                <Setter Property="FontFamily" Value="{StaticResource ND.Font.SemiBold}"/>
+                <Setter Property="FontSize" Value="16.5"/>
+                <Setter Property="Foreground" Value="#1B1D33"/>
+                <Setter Property="Margin" Value="0,0,0,10"/>
+            </Style>
+            <!-- round radio with a teal ring when selected -->
+            <Style x:Key="GcRadio" TargetType="{x:Type RadioButton}">
+                <Setter Property="Foreground" Value="#1B1D33"/>
+                <Setter Property="FontFamily" Value="{StaticResource ND.Font.Regular}"/>
+                <Setter Property="FontSize" Value="17"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Focusable" Value="False"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type RadioButton}">
+                            <StackPanel Orientation="Horizontal" Background="Transparent">
+                                <Grid Width="26" Height="26" VerticalAlignment="Center">
+                                    <Ellipse x:Name="ring" Stroke="#C9CEDC" StrokeThickness="1.5" Fill="#FFFFFF"/>
+                                    <Ellipse x:Name="dot" Width="11" Height="11" Fill="#3DB6D9" Visibility="Collapsed"/>
+                                </Grid>
+                                <ContentPresenter Margin="12,0,0,0" VerticalAlignment="Center">
+                                    <ContentPresenter.Resources><Style TargetType="{x:Type TextBlock}"/></ContentPresenter.Resources>
+                                </ContentPresenter>
+                            </StackPanel>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter TargetName="dot" Property="Visibility" Value="Visible"/>
+                                    <Setter TargetName="ring" Property="Stroke" Value="#3DB6D9"/>
+                                    <Setter TargetName="ring" Property="StrokeThickness" Value="2.5"/>
+                                    <Setter TargetName="ring" Property="Fill" Value="#E8F7FC"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
 
-                    <Button IsTabStop="False" Focusable="False" Grid.Column="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Content="KEYBOARD"
-                                 FontFamily="{StaticResource OSSemiBold}" Style="{DynamicResource GeneralButtonStyle}"  Height="35" Width="120" x:Name="FullKbd" Click="FullKbd_Click" Visibility="Collapsed"/>
+    <!-- New design (Sell a Gift Certificate): navy header, info banner, Issue / Reload, number + amount, Cancel / Done.
+         Names used by the code-behind are unchanged; it hides/shows rgMGCTran, lbNote, lbGC, txtGiftCertNo, lbAuto, lbCustomer(1). -->
+    <Grid Margin="10">
+        <!-- kept for the code-behind (sets its CloseCommand); the visible chrome is drawn below -->
+        <cc:ModalWindow x:Name="ModalWindow" Visibility="Collapsed"/>
 
-                    <Button IsTabStop="False" Focusable="False" Grid.Column="2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Content="Help" Visibility="Collapsed"
-                                 FontFamily="{StaticResource OSSemiBold}" Style="{DynamicResource GeneralButtonStyle}"   Height="35" Width="120" x:Name="btnHelp" Click="btnHelp_Click"/>
+        <Border CornerRadius="20" Background="#FFFFFF" Effect="{StaticResource ND.ShadowLarge}"/>
+        <!-- rounded clip set from the actual size in code (ClipToBounds ignores corner radius) -->
+        <Border CornerRadius="20" x:Name="dlgBody">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="104"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-                    <Button IsTabStop="False" Focusable="False" Grid.Column="4" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Content="DONE"
-                                 FontFamily="{StaticResource OSSemiBold}" Style="{DynamicResource SaveButtonStyle}"  Height="35" Width="120" x:Name="btnOK" Click="btnOK_Click"/>
-
-                    <Button IsTabStop="False" Focusable="False" Grid.Column="2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Content="CANCEL"
-                                 FontFamily="{StaticResource OSSemiBold}" Style="{DynamicResource CancelButtonStyle}"   Height="35" Width="120" x:Name="btnCancel" Click="btnCancel_Click"/>
-
-                    
-                </Grid>
-            </Grid>
-            <Rectangle Grid.Row="1" Style="{DynamicResource DefaultLineStyle}"  VerticalAlignment="Center"  Margin="-9,0"/>
-
-            <TextBlock Grid.Row="2" Margin="9" Text="Note: Use Tender Screen to Redeem a Gift Certificate"
-                               Style="{DynamicResource LoginUser}" x:Name="lbNote"/>
-
-
-            <Grid Grid.Row="4" Margin="9,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                    <ColumnDefinition Width="2"></ColumnDefinition>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-
-                <Grid Grid.Column="0" >
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"></RowDefinition>
-                        <RowDefinition Height="3"></RowDefinition>
-                        <RowDefinition Height="Auto"></RowDefinition>
-                        <RowDefinition Height="3"></RowDefinition>
-                        <RowDefinition Height="Auto"></RowDefinition>
-                        <RowDefinition Height="3"></RowDefinition>
-                        <RowDefinition Height="Auto"></RowDefinition>
-                        <RowDefinition Height="3"></RowDefinition>
-                        
-                    </Grid.RowDefinitions>
-
-                    <Grid Grid.Row="0"  x:Name="rgMGCTran">
+                <!-- ===== header ===== -->
+                <Grid Grid.Row="0">
+                    <Rectangle>
+                        <Rectangle.Fill>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#1E2246" Offset="0"/>
+                                <GradientStop Color="#2A2F5C" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Rectangle.Fill>
+                    </Rectangle>
+                    <Rectangle HorizontalAlignment="Right" Width="360" Opacity="0.85">
+                        <Rectangle.Fill>
+                            <ImageBrush ImageSource="pack://application:,,,/OfflineRetailV2;component/Resources/Images/LoginStore.jpg"
+                                        Stretch="UniformToFill" AlignmentX="Center" AlignmentY="Bottom" Viewbox="0.42,0.78,0.5,0.22"/>
+                        </Rectangle.Fill>
+                        <Rectangle.OpacityMask>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                <GradientStop Color="#00000000" Offset="0"/>
+                                <GradientStop Color="#FF000000" Offset="0.6"/>
+                            </LinearGradientBrush>
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                    <Grid Margin="24,0,22,0" VerticalAlignment="Center">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <RadioButton Content="Issue" x:Name="rbIssue" IsChecked="True" GroupName="1" Checked="RbIssue_Checked" />
-                        <RadioButton Grid.Column="2" Content="Reload" x:Name="rbReload" GroupName="1" Checked="RbIssue_Checked" />
+                        <Path Data="{StaticResource GcIconGift}" Style="{StaticResource ND.IconPath}" Stroke="#FFFFFF" StrokeThickness="1.9" Width="34" Height="34"
+                              VerticalAlignment="Center" Margin="0,0,18,0"/>
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock x:Name="Title" Text="Sell a Gift Certificate" FontFamily="{StaticResource ND.Font.Bold}" FontSize="26" Foreground="#FFFFFF"
+                                       TextTrimming="CharacterEllipsis"/>
+                            <TextBlock Text="Issue or reload a customer gift certificate" FontFamily="{StaticResource ND.Font.Regular}" FontSize="14.5" Foreground="#D8DBF0" Margin="0,1,0,0"/>
+                        </StackPanel>
+                        <Button Grid.Column="2" Style="{StaticResource ND.DialogCloseButton}" Click="btnCancel_Click" ToolTip="Close"/>
                     </Grid>
-
-                    <TextBlock Grid.Row="2" Grid.Column="0" Text="" x:Name="lbCustomer"/>
-                    <TextBlock Grid.Row="4" Grid.Column="2" Text="" x:Name="lbCustomer1"/>
-
-
                 </Grid>
-                
-                <Grid Grid.Column="2" >
 
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"></RowDefinition>
-                        <RowDefinition Height="3"></RowDefinition>
-                        <RowDefinition Height="Auto"></RowDefinition>
-                        <RowDefinition Height="3"></RowDefinition>
-                        <RowDefinition Height="Auto"></RowDefinition>
-                        <RowDefinition Height="3"></RowDefinition>
-                        <RowDefinition Height="Auto"></RowDefinition>
-                        <RowDefinition Height="3"></RowDefinition>
+                <!-- ===== body ===== -->
+                <StackPanel Grid.Row="1" Margin="24,20,24,0">
+                    <!-- note banner (hidden by code for card-gateway gift cards) -->
+                    <Border x:Name="lbNote" Background="#EEF1F8" CornerRadius="10" Padding="14,11" Margin="0,0,0,20">
+                        <StackPanel Orientation="Horizontal">
+                            <Path Data="{StaticResource GcIconInfo}" Style="{StaticResource ND.IconPath}" Stroke="#1B1D33" StrokeThickness="1.8" Width="20" Height="20"/>
+                            <TextBlock Text="Use the Tender screen to redeem a gift certificate." Margin="12,0,0,0" VerticalAlignment="Center"
+                                       FontFamily="{StaticResource ND.Font.Medium}" FontSize="15" Foreground="#1B1D33"/>
+                        </StackPanel>
+                    </Border>
 
-                    </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Gift Certificate #" x:Name="lbGC"/>
-                    <dxe:TextEdit Grid.Row="2" Grid.Column="2" Text="" x:Name="txtGiftCertNo" Mask="d0" MaskType="Numeric" MaxLength="20" InputScope="Number" EditValueChanging="txtGiftCertNo_EditValueChanging" SelectAllOnGotFocus="True" GotFocus="Num_GotFocus" LostFocus="Num_LostFocus" />
-                    <TextBlock Grid.Row="2" Grid.Column="2" x:Name="lbAuto" Text="Auto" Style="{DynamicResource HighlightFont}" Visibility="Hidden"></TextBlock>
-                    <TextBlock Grid.Row="4" Grid.Column="0" Text="Amount"/>
-                    <dxe:TextEdit Grid.Row="6" Grid.Column="2" Mask="f2" MaskType="Numeric" MaskUseAsDisplayFormat="True"  InputScope="Number" Text="0.00" x:Name="numAmount"  SelectAllOnGotFocus="True" GotFocus="Num_GotFocus" LostFocus="Num_LostFocus"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.85*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="1.3*"/>
+                        </Grid.ColumnDefinitions>
 
+                        <!-- left: Issue / Reload + customer -->
+                        <StackPanel Grid.Column="0" Margin="6,0,18,0">
+                            <Grid x:Name="rgMGCTran">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="34"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <RadioButton Content="Issue" x:Name="rbIssue" IsChecked="True" GroupName="1" Checked="RbIssue_Checked" Style="{StaticResource GcRadio}"/>
+                                <RadioButton Grid.Column="2" Content="Reload" x:Name="rbReload" GroupName="1" Checked="RbIssue_Checked" Style="{StaticResource GcRadio}"/>
+                            </Grid>
+                            <TextBlock Text="" x:Name="lbCustomer" Margin="0,22,0,0" FontFamily="{StaticResource ND.Font.SemiBold}" FontSize="14" Foreground="#6B7089"/>
+                            <TextBlock Text="" x:Name="lbCustomer1" Margin="0,2,0,0" FontFamily="{StaticResource ND.Font.Medium}" FontSize="15" Foreground="#1B1D33" TextWrapping="Wrap"/>
+                        </StackPanel>
+
+                        <Rectangle Grid.Column="1" Width="1" Fill="#E3E6EF" Margin="0,4"/>
+
+                        <!-- right: certificate number + amount -->
+                        <StackPanel Grid.Column="2" Margin="22,0,6,0">
+                            <TextBlock Text="Gift Certificate #" x:Name="lbGC" Style="{StaticResource GcLabel}"/>
+                            <Grid>
+                                <Border x:Name="pnlGiftCertNo" Height="48" CornerRadius="10" BorderBrush="#C9CEDC" BorderThickness="1.3" Background="#FFFFFF" Padding="12,0">
+                                    <dxe:TextEdit Text="" x:Name="txtGiftCertNo" Mask="d0" MaskType="Numeric" MaxLength="20" InputScope="Number" ShowBorder="False" Background="Transparent"
+                                                  VerticalContentAlignment="Center" FontFamily="{StaticResource ND.Font.Regular}" FontSize="17" Foreground="#1B1D33"
+                                                  EditValueChanging="txtGiftCertNo_EditValueChanging" SelectAllOnGotFocus="True" GotFocus="Num_GotFocus" LostFocus="Num_LostFocus"/>
+                                </Border>
+                                <!-- shown instead of the number box when numbers are generated automatically -->
+                                <Border x:Name="lbAuto" Height="48" CornerRadius="10" Background="#EEF1F8" Padding="14,0" Visibility="Hidden">
+                                    <TextBlock Text="Auto" VerticalAlignment="Center" FontFamily="{StaticResource ND.Font.SemiBold}" FontSize="16" Foreground="#3DB6D9"/>
+                                </Border>
+                            </Grid>
+
+                            <TextBlock Text="Amount" Style="{StaticResource GcLabel}" Margin="0,20,0,10"/>
+                            <Border Height="48" CornerRadius="10" BorderBrush="#C9CEDC" BorderThickness="1.3" Background="#FFFFFF" ClipToBounds="True">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="46"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Border Background="#EEF1F6" CornerRadius="9,0,0,9" BorderBrush="#C9CEDC" BorderThickness="0,0,1.3,0">
+                                        <TextBlock Text="£" x:Name="lbCurrency" FontFamily="{StaticResource ND.Font.SemiBold}" FontSize="18" Foreground="#1B1D33"
+                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                    <dxe:TextEdit Grid.Column="1" Mask="f2" MaskType="Numeric" MaskUseAsDisplayFormat="True" InputScope="Number" Text="0.00" x:Name="numAmount"
+                                                  ShowBorder="False" Background="Transparent" Margin="12,0,10,0" VerticalContentAlignment="Center"
+                                                  FontFamily="{StaticResource ND.Font.Regular}" FontSize="18" Foreground="#1B1D33"
+                                                  SelectAllOnGotFocus="True" GotFocus="Num_GotFocus" LostFocus="Num_LostFocus"/>
+                                </Grid>
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+
+                <!-- ===== footer ===== -->
+                <Grid Grid.Row="2" Margin="18,22,18,22">
+                    <Rectangle Height="1" Fill="#E3E6EF" VerticalAlignment="Top" Margin="0,-12,0,0"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,12,0">
+                        <Button IsTabStop="False" Focusable="False" Content="KEYBOARD" Style="{StaticResource ND.PosSoftButton}" HorizontalContentAlignment="Center"
+                                Height="50" Width="130" Margin="0,0,14,0" x:Name="FullKbd" Click="FullKbd_Click" Visibility="Collapsed"/>
+                        <Button IsTabStop="False" Focusable="False" Content="Help" Style="{StaticResource ND.PosSoftButton}" HorizontalContentAlignment="Center"
+                                Height="50" Width="110" Margin="0,0,14,0" x:Name="btnHelp" Click="btnHelp_Click" Visibility="Collapsed"/>
+                        <Button IsTabStop="False" Focusable="False" x:Name="btnCancel" Style="{StaticResource ND.PosSoftButton}" HorizontalContentAlignment="Center"
+                                Height="50" Width="122" Margin="0,0,14,0" Click="btnCancel_Click">
+                            <TextBlock Text="Cancel" FontSize="18" FontFamily="{StaticResource ND.Font.SemiBold}"/>
+                        </Button>
+                        <Button IsTabStop="False" Focusable="False" x:Name="btnOK" Style="{StaticResource ND.SuccessButton}" Height="50" Width="164" Click="btnOK_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <Path Data="{StaticResource ND.Icon.CheckCircle}" Style="{StaticResource ND.IconPath}" Stroke="#FFFFFF" StrokeThickness="2" Width="22" Height="22" Margin="0,0,12,0"/>
+                                <TextBlock Text="Done" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
                 </Grid>
-                
             </Grid>
-
-        </Grid>
-    </cc:ModalWindow>
+        </Border>
+    </Grid>
 </Window>

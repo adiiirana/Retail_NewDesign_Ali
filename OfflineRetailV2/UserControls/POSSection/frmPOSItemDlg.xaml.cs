@@ -364,7 +364,10 @@ namespace OfflineRetailV2.UserControls.POSSection
 
         private void PrepareUiBeforeShow()
         {
-            if (strServiceType == "Sales" && (blWeighted || blBlankLine))
+            // new design: editing a sale line also uses the modern layout, as long as the
+            // quantity is a whole number (the stepper is whole units) and it is not a fuel item
+            bool modernEdit = blIsEdit && !blFuelItem && intQty > 0 && intQty == Math.Floor(intQty);
+            if (strServiceType == "Sales" && (blWeighted || blBlankLine || modernEdit))
             {
                 ApplyModernShell();
             }
@@ -1633,11 +1636,15 @@ namespace OfflineRetailV2.UserControls.POSSection
             dimOverlay.Visibility = Visibility.Visible;
             dialogHost.HorizontalAlignment = HorizontalAlignment.Center;
             dialogHost.VerticalAlignment = VerticalAlignment.Center;
-            dialogHost.Width = 540;
+            dialogHost.Width = 500;
             dialogHost.Height = double.NaN;
             ModalWindow.Margin = new Thickness(5);
             gridClassic.Visibility = Visibility.Collapsed;
             gridModern.Visibility = Visibility.Visible;
+            // new design: the modern card has its own chrome, so the classic modal frame is hidden
+            ModalWindow.Visibility = Visibility.Collapsed;
+            gridModernClip.SizeChanged += (s, e) =>
+                gridModernClip.Clip = new RectangleGeometry(new Rect(gridModernClip.RenderSize), 18, 18);
 
             string currency = SystemVariables.CurrencySymbol ?? "£";
             txtHeroCurrency.Text = currency;
@@ -1680,9 +1687,26 @@ namespace OfflineRetailV2.UserControls.POSSection
                 pnlWeightField.Visibility = Visibility.Collapsed;
                 pnlPriceHeroField.Visibility = Visibility.Visible;
                 pnlQtyBox.Visibility = Visibility.Visible;
-                colQty.Width = new GridLength(140);
+                colQty.Width = new GridLength(1, GridUnitType.Star);
                 pnlPriceField.Visibility = Visibility.Collapsed;
                 pnlCostField.Visibility = Visibility.Visible;
+
+                if (!blBlankLine)
+                {
+                    // editing an existing sale line: no cost field; discount takes the full row
+                    txtModernTitle.Text = "Edit Item";
+                    txtModernSubtitle.Text = "Update item details";
+                    pnlCostField.Visibility = Visibility.Collapsed;
+                    Grid.SetColumn(pnlDiscountField, 0);
+                    Grid.SetColumnSpan(pnlDiscountField, 3);
+                    if (blBottleRefund)
+                    {
+                        // bottle refund lines keep their description and take no discount
+                        pnlSecondaryAmounts.Visibility = Visibility.Collapsed;
+                        txtModernProduct.IsReadOnly = true;
+                        txtModernProduct.Focusable = false;
+                    }
+                }
 
                 int qty = (int)Math.Round(intQty);
                 if (qty <= 0) qty = 1;
@@ -1793,7 +1817,11 @@ namespace OfflineRetailV2.UserControls.POSSection
             cmbModernTax.DisplayMember = "TaxName";
             cmbModernTax.ValueMember = "ID";
             cmbModernTax.EditValue = selectedId;
+            _modernTaxInitialId = selectedId;
         }
+
+        // tax chosen when the modern layout opened; while unchanged, an edited line keeps all of its taxes
+        private int _modernTaxInitialId = -1;
 
         private void ApplyModernTaxToGrid()
         {
@@ -1801,11 +1829,15 @@ namespace OfflineRetailV2.UserControls.POSSection
             if (dtbl == null) return;
 
             int selectedId = GeneralFunctions.fnInt32(cmbModernTax.EditValue);
-            foreach (DataRow dr in dtbl.Rows)
+            bool keepLineTaxes = blIsEdit && !blBlankLine && selectedId == _modernTaxInitialId;
+            if (!keepLineTaxes)
             {
-                dr["CheckTax"] = GeneralFunctions.fnInt32(dr["ID"].ToString()) == selectedId;
+                foreach (DataRow dr in dtbl.Rows)
+                {
+                    dr["CheckTax"] = GeneralFunctions.fnInt32(dr["ID"].ToString()) == selectedId;
+                }
+                grdTax.ItemsSource = dtbl;
             }
-            grdTax.ItemsSource = dtbl;
 
             strTaxApplicable1 = "N";
             strTaxApplicable2 = "N";

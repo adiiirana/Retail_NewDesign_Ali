@@ -90,6 +90,26 @@ namespace OfflineRetailV2.UserControls.POSSection
 
             Loaded += Frm_POSReturnReprintDlg_Loaded;
             ModalWindow.CloseCommand = new CommandBase(OnCloseCommandExecute);
+
+            // new design: rounded corners
+            dlgBody.SizeChanged += (s, e) => dlgBody.Clip = new System.Windows.Media.RectangleGeometry(new System.Windows.Rect(dlgBody.RenderSize), 20, 20);
+            // new design: each editor sits in a rounded frame; the frame follows the editor's visibility (set by the code below)
+            foreach (FrameworkElement ed in new FrameworkElement[] { cmbStore, dtF, numF, dtT, numT })
+            {
+                FrameworkElement frame = ed.Parent as FrameworkElement;
+                if (frame == null) continue;
+                System.ComponentModel.DependencyPropertyDescriptor.FromProperty(UIElement.VisibilityProperty, ed.GetType())
+                    .AddValueChanged(ed, (s, e) => frame.Visibility = ed.Visibility);
+                frame.Visibility = ed.Visibility;
+            }
+            // new design: receipt / customer info lines take no space while blank
+            foreach (TextBlock tb in new TextBlock[] { lbReceipt, lbCustCompany, lbCustName, lbCustID })
+            {
+                TextBlock t = tb;
+                System.ComponentModel.DependencyPropertyDescriptor.FromProperty(TextBlock.TextProperty, typeof(TextBlock))
+                    .AddValueChanged(t, (s, e) => t.Visibility = string.IsNullOrWhiteSpace(t.Text) ? Visibility.Collapsed : Visibility.Visible);
+                t.Visibility = string.IsNullOrWhiteSpace(t.Text) ? Visibility.Collapsed : Visibility.Visible;
+            }
         }
 
         private void OnCloseCommandExecute(object obj)

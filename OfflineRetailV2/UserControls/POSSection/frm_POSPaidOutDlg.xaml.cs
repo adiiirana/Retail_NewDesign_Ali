@@ -38,6 +38,7 @@ namespace OfflineRetailV2.UserControls.POSSection
         {
             InitializeComponent();
             Loaded += Frm_POSPaidOutDlg_Loaded;
+            dlgBody.SizeChanged += (s, e) => dlgBody.Clip = new System.Windows.Media.RectangleGeometry(new Rect(dlgBody.RenderSize), 20, 20);   // new design: rounded corners
             ModalWindow.CloseCommand = new CommandBase(OnCloseCommandExecute);
         }
 
@@ -53,6 +54,7 @@ namespace OfflineRetailV2.UserControls.POSSection
             nkybrd = new NumKeyboard();
             fkybrd = new FullKeyboard();
             Title.Text =Properties.Resources.Paid_Out;
+            if (!string.IsNullOrWhiteSpace(Settings.CurrencySymbol)) lbCurrency.Text = Settings.CurrencySymbol.Trim();   // new design: currency prefix
             SetDecimalPlace();
         }
 

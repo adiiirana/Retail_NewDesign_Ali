@@ -18,6 +18,13 @@
     <!--Width="1024" Height="768"-->
     <UserControl.Resources>
         <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/NewDesignStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <BooleanToVisibilityConverter x:Key="ND.BoolToVis"/>
+            <!-- New design: navy side menu on the POS screen (theme default is teal) -->
+            <Style TargetType="{x:Type DockPanel}" x:Key="AdminMenuHeaderMainBackground"><Setter Property="Background" Value="#1A1D38"/></Style>
+            <Style TargetType="{x:Type DockPanel}" x:Key="AdminMenuHeaderBackground"><Setter Property="Background" Value="#1A1D38"/></Style>
             <dxre:HtmlToContentConverter x:Key="htmlToContentConverter"></dxre:HtmlToContentConverter>
             <dxre:RtfToContentConverter x:Key="rtfToContentConverter" />
             <Style x:Key="richEditStyle" TargetType="dxre:RichEditControl">
@@ -314,7 +321,16 @@
 
     </UserControl.Resources>
 
-    <Grid Style="{DynamicResource GrdBkColor}">
+    <Grid Style="{DynamicResource GrdBkColor}" x:Name="pnlPosRoot">
+        <!-- New design: gold / purple waves at the bottom of the navy sale screen (shown with the backdrop) -->
+        <Viewbox x:Name="ndPosWaves" Stretch="Fill" VerticalAlignment="Bottom" Height="170" IsHitTestVisible="False" Visibility="Collapsed">
+            <Canvas Width="1600" Height="170">
+                <Path Stroke="#8C7B5CF0" StrokeThickness="2" Data="M0,140 C220,90 420,160 640,120 C860,80 1000,150 1240,110 C1400,85 1500,120 1600,100"/>
+                <Path Stroke="#59A07CF5" StrokeThickness="1" Data="M0,150 C230,100 430,170 650,130 C870,92 1010,160 1250,122 C1410,96 1510,130 1600,112"/>
+                <Path Stroke="#B3F2A93B" StrokeThickness="2" Data="M520,170 C700,120 860,70 1040,95 C1220,120 1360,60 1600,40"/>
+                <Path Stroke="#73F2A93B" StrokeThickness="1" Data="M540,170 C720,130 880,84 1060,108 C1240,132 1380,74 1600,56"/>
+            </Canvas>
+        </Viewbox>
         <Grid >
             <Grid.RowDefinitions>
                 <RowDefinition Height="0"/>
@@ -336,7 +352,7 @@
                         <ColumnDefinition Width="2"/>
                         <!--<ColumnDefinition Width="375"/>-->
                         <!--<ColumnDefinition Width="10"/>-->
-                        <ColumnDefinition Width="375" x:Name="colPOSCart"/>
+                        <ColumnDefinition Width="430" x:Name="colPOSCart"/>
                         <ColumnDefinition Width="10" x:Name="colConvenienceKeypad"/>
                         <ColumnDefinition Width="55"/>
                     </Grid.ColumnDefinitions>
@@ -370,43 +386,55 @@
                             <RowDefinition Height="*"></RowDefinition>
                         </Grid.RowDefinitions>
 
-                        <Grid Grid.Row="0" Margin="10,10,10,0">
+                        <!-- New design top bar: POS | back / home | sale type | search | scan -->
+                        <Grid Grid.Row="0" Margin="22,18,18,6">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"></ColumnDefinition>
-                                <ColumnDefinition Width="9"></ColumnDefinition>
-                                <ColumnDefinition Width="Auto"></ColumnDefinition>
-                                <ColumnDefinition Width="9"></ColumnDefinition>
-                                <ColumnDefinition Width="*"></ColumnDefinition>
-                                <ColumnDefinition Width="9"></ColumnDefinition>
-                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="14"/>
+                                <ColumnDefinition Width="0"/>
+                                <ColumnDefinition Width="0"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="14"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="12"/>
+                                <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <Image Source="{DynamicResource Back}" Height="40" Width="40" x:Name="btnBack" PreviewMouseLeftButtonDown="BtnBack_PreviewMouseLeftButtonDown" ></Image>
-                            <Button x:Name="btnBackConv" Style="{StaticResource ConvNavBtnStyle}"
+                            <TextBlock Grid.Column="0" x:Name="txtPosTitle" Text="POS" FontFamily="{StaticResource ND.Font.Bold}" FontSize="30" Foreground="#FFFFFF"
+                                       VerticalAlignment="Center" Margin="0,0,18,0"/>
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                                <Image Source="{DynamicResource Back}" Height="38" Width="38" x:Name="btnBack" PreviewMouseLeftButtonDown="BtnBack_PreviewMouseLeftButtonDown" ></Image>
+                                <Button x:Name="btnBackConv" Style="{StaticResource ConvNavBtnStyle}"
                                     Background="{DynamicResource ConvNavBackFill}" BorderBrush="{DynamicResource ConvNavBackStroke}"
                                     Visibility="Collapsed" Cursor="Hand"
                                     PreviewMouseLeftButtonDown="BtnBack_PreviewMouseLeftButtonDown">
                                 <Path Data="M20,11H7.83l5.59,-5.59L12,4l-8,8 8,8 1.41,-1.41L7.83,13H20V11z"
                                       Stretch="Uniform" Width="18" Height="18" Fill="{DynamicResource ConvNavBackIcon}"/>
                             </Button>
-                            <Image Grid.Column="2" Source="{DynamicResource POSHome}" Height="40" Width="40" x:Name="btnHome" PreviewMouseLeftButtonDown="BtnHome_PreviewMouseLeftButtonDown"></Image>
-                            <Button x:Name="btnHomeConv" Grid.Column="2" Style="{StaticResource ConvNavBtnStyle}"
+                            </StackPanel>
+                            <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" Margin="8,0,0,0">
+                                <Image Source="{DynamicResource POSHome}" Height="38" Width="38" x:Name="btnHome" PreviewMouseLeftButtonDown="BtnHome_PreviewMouseLeftButtonDown"></Image>
+                                <Button x:Name="btnHomeConv" Style="{StaticResource ConvNavBtnStyle}"
                                     Background="{DynamicResource ConvNavHomeFill}" BorderBrush="{DynamicResource ConvNavHomeStroke}"
                                     Visibility="Collapsed" Cursor="Hand"
                                     PreviewMouseLeftButtonDown="BtnHome_PreviewMouseLeftButtonDown">
                                 <Path Data="M10,20 V14 H14 V20 H19 V12 H22 L12,3 2,12 H5 V20 Z"
                                       Stretch="Uniform" Width="18" Height="18" Fill="{DynamicResource ConvNavHomeIcon}"/>
                             </Button>
-
-                            <cc:CustomTextBox Grid.Column="4" VerticalAlignment="Center"  HorizontalAlignment="Stretch" Height="30"  BorderThickness="1"  CornerRadius="0" MaxLength="50"
-                                  InfoText="Search"  Icon="{DynamicResource Search}" FontSize="13"  FontFamily="{DynamicResource OSSemiBold}"  x:Name="txtSearch" LostFocus="TxtSearch_LostFocus" TextChanged="TxtSearch_TextChanged" PreviewKeyDown="Find_PreviewKeyDown" PreviewMouseDown="TxtSearch_MouseDown"  />
-
-                            <dxe:ComboBoxEdit Grid.Column="6" x:Name="cmbSaleType" Width="115" Height="30" IsTextEditable="False" VerticalAlignment="Center"
+                            </StackPanel>
+                            <dxe:ComboBoxEdit Grid.Column="6" x:Name="cmbSaleType" Width="200" Height="46" IsTextEditable="False" VerticalAlignment="Center"
                                               SelectedIndex="0" SelectedIndexChanged="CmbSaleType_SelectedIndexChanged"
-                                              FontFamily="{StaticResource OSSemiBold}" FontSize="13" Foreground="White" 
-                                              Background="#800080" BorderThickness="0" BorderBrush="Transparent">
+                                              FontFamily="{StaticResource ND.Font.Medium}" FontSize="15" Foreground="White" 
+                                              Background="#14FFFFFF" BorderThickness="1.2" BorderBrush="#40FFFFFF" Padding="12,0,0,0">
                                 <dxe:ComboBoxEditItem Content="Counter Sale"/>
                                 <dxe:ComboBoxEditItem Content="Account Sale"/>
                             </dxe:ComboBoxEdit>
+                            <cc:CustomTextBox Background="#14FFFFFF" BorderBrush="#40FFFFFF" Foreground="#FFFFFF" Grid.Column="8" VerticalAlignment="Center"  HorizontalAlignment="Stretch" Height="46"  BorderThickness="1"  CornerRadius="12" MaxLength="50"
+                                  InfoText="Search by Item Name, SKU or Barcode..."  Icon="{DynamicResource Search}" FontSize="14"  FontFamily="{DynamicResource OSSemiBold}"  x:Name="txtSearch" LostFocus="TxtSearch_LostFocus" TextChanged="TxtSearch_TextChanged" PreviewKeyDown="Find_PreviewKeyDown" PreviewMouseDown="TxtSearch_MouseDown"  />
+                            <Button Grid.Column="10" x:Name="btnPosScan" Style="{StaticResource ND.PosDarkButton}" Click="BtnPosScan_Click" ToolTip="Scan barcode">
+                                <Path Data="{StaticResource ND.Icon.Barcode}" Style="{StaticResource ND.IconPath}" Stroke="#FFFFFF" Width="22" Height="20"/>
+                            </Button>
                         </Grid>
 
                         <TabControl Grid.Row="1"   x:Name="tcPOS" Visibility="Visible"
@@ -1150,7 +1178,10 @@
 
                     <Rectangle Grid.Column="1" Style="{DynamicResource DefaultLineStyle}" Grid.RowSpan="3"></Rectangle>
 
-                    <Grid Grid.Column="2"  Grid.RowSpan="3" Margin="0,0,0,0" Style="{DynamicResource POSRowGrid}">
+                    <!-- New design: Current Sale card -->
+                    <Border Grid.Column="2" Grid.RowSpan="3" x:Name="pnlSaleCard" Margin="6,16,16,16" Background="#FFFFFF" CornerRadius="18" Padding="14,12,14,14"
+                            Effect="{StaticResource ND.Shadow}">
+                    <Grid Style="{DynamicResource POSRowGrid}" Background="Transparent">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
@@ -1158,7 +1189,41 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
-                        <Grid Grid.Column="2" x:Name="pnlCust" Margin="7,0,0,0" Height="25" Visibility="Collapsed">
+                        <StackPanel Grid.Row="0">
+                        <!-- Current Sale header: title, clear sale, POS options -->
+                        <Grid Margin="2,2,0,10">
+                            <TextBlock Text="Current Sale" FontFamily="{StaticResource ND.Font.Bold}" FontSize="22" Foreground="#1B1D33" VerticalAlignment="Center"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Button Style="{StaticResource ND.PosIconButton}" Click="BtnDelete1_Click" ToolTip="Clear sale">
+                                    <Path Data="{StaticResource ND.Icon.Trash}" Style="{StaticResource ND.IconPath}" Stroke="#1B1D33" Width="16" Height="18"/>
+                                </Button>
+                                <Button Style="{StaticResource ND.PosIconButton}" Margin="10,0,0,0" Click="BtnPosOptions_Click" ToolTip="POS options">
+                                    <Path Data="{StaticResource ND.Icon.Dots}" Style="{StaticResource ND.IconPath}" Stroke="#1B1D33" StrokeThickness="3" Width="4" Height="16"/>
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+                        <!-- customer selector (opens the customer list) -->
+                        <Button Style="{StaticResource ND.PosSoftButton}" Height="44" Margin="0,0,0,10" Click="BtnPosCustomer_Click">
+                            <Grid>
+                                <StackPanel Orientation="Horizontal">
+                                    <Path Data="{StaticResource ND.Icon.Person}" Style="{StaticResource ND.IconPath}" Stroke="#1B1D33" Width="15" Height="17"/>
+                                    <TextBlock Margin="12,0,0,0" VerticalAlignment="Center" FontSize="15">
+                                        <TextBlock.Style>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Setter Property="Text" Value="{Binding Text, ElementName=lbCustName}"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Text, ElementName=lbCustName}" Value="">
+                                                        <Setter Property="Text" Value="Walk-in Customer"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </StackPanel>
+                                <Path Data="{StaticResource ND.Icon.ChevronDown}" Style="{StaticResource ND.IconPath}" Stroke="#1B1D33" Width="12" Height="7" HorizontalAlignment="Right"/>
+                            </Grid>
+                        </Button>
+                        <Grid x:Name="pnlCust" Margin="7,0,0,0" Height="25" Visibility="Collapsed">
                             <!--Style="{DynamicResource LoginEmployeeBackcolor}"-->
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"></ColumnDefinition>
@@ -1174,6 +1239,7 @@
                             <TextBlock x:Name="lbCustName" Grid.Column="2" Text=""   FontSize="14" FontFamily="{DynamicResource OSBold}" Cursor="Hand" TextWrapping="WrapWithOverflow"  PreviewMouseLeftButtonDown="LbCustName_PreviewMouseLeftButtonDown" />
                             <TextBlock x:Name="lbTradeInvoiceId" Grid.Column="4" Text="" FontSize="14" FontFamily="{DynamicResource OSBold}" VerticalAlignment="Center" HorizontalAlignment="Right" Visibility="Collapsed" />
                         </Grid>
+                        </StackPanel>
 
                         <Border Padding="0,0,0,0" BorderThickness="0" Grid.Row="1" >
                             <Grid >
@@ -1882,7 +1948,7 @@
                                     <RowDefinition Height="16"></RowDefinition>
                                     <RowDefinition Height="Auto"></RowDefinition>
                                 </Grid.RowDefinitions>
-                                <Grid Grid.Row="0" Style="{DynamicResource GrdBkColor}">
+                                <Grid Grid.Row="0" Style="{DynamicResource GrdBkColor}" Visibility="Collapsed">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="12"></RowDefinition>
                                         <RowDefinition Height="Auto"></RowDefinition>
@@ -2005,85 +2071,109 @@
                                     </Grid>
                                 </Grid>
 
-                                <Grid Grid.Row="1" Margin="9,6">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"></RowDefinition>
-                                        <RowDefinition Height="Auto"></RowDefinition>
-                                        <RowDefinition Height="Auto"></RowDefinition>
-                                    </Grid.RowDefinitions>
+                                <!-- New design: discount / note buttons + summary box -->
+                                <Grid Grid.Row="1" Margin="0,10,0,12">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"></ColumnDefinition>
-                                        <ColumnDefinition Width="*"></ColumnDefinition>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="12"/>
+                                        <ColumnDefinition Width="1.05*"/>
                                     </Grid.ColumnDefinitions>
-
-                                    <StackPanel Orientation="Horizontal" Grid.Row="0" VerticalAlignment="Center">
-                                        <TextBlock Text="Sub total" FontFamily="{StaticResource OSSemiBold}" FontSize="18" VerticalAlignment="Center"/>
-                                        <TextBlock x:Name="lbSubTotalQty" Text="" Margin="8,0,0,0" FontFamily="{StaticResource OSSemiBold}" FontSize="18" VerticalAlignment="Center" Visibility="Collapsed"/>
+                                    <StackPanel VerticalAlignment="Top">
+                                        <Button Style="{StaticResource ND.PosSoftButton}" Height="42" Click="BtnDiscount1_Click">
+                                            <Grid>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Path Data="{StaticResource ND.Icon.Tag}" Style="{StaticResource ND.IconPath}" Stroke="#1B1D33" Width="16" Height="16"/>
+                                                    <TextBlock Text="Add Discount" Margin="10,0,0,0" VerticalAlignment="Center" FontSize="13.5"/>
+                                                </StackPanel>
+                                                <Path Data="{StaticResource ND.Icon.ChevronRight}" Style="{StaticResource ND.IconPath}" Stroke="#1B1D33" Width="7" Height="12" HorizontalAlignment="Right"/>
+                                            </Grid>
+                                        </Button>
+                                        <Button Style="{StaticResource ND.PosSoftButton}" Height="42" Margin="0,8,0,0" Click="simpleButton6_Click" ToolTip="Edit the selected line">
+                                            <Grid>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Path Data="{StaticResource ND.Icon.Edit}" Style="{StaticResource ND.IconPath}" Stroke="#1B1D33" Width="15" Height="15"/>
+                                                    <TextBlock Text="Edit" Margin="10,0,0,0" VerticalAlignment="Center" FontSize="13.5"/>
+                                                </StackPanel>
+                                                <Path Data="{StaticResource ND.Icon.ChevronRight}" Style="{StaticResource ND.IconPath}" Stroke="#1B1D33" Width="7" Height="12" HorizontalAlignment="Right"/>
+                                            </Grid>
+                                        </Button>
+                                        <Button Style="{StaticResource ND.PosSoftButton}" Height="42" Margin="0,8,0,0" Click="btnINVNotes_Click">
+                                            <Grid>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Path Data="{StaticResource ND.Icon.NoteEdit}" Style="{StaticResource ND.IconPath}" Stroke="#1B1D33" Width="15" Height="16"/>
+                                                    <TextBlock Text="Order Note" Margin="10,0,0,0" VerticalAlignment="Center" FontSize="13.5"/>
+                                                </StackPanel>
+                                                <Path Data="{StaticResource ND.Icon.ChevronRight}" Style="{StaticResource ND.IconPath}" Stroke="#1B1D33" Width="7" Height="12" HorizontalAlignment="Right"/>
+                                            </Grid>
+                                        </Button>
                                     </StackPanel>
-                                    <TextBlock Text="Discount" Grid.Row="1"  FontFamily="{StaticResource OSRegular}"
-                                               FontSize="12" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Tax" Grid.Row="2"  FontFamily="{StaticResource OSRegular}"
-                                               FontSize="12" VerticalAlignment="Center"/>
-
-
-                                    <Grid Grid.Column="1" Grid.Row="0" HorizontalAlignment="Right">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="3"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Text="£"  FontFamily="{StaticResource OSSemiBold}" FontSize="18" VerticalAlignment="Center" x:Name="lbCur1"/>
-                                        <TextBlock x:Name="numSubTotal" Text="0.00" Grid.Column="2"  FontFamily="{StaticResource OSSemiBold}" FontSize="18" VerticalAlignment="Center"/>
-                                    </Grid>
-
-                                    <Grid Grid.Column="1" Grid.Row="1"  HorizontalAlignment="Right">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="3"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Text="£"  FontFamily="{StaticResource OSRegular}" FontSize="12" VerticalAlignment="Center" x:Name="lbCur2"/>
-                                        <TextBlock x:Name="numDiscount" Text="0.00" Grid.Column="2"  FontFamily="{StaticResource OSRegular}" FontSize="12" VerticalAlignment="Center"/>
-                                    </Grid>
-
-                                    <Grid Grid.Column="1" Grid.Row="2"  HorizontalAlignment="Right">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="3"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Text="£"  FontFamily="{StaticResource OSRegular}" FontSize="12" VerticalAlignment="Center" x:Name="lbCur3"/>
-                                        <TextBlock x:Name="numTax" Text="0.00" Grid.Column="2"  FontFamily="{StaticResource OSRegular}" FontSize="12" VerticalAlignment="Center"/>
-                                    </Grid>
-
-                                </Grid>
-                                <Rectangle Grid.Row="2" Style="{DynamicResource DefaultLineStyle}" Height="2" Margin="0"/>
-                                <Grid Grid.Row="3" Margin="9,0,9,7" x:Name="pnlPayButtonGrid">
-                                    <Button Grid.Row="2" Height="70" FontFamily="{StaticResource OSSemiBold}" FontSize="19"
-                                            Style="{DynamicResource PadPayButtonStyle}" x:Name="b" Click="b_Click">
-                                        <Grid Margin="3">
+                                    <Border Grid.Column="2" Background="#F1F3FA" CornerRadius="12" Padding="12,10,12,8" TextElement.Foreground="#1B1D33">
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="Auto"/>
-                                                <ColumnDefinition Width="23*"/>
-                                                <ColumnDefinition Width="58*"/>
-                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
                                             </Grid.ColumnDefinitions>
-                                            <TextBlock x:Name="BTextBlock" Text="Pay" Foreground="White" FontFamily="{StaticResource OSSemiBold}"  VerticalAlignment="Center" FontSize="26"/>
-                                            <Grid Grid.Column="3">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="Auto"/>
-                                                    <ColumnDefinition Width="2"/>
-                                                    <ColumnDefinition Width="Auto"/>
-                                                </Grid.ColumnDefinitions>
-                                                <TextBlock Text="£" Foreground="White" FontFamily="{StaticResource OSSemiBold}" FontSize="24" VerticalAlignment="Center" x:Name="lbCur4"/>
-                                                <TextBlock x:Name="numTotal" Text="0.00" Grid.Column="2" Foreground="White" FontSize="24" FontFamily="{StaticResource OSSemiBold}" VerticalAlignment="Center"/>
-                                            </Grid>
+                                            <StackPanel Orientation="Horizontal" Grid.Row="0">
+                                                <TextBlock Text="Subtotal" FontFamily="{StaticResource ND.Font.Regular}" FontSize="13.5"/>
+                                                <TextBlock x:Name="lbSubTotalQty" Text="" Margin="6,0,0,0" FontFamily="{StaticResource ND.Font.Regular}" FontSize="13.5" Visibility="Collapsed"/>
+                                            </StackPanel>
+                                            <TextBlock Text="Discount" Grid.Row="1" Margin="0,3,0,0" FontFamily="{StaticResource ND.Font.Regular}" FontSize="13.5"/>
+                                            <TextBlock Text="Tax" Grid.Row="2" Margin="0,3,0,0" FontFamily="{StaticResource ND.Font.Regular}" FontSize="13.5"/>
+                                            <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
+                                                <TextBlock Text="£" x:Name="lbCur1" FontFamily="{StaticResource ND.Font.Regular}" FontSize="13.5"/>
+                                                <TextBlock x:Name="numSubTotal" Text="0.00" Margin="2,0,0,0" FontFamily="{StaticResource ND.Font.Regular}" FontSize="13.5"/>
+                                            </StackPanel>
+                                            <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,3,0,0">
+                                                <TextBlock Text="£" x:Name="lbCur2" FontFamily="{StaticResource ND.Font.Regular}" FontSize="13.5"/>
+                                                <TextBlock x:Name="numDiscount" Text="0.00" Margin="2,0,0,0" FontFamily="{StaticResource ND.Font.Regular}" FontSize="13.5"/>
+                                            </StackPanel>
+                                            <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,3,0,0">
+                                                <TextBlock Text="£" x:Name="lbCur3" FontFamily="{StaticResource ND.Font.Regular}" FontSize="13.5"/>
+                                                <TextBlock x:Name="numTax" Text="0.00" Margin="2,0,0,0" FontFamily="{StaticResource ND.Font.Regular}" FontSize="13.5"/>
+                                            </StackPanel>
+                                            <Border Grid.Row="3" Grid.ColumnSpan="2" Margin="-12,8,-12,-8" Padding="12,8" Background="#E6E9F4" CornerRadius="0,0,12,12">
+                                                <Grid>
+                                                    <TextBlock Text="Total" FontFamily="{StaticResource ND.Font.Bold}" FontSize="19"/>
+                                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                                        <TextBlock Text="{Binding Text, ElementName=lbCur4}" FontFamily="{StaticResource ND.Font.Bold}" FontSize="19"/>
+                                                        <TextBlock Text="{Binding Text, ElementName=numTotal}" Margin="2,0,0,0" FontFamily="{StaticResource ND.Font.Bold}" FontSize="19"/>
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Border>
                                         </Grid>
+                                    </Border>
+                                </Grid>
+                                <Rectangle Grid.Row="2" Style="{DynamicResource DefaultLineStyle}" Height="2" Margin="0" Visibility="Collapsed"/>
+                                <Grid Grid.Row="3" Margin="0,4,0,0" x:Name="pnlPayButtonGrid">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="12"/>
+                                        <ColumnDefinition Width="0.55*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Button Height="62" Style="{StaticResource ND.PosPayButton}" x:Name="b" Click="b_Click">
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                            <Path Data="{StaticResource ND.Icon.CardPay}" Style="{StaticResource ND.IconPath}" Stroke="#FFFFFF" Width="24" Height="18" Margin="0,0,14,0"/>
+                                            <TextBlock x:Name="BTextBlock" Text="Pay" Foreground="White" FontFamily="{StaticResource ND.Font.SemiBold}" VerticalAlignment="Center" FontSize="21"/>
+                                            <TextBlock Text="£" Foreground="White" FontFamily="{StaticResource ND.Font.SemiBold}" FontSize="21" VerticalAlignment="Center" Margin="8,0,0,0" x:Name="lbCur4"/>
+                                            <TextBlock x:Name="numTotal" Text="0.00" Foreground="White" FontSize="21" FontFamily="{StaticResource ND.Font.SemiBold}" VerticalAlignment="Center"/>
+                                        </StackPanel>
                                     </Button>
-                                    <TextBlock x:Name="lbQuickTenderOutstanding" Text="Outstanding" Grid.Row="0" Foreground="White" FontFamily="{StaticResource OSSemiBold}" FontSize="13" Visibility="Collapsed" 
-                                               VerticalAlignment="Center"/>
-                                    <TextBlock x:Name="lbFStotal" Text="Food Stamp" Grid.Row="0" Grid.Column="2" Foreground="White"
-                                               VerticalAlignment="Center" Visibility="Collapsed"/>
+                                    <Button Grid.Column="2" Height="62" Style="{StaticResource ND.PosSoftButton}" HorizontalContentAlignment="Center" Click="btnResumeSuspend_Click"
+                                            ToolTip="Suspend this sale (or resume one when the cart is empty)">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Path Data="{StaticResource ND.Icon.Send}" Style="{StaticResource ND.IconPath}" Stroke="#1B1D33" Width="18" Height="18" Margin="0,0,10,0"/>
+                                            <TextBlock Text="Order" FontSize="18" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <TextBlock x:Name="lbQuickTenderOutstanding" Text="Outstanding" Foreground="White" FontFamily="{StaticResource OSSemiBold}" FontSize="13" Visibility="Collapsed"
+                                               VerticalAlignment="Top" Margin="14,4,0,0" IsHitTestVisible="False"/>
+                                    <TextBlock x:Name="lbFStotal" Text="Food Stamp" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,4,14,0" Visibility="Collapsed" IsHitTestVisible="False"/>
                                 </Grid>
 
                                 <!-- NEW UI: TOTAL ROW (Convenience View ON) -->
@@ -2112,6 +2202,7 @@
                             </Grid>
                         </Grid>
                     </Grid>
+                    </Border>
 
                     <!--<Grid Grid.Column="3" Style="{DynamicResource KeypadBackcolor}" Grid.RowSpan="3">
                         <Grid.ColumnDefinitions>
@@ -2578,7 +2669,17 @@
 
 
 
-                    <Grid Grid.Row="2" Margin="0,7,9,5"  Background="#489DAC" Height="Auto"  >
+                    <!-- New design: function buttons live in the POS options modal (pnlPosOptions) -->
+                    <Grid Grid.Row="2" Margin="0,7,9,5">
+                        <Button x:Name="btnPosOptions" Style="{StaticResource ND.PosOptionsButton}" Height="54" MinWidth="220"
+                                HorizontalAlignment="Left" Margin="14,0,0,8" Click="BtnPosOptions_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <Path Data="{StaticResource ND.Icon.Grid}" Style="{StaticResource ND.IconPath}" Stroke="#FFFFFF" Width="19" Height="19" Margin="0,0,12,0"/>
+                                <TextBlock Text="POS Options" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+                    <Grid Grid.Row="2" Margin="0,7,9,5"  Background="#489DAC" Height="Auto" Visibility="Collapsed" >
 
                         <Grid  Margin="7"  >
 
@@ -2607,269 +2708,6 @@
                                     <ColumnDefinition Width="9"/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
-                                <ScrollViewer Grid.Column="0" x:Name="POSActionScrollViewer"
-                                  HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" OverridesDefaultStyle="False" Grid.ColumnSpan="3" PanningMode="Both" PanningRatio="1" PanningDeceleration="2" ManipulationBoundaryFeedback="ScrlViewer_ManipulationBoundaryFeedback" >
-                                    <WrapPanel Orientation="Horizontal" x:Name="pnlFB">
-
-
-                                        <RadioButton Visibility="Collapsed" x:Name="btnProductNote" Click="btnProductNote_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Product Notes"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnViewPrice" Click="btnViewPrice_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="View Product Price"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnChangePrice" Click="btnChangePrice_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Change Product Price"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnUsePrice" Click="btnUsePrice_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Use Price Level"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnFastCash" Click="btnFastCash_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Fast Cash"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-
-                                        <RadioButton Visibility="Collapsed" x:Name="btnGiftCertBalance" Click="btnGiftCertBalance_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Gift Cert Balance"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnINVNotes" Click="btnINVNotes_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Invoice Item Notes"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnWorkOrder" Click="btnWorkOrder_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Word Order"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnPrintLabel" Click="btnPrintLabel_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Print Cust. Label"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnPrintGiftReceipt" Click="btnPrintGiftReceipt_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Print Gift Receipt"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnCoupon" Click="btnCoupon_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Discount Ticket"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnRentRecall" Click="btnRentRecall_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Recall Rent"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnFastCC" Click="btnFastCC_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Fast CC"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnFees" Click="btnFees_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Fees &amp; Charges Item"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnBottleRefund" Click="btnBottleRefund_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Bottle Refund"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnDiscItem" Click="btnDiscItem_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Discount Item"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnAddQty" Click="btnAddQty_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="QTY (+)"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnMinusQty" Click="btnMinusQty_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="QTY (-)"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnMoreFunctions" Click="btnMoreFunctions_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="More Apps"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnHelp" Click="btnHelp_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Help"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnApptBook" Click="btnApptBook_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Book Appt."/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnApptRecall" Click="btnApptRecall_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Recall Appt."/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnPaidOut" Click="btnPaidOut_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Paid Out"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnNoSale" Click="btnNoSale_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="No Sale"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnCancel" Click="btnCancel_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Cancel"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnLayAway" Click="btnLayAway_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Layaway"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnAcctPay" Click="btnAcctPay_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Acct Pay"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnGiftCert" Click="btnGiftCert_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Gift Cert"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnResumeSuspend" Click="btnResumeSuspend_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Suspend"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnReprint" Click="btnReprint_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Return Reprint"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnStockRefresh" Click="btnStockRefresh_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Refresh Stock"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnCustomize" Click="btnCustomize_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Select Apps"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnBoardingPassSalesReport" Click="btnBoardingPassReport_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Boarding Pass Report"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnCustPhoto" Click="btnCustPhoto_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Cust. Picture"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnCustNotes" Click="btnCustNotes_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Cust. Notes"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnEmpPhoto" Click="btnEmpPhoto_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Emp. Picture"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnProductPhoto" Click="btnProductPhoto_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Product Picture"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnsrvSales" Click="btnsrvSales_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Sales"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnsrvRent" Click="btnsrvRent_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Rent"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnsrvRepair" Click="btnsrvRepair_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Repair"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnSaveRepair" Click="btnSaveRepair_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Save Invoice"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnOrdering" Click="btnOrdering_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Customer Ordering"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnRepairRecall" Click="btnRepairRecall_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Recall Repair"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnCardTran" Click="btnCardTran_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Revert CARD Tran."/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnMcryGiftCard" Click="btnMcryGiftCard_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Mercury Gift Card"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnEBTBal" Click="btnEBTBal_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="EBT/ Mercury Gift Card Balance"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnTare" Click="btnTare_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Tare"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnFeesCoupon" Click="btnFeesCoupon_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Fees &amp; Charges Ticket"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnCheckInOut" Click="btnCheckInOut_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Check In/Out"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnPointToStoreCredit" Click="btnPointToStoreCredit_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Points to Store Credit"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                        <RadioButton Visibility="Collapsed" x:Name="btnLottoPayout" Click="btnLottoPayout_Click">
-                                            <RadioButton.Content>
-                                                <TextBlock  Text="Lotto Payout"/>
-                                            </RadioButton.Content>
-                                        </RadioButton>
-                                    </WrapPanel>
-                                </ScrollViewer>
 
                                 <Grid Grid.Column="4" VerticalAlignment="Center" Margin="0,4">
                                     <Grid.RowDefinitions>
@@ -2896,6 +2734,353 @@
 
                 </Grid>
             </Grid>
+        </Grid>
+        <!-- ===================== POS options modal (new design, PDF page 4) =====================
+             Hosts the configurable function buttons (pnlFB, built in DisplayFunctionButtons) as tiles. -->
+        <Grid x:Name="pnlPosOptions" Visibility="Collapsed" Background="#7326324F" Panel.ZIndex="50"
+              MouseLeftButtonDown="PnlPosOptions_MouseLeftButtonDown">
+            <Border Width="560" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#FFFFFF" CornerRadius="14"
+                    Padding="18,14,18,18" Effect="{StaticResource ND.Shadow}">
+                <StackPanel>
+                    <Grid Margin="0,0,0,14">
+                        <TextBlock Text="POS options" FontFamily="{StaticResource ND.Font.SemiBold}" FontSize="19"
+                                   Foreground="{StaticResource ND.TextDark}" VerticalAlignment="Center"/>
+                        <Button Style="{StaticResource ND.ModalCloseButton}" HorizontalAlignment="Right" Click="BtnPosOptionsClose_Click" ToolTip="Close"/>
+                    </Grid>
+                    <!-- PDF page 4 tiles; Separate / Hold / Send / Re-fire / Mark Sent are hospitality-only and shown disabled -->
+                    <UniformGrid Columns="5" x:Name="pnlPosOptionTiles">
+                        <Button Style="{StaticResource ND.PosOptionTile}" Height="78" Margin="4" Tag="Print" Click="PosTile_Click">
+                            <Button.Resources><StaticResource x:Key="ND.TileIcon" ResourceKey="ND.Icon.Printer"/></Button.Resources>
+                            <TextBlock Text="Print" TextWrapping="Wrap" TextAlignment="Center"/>
+                        </Button>
+                        <Button Style="{StaticResource ND.PosOptionTile}" Height="78" Margin="4" Tag="Discount" Click="PosTile_Click">
+                            <Button.Resources><StaticResource x:Key="ND.TileIcon" ResourceKey="ND.Icon.List"/></Button.Resources>
+                            <TextBlock Text="Discount" TextWrapping="Wrap" TextAlignment="Center"/>
+                        </Button>
+                        <Button Style="{StaticResource ND.PosOptionTile}" Height="78" Margin="4" Tag="Notes" Click="PosTile_Click">
+                            <Button.Resources><StaticResource x:Key="ND.TileIcon" ResourceKey="ND.Icon.Edit"/></Button.Resources>
+                            <TextBlock Text="Notes" TextWrapping="Wrap" TextAlignment="Center"/>
+                        </Button>
+                        <Button Style="{StaticResource ND.PosOptionTile}" Height="78" Margin="4" Tag="Separate" Click="PosTile_Click" IsEnabled="False" ToolTip="Not available in Retail">
+                            <Button.Resources><StaticResource x:Key="ND.TileIcon" ResourceKey="ND.Icon.Swap"/></Button.Resources>
+                            <TextBlock Text="Separate" TextWrapping="Wrap" TextAlignment="Center"/>
+                        </Button>
+                        <Button Style="{StaticResource ND.PosOptionTile}" Height="78" Margin="4" Tag="CancelItem" Click="PosTile_Click">
+                            <Button.Resources><StaticResource x:Key="ND.TileIcon" ResourceKey="ND.Icon.Close"/></Button.Resources>
+                            <TextBlock Text="Cancel Item" TextWrapping="Wrap" TextAlignment="Center"/>
+                        </Button>
+                        <Button Style="{StaticResource ND.PosOptionTile}" Height="78" Margin="4" Tag="Edit" Click="PosTile_Click">
+                            <Button.Resources><StaticResource x:Key="ND.TileIcon" ResourceKey="ND.Icon.Edit"/></Button.Resources>
+                            <TextBlock Text="Edit" TextWrapping="Wrap" TextAlignment="Center"/>
+                        </Button>
+                        <Button Style="{StaticResource ND.PosOptionTile}" Height="78" Margin="4" Tag="Retrieve" Click="PosTile_Click">
+                            <Button.Resources><StaticResource x:Key="ND.TileIcon" ResourceKey="ND.Icon.Refresh"/></Button.Resources>
+                            <TextBlock Text="Retrieve" TextWrapping="Wrap" TextAlignment="Center"/>
+                        </Button>
+                        <Button Style="{StaticResource ND.PosOptionTile}" Height="78" Margin="4" Tag="Recall" Click="PosTile_Click">
+                            <Button.Resources><StaticResource x:Key="ND.TileIcon" ResourceKey="ND.Icon.History"/></Button.Resources>
+                            <TextBlock Text="Recall" TextWrapping="Wrap" TextAlignment="Center"/>
+                        </Button>
+                        <Button Style="{StaticResource ND.PosOptionTile}" Height="78" Margin="4" Tag="ManualDiscount" Click="PosTile_Click">
+                            <Button.Resources><StaticResource x:Key="ND.TileIcon" ResourceKey="ND.Icon.Percent"/></Button.Resources>
+                            <TextBlock Text="Manual Discount" TextWrapping="Wrap" TextAlignment="Center"/>
+                        </Button>
+                        <Button Style="{StaticResource ND.PosOptionTile}" Height="78" Margin="4" Tag="AddMisc" Click="PosTile_Click">
+                            <Button.Resources><StaticResource x:Key="ND.TileIcon" ResourceKey="ND.Icon.Plus"/></Button.Resources>
+                            <TextBlock Text="Add Misc" TextWrapping="Wrap" TextAlignment="Center"/>
+                        </Button>
+                        <Button Style="{StaticResource ND.PosOptionTile}" Height="78" Margin="4" Tag="VoidOrder" Click="PosTile_Click">
+                            <Button.Resources><StaticResource x:Key="ND.TileIcon" ResourceKey="ND.Icon.Trash"/></Button.Resources>
+                            <TextBlock Text="Void Order" TextWrapping="Wrap" TextAlignment="Center"/>
+                        </Button>
+                        <Button Style="{StaticResource ND.PosOptionTile}" Height="78" Margin="4" Tag="Hold" Click="PosTile_Click" IsEnabled="False" ToolTip="Not available in Retail">
+                            <Button.Resources><StaticResource x:Key="ND.TileIcon" ResourceKey="ND.Icon.Pause"/></Button.Resources>
+                            <TextBlock Text="Hold Item" TextWrapping="Wrap" TextAlignment="Center"/>
+                        </Button>
+                        <Button Style="{StaticResource ND.PosOptionTile}" Height="78" Margin="4" Tag="Send" Click="PosTile_Click" IsEnabled="False" ToolTip="Not available in Retail">
+                            <Button.Resources><StaticResource x:Key="ND.TileIcon" ResourceKey="ND.Icon.Send"/></Button.Resources>
+                            <TextBlock Text="Send Item" TextWrapping="Wrap" TextAlignment="Center"/>
+                        </Button>
+                        <Button Style="{StaticResource ND.PosOptionTile}" Height="78" Margin="4" Tag="Refire" Click="PosTile_Click" IsEnabled="False" ToolTip="Not available in Retail">
+                            <Button.Resources><StaticResource x:Key="ND.TileIcon" ResourceKey="ND.Icon.Refresh"/></Button.Resources>
+                            <TextBlock Text="Re-fire Item" TextWrapping="Wrap" TextAlignment="Center"/>
+                        </Button>
+                        <Button Style="{StaticResource ND.PosOptionTile}" Height="78" Margin="4" Tag="MarkSent" Click="PosTile_Click" IsEnabled="False" ToolTip="Not available in Retail">
+                            <Button.Resources><StaticResource x:Key="ND.TileIcon" ResourceKey="ND.Icon.Check"/></Button.Resources>
+                            <TextBlock Text="Mark Sent" TextWrapping="Wrap" TextAlignment="Center"/>
+                        </Button>
+                    </UniformGrid>
+                    <ToggleButton x:Name="tglMoreFunctions" Style="{StaticResource ND.LinkToggle}" Content="More functions" Margin="6,10,0,4" HorizontalAlignment="Left"/>
+                    <ScrollViewer x:Name="POSActionScrollViewer" MaxHeight="200"
+                                  Visibility="{Binding IsChecked, ElementName=tglMoreFunctions, Converter={StaticResource ND.BoolToVis}}" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"
+                                  PanningMode="VerticalOnly" PanningRatio="1" PanningDeceleration="2" ManipulationBoundaryFeedback="ScrlViewer_ManipulationBoundaryFeedback">
+                        <WrapPanel Orientation="Horizontal" x:Name="pnlFB" ButtonBase.Click="PnlFB_Click">
+                                            <RadioButton Visibility="Collapsed" x:Name="btnProductNote" Click="btnProductNote_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Product Notes"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnViewPrice" Click="btnViewPrice_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="View Product Price"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnChangePrice" Click="btnChangePrice_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Change Product Price"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnUsePrice" Click="btnUsePrice_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Use Price Level"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnFastCash" Click="btnFastCash_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Fast Cash"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+
+                                            <RadioButton Visibility="Collapsed" x:Name="btnGiftCertBalance" Click="btnGiftCertBalance_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Gift Cert Balance"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnINVNotes" Click="btnINVNotes_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Invoice Item Notes"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnWorkOrder" Click="btnWorkOrder_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Word Order"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnPrintLabel" Click="btnPrintLabel_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Print Cust. Label"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnPrintGiftReceipt" Click="btnPrintGiftReceipt_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Print Gift Receipt"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnCoupon" Click="btnCoupon_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Discount Ticket"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnRentRecall" Click="btnRentRecall_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Recall Rent"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnFastCC" Click="btnFastCC_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Fast CC"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnFees" Click="btnFees_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Fees &amp; Charges Item"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnBottleRefund" Click="btnBottleRefund_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Bottle Refund"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnDiscItem" Click="btnDiscItem_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Discount Item"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnAddQty" Click="btnAddQty_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="QTY (+)"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnMinusQty" Click="btnMinusQty_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="QTY (-)"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnMoreFunctions" Click="btnMoreFunctions_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="More Apps"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnHelp" Click="btnHelp_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Help"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnApptBook" Click="btnApptBook_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Book Appt."/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnApptRecall" Click="btnApptRecall_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Recall Appt."/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnPaidOut" Click="btnPaidOut_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Paid Out"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnNoSale" Click="btnNoSale_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="No Sale"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnCancel" Click="btnCancel_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Cancel"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnLayAway" Click="btnLayAway_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Layaway"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnAcctPay" Click="btnAcctPay_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Acct Pay"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnGiftCert" Click="btnGiftCert_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Gift Cert"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnResumeSuspend" Click="btnResumeSuspend_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Suspend"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnReprint" Click="btnReprint_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Return Reprint"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnStockRefresh" Click="btnStockRefresh_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Refresh Stock"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnCustomize" Click="btnCustomize_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Select Apps"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnBoardingPassSalesReport" Click="btnBoardingPassReport_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Boarding Pass Report"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnCustPhoto" Click="btnCustPhoto_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Cust. Picture"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnCustNotes" Click="btnCustNotes_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Cust. Notes"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnEmpPhoto" Click="btnEmpPhoto_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Emp. Picture"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnProductPhoto" Click="btnProductPhoto_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Product Picture"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnsrvSales" Click="btnsrvSales_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Sales"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnsrvRent" Click="btnsrvRent_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Rent"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnsrvRepair" Click="btnsrvRepair_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Repair"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnSaveRepair" Click="btnSaveRepair_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Save Invoice"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnOrdering" Click="btnOrdering_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Customer Ordering"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnRepairRecall" Click="btnRepairRecall_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Recall Repair"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnCardTran" Click="btnCardTran_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Revert CARD Tran."/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnMcryGiftCard" Click="btnMcryGiftCard_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Mercury Gift Card"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnEBTBal" Click="btnEBTBal_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="EBT/ Mercury Gift Card Balance"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnTare" Click="btnTare_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Tare"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnFeesCoupon" Click="btnFeesCoupon_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Fees &amp; Charges Ticket"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnCheckInOut" Click="btnCheckInOut_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Check In/Out"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnPointToStoreCredit" Click="btnPointToStoreCredit_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Points to Store Credit"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                                            <RadioButton Visibility="Collapsed" x:Name="btnLottoPayout" Click="btnLottoPayout_Click">
+                                                <RadioButton.Content>
+                                                    <TextBlock  Text="Lotto Payout"/>
+                                                </RadioButton.Content>
+                                            </RadioButton>
+                        </WrapPanel>
+                    </ScrollViewer>
+                    <Button Style="{StaticResource ND.DangerOutlineButton}" Height="46" Margin="4,14,4,0" Click="BtnPosOptionsClearOrder_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <Path Data="{StaticResource ND.Icon.Trash}" Style="{StaticResource ND.IconPath}" Stroke="#C0392B" Width="15" Height="16" Margin="0,0,8,0"/>
+                            <TextBlock Text="Clear Order" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Border>
         </Grid>
         <Grid Background="#3D000000" x:Name="blurGrid" Visibility="Collapsed"/>
         <Grid Background="#3D000000" x:Name="menuGrid" Visibility="Collapsed" >

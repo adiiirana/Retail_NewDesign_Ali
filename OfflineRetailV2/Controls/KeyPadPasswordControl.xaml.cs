@@ -24,7 +24,22 @@ namespace OfflineRetailV2.Controls
     {
         public event EventHandler PasswordChanged;
 
-        private SolidColorBrush PassFillColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#B364C2DB"));
+        /// <summary>
+        /// Raised by the bottom-left menu key (new design). The sender is the key, so a host can
+        /// anchor a menu to it. With no subscriber the key clears the passcode (old Clear button).
+        /// </summary>
+        public event EventHandler MenuRequested;
+
+        private SolidColorBrush PassFillColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#272B4F"));
+        private SolidColorBrush PassEmptyColor = new SolidColorBrush(Colors.Transparent);
+        private SolidColorBrush PassEmptyStroke = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#B9BED8"));
+
+        /// <summary>Show or hide the built-in "Enter Passcode" title (the login screen draws its own).</summary>
+        public bool ShowHeader
+        {
+            get { return pnlPadHeader.Visibility == Visibility.Visible; }
+            set { pnlPadHeader.Visibility = value ? Visibility.Visible : Visibility.Collapsed; }
+        }
         public KeyPadPasswordControl()
         {
             InitializeComponent();
@@ -37,27 +52,32 @@ namespace OfflineRetailV2.Controls
         string _pass4 = "";
         private void FillPassEllipse()
         {
-            Pass1.Fill = Pass2.Fill = Pass3.Fill = Pass4.Fill = new SolidColorBrush(SystemVariables.SelectedTheme == "Dark" ? Colors.Transparent : (Color)ColorConverter.ConvertFromString("#EFF4F4"));
+            Pass1.Fill = Pass2.Fill = Pass3.Fill = Pass4.Fill = PassEmptyColor;
+            Pass1.Stroke = Pass2.Stroke = Pass3.Stroke = Pass4.Stroke = PassEmptyStroke;
             Password = "";
 
             if (_pass1 != "")
             {
                 Pass1.Fill = PassFillColor;
+                Pass1.Stroke = PassFillColor;
                 Password += _pass1;
             }
             if (_pass2 != "")
             {
                 Pass2.Fill = PassFillColor;
+                Pass2.Stroke = PassFillColor;
                 Password += _pass2;
             }
             if (_pass3 != "")
             {
                 Pass3.Fill = PassFillColor;
+                Pass3.Stroke = PassFillColor;
                 Password += _pass3;
             }
             if (_pass4 != "")
             {
                 Pass4.Fill = PassFillColor;
+                Pass4.Stroke = PassFillColor;
                 Password += _pass4;
             }
 
@@ -206,6 +226,17 @@ namespace OfflineRetailV2.Controls
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
+            if (MenuRequested != null)
+            {
+                MenuRequested(sender, EventArgs.Empty);
+                return;
+            }
+            ClearPassCode();
+        }
+
+        /// <summary>Clears the passcode and the selected employee (the old "Clear" button).</summary>
+        public void ClearPassCode()
+        {
             if (_pass4 != "")
             {
                 _pass4 = "";
@@ -231,7 +262,7 @@ namespace OfflineRetailV2.Controls
                 //return;
             }
 
-            (Window.GetWindow(this) as MainWindow).ResetSeletionStyle();
+            (Window.GetWindow(this) as MainWindow)?.ResetSeletionStyle();
         }
 
 

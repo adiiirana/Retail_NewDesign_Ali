@@ -31,6 +31,7 @@ namespace OfflineRetailV2.UserControls.POSSection
             InitializeComponent();
 
             Loaded += Frm_POSResumeTranDlg_Loaded;
+            dlgBody.SizeChanged += (s, e) => dlgBody.Clip = new System.Windows.Media.RectangleGeometry(new Rect(dlgBody.RenderSize), 20, 20);   // new design: rounded corners
             ModalWindow.CloseCommand = new CommandBase(OnCloseCommandExecute);
         }
 
@@ -377,6 +378,29 @@ namespace OfflineRetailV2.UserControls.POSSection
             }
             txtInv.Text = "";
             txtInv.Focus();
+        }
+
+        // ---- New design: on-screen keypad and Done ----
+
+        /// <summary>Keypad types into Invoice #; the search key looks the invoice up (same as Enter).</summary>
+        private void RtKey_Click(object sender, RoutedEventArgs e)
+        {
+            string key = (sender as FrameworkElement)?.Tag as string;
+            string text = txtInv.Text ?? "";
+            switch (key)
+            {
+                case "CLEAR": txtInv.Text = ""; break;
+                case "BACK": if (text.Length > 0) txtInv.Text = text.Substring(0, text.Length - 1); break;
+                case "ENTER": if (text.Trim() != "") FetchSpecificData(); break;
+                default: txtInv.Text = text + key; break;
+            }
+        }
+
+        /// <summary>Done: resume the typed invoice if one was entered, otherwise the selected row.</summary>
+        private void BtnResumeDone_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(txtInv.Text)) FetchSpecificData();
+            else btnOK_Click(sender, e);
         }
 
         private void BtnUpHeader_Click(object sender, RoutedEventArgs e)

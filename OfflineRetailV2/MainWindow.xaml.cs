@@ -163,6 +163,8 @@ namespace OfflineRetailV2
         {
             DataControlBase.AllowInfiniteGridSize = true;
             InitializeComponent();
+            DependencyPropertyDescriptor.FromProperty(UIElement.VisibilityProperty, typeof(Border))
+                .AddValueChanged(LoginMenuBorder, LoginMenuBorder_VisibilityChanged);
             ProcessMonitor();
             this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
             this.MinHeight = SystemParameters.MaximizedPrimaryScreenHeight;
@@ -419,23 +421,10 @@ namespace OfflineRetailV2
             {
                 GeneralFunctions.ExecuteCopyBackground();
                 GeneralFunctions.ExecuteCopyLabelDesign();
-                string strfilename = GeneralFunctions.GetUserBackground();
-                if (!File.Exists(strfilename))
-                {
-                    var imgBrush = new ImageBrush();
-                    imgBrush.ImageSource = this.FindResource("MainBackground") as ImageSource;
-                    imgBrush.Stretch = Stretch.Fill;
-                    LoginGrid.Background = imgBrush;
-                }
-                else
-                {
-                    var img = new System.Windows.Controls.Image();
-                    img.Source = new BitmapImage(new Uri(strfilename, UriKind.Absolute));
-                    var imgBrush = new ImageBrush();
-                    imgBrush.ImageSource = GeneralFunctions.ConvertImageToImageSource(img);
-                    imgBrush.Stretch = Stretch.Fill;
-                    LoginGrid.Background = imgBrush;
-                }
+                // New design: the login area always uses the new login photo (Resources/Images/LoginBackground.jpg).
+                // The old Background.png (copied to the user data folder) is no longer shown at start-up.
+                LoginGrid.Background = (this.TryFindResource("ND.LoginPhoto") as System.Windows.Media.Brush)
+                                       ?? (System.Windows.Media.Brush)this.FindResource("ND.Navy");
                 string arg = "";
                 try
                 {
@@ -670,6 +659,7 @@ namespace OfflineRetailV2
                     TillTextBlock.Text = GeneralFunctions.GetHostName();
 
                     PointOfSaleButton.Visibility = Settings.RegPOSAccess == "Y" ? Visibility.Visible : Visibility.Collapsed;
+                    rbNavOrdering.Visibility = PointOfSaleButton.Visibility;
 
 
                     pnlMenuHeader.Width = 50.0;
@@ -1194,6 +1184,13 @@ namespace OfflineRetailV2
             int minute = DateTime.Now.TimeOfDay.Minutes;
             TimeTextBlock.Text = (hour > 9 ? hour.ToString() : "0" + hour) + ":" + (minute > 9 ? minute.ToString() : "0" + minute);
             DateTextBlock.Text = DateTime.Now.ToString("d MMM yy");
+            // Online pill refreshes on every clock tick (once a minute)
+            {
+                bool online = InternetChecker.IsConnectedToInternet();
+                txtHeaderOnline.Text = online ? "Online" : "Offline";
+                dotHeaderOnline.Fill = online ? Hex("#22C55E") : Hex("#9CA3AF");
+            }
+            if (LoginBorder != null && LoginBorder.Visibility == Visibility.Visible) UpdateLoginInfo();
         }
 
         #region LoginMenuBorder
@@ -1345,8 +1342,42 @@ namespace OfflineRetailV2
             LoginMenuBorder.Visibility = Visibility.Visible;
         }
 
+        /// <summary>
+        /// New design: typing the passcode no longer logs in on the 4th digit. It enables
+        /// LOGIN / Clock In / Start Break / Clock Out; those buttons call TryLogin().
+        /// </summary>
         private void KeyPadPasswordControl_PasswordChanged(object sender, EventArgs e)
         {
+            // New design: no LOGIN button - the 4th digit logs in straight away.
+            if (KeyPadPasswordControl.Password == null || KeyPadPasswordControl.Password.Length != 4) return;
+            if (_clockMode)
+            {
+                LoginSection previous = LoginSection;
+                ClockButton_ClickKeepSelection();
+                SetClockMode(false);
+                if (!TryLogin()) LoginSection = previous;
+            }
+            else
+            {
+                TryLogin();
+            }
+        }
+
+        // "Clock In / Out" link: tap it, then enter the passcode to open Attendance instead of the selected section.
+        private bool _clockMode;
+
+        private void SetClockMode(bool on)
+        {
+            _clockMode = on;
+            if (btnClockIn == null) return;
+            btnClockIn.Foreground = on ? (System.Windows.Media.Brush)Hex("#E08E12") : Hex("#4B4F6B");
+            txtClockLink.Text = on ? "Clock In / Out - enter passcode" : "Clock In / Out";
+        }
+
+        /// <summary>Validates the entered passcode for the current LoginSection and logs in. Returns true on success.</summary>
+        private bool TryLogin()
+        {
+            InitializeUserControls();
             if (!string.IsNullOrEmpty(KeyPadPasswordControl.Password))
             {
                 bool bProcced = false;
@@ -1421,7 +1452,7 @@ namespace OfflineRetailV2
                                 if (intreturn == 0)
                                 {
                                     new MessageBoxWindow().Show(Properties.Resources.Invalid_Login_ID___Password, Properties.Resources.Login_Validation, MessageBoxButton.OK, MessageBoxImage.Information);
-                                    return;
+                                    return false;
                                 }
 
                                 SystemVariables.CurrentUserCode = strLogCode;
@@ -1442,11 +1473,12 @@ namespace OfflineRetailV2
                             }
                             //FormAccessor.ThreadSafeObjectProvider<FormAccessor>.
                             DoLogin();
+                            return true;
                         }
                         else
                         {
                             new MessageBoxWindow().Show(Properties.Resources.Invalid_Login_ID___Password, Properties.Resources.Login_Validation, MessageBoxButton.OK, MessageBoxImage.Information);
-                            return;
+                            return false;
                         }
 
 
@@ -1456,7 +1488,13 @@ namespace OfflineRetailV2
                         Cursor = Cursors.Arrow;
                     }
                 }
+                else
+                {
+                    new MessageBoxWindow().Show(Properties.Resources.Invalid_Login_ID___Password, Properties.Resources.Login_Validation, MessageBoxButton.OK, MessageBoxImage.Information);
+                    KeyPadPasswordControl.ResetPassCode();
+                }
             }
+            return false;
         }
         private int SignINOption = 0;
         private bool IsValid()
@@ -2475,6 +2513,12 @@ namespace OfflineRetailV2
         #endregion LoginBorder
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            // New design: open straight on Select Employee (the old module menu is gone).
+            Dispatcher.BeginInvoke(new System.Action(() =>
+            {
+                if (LoginBorder.Visibility != Visibility.Visible) ShowLoginHome();
+            }), DispatcherPriority.Background);
+
             if (Settings.CheckSecondMonitor == "Y" &&
                 System.Windows.Forms.Screen.AllScreens.Length >= Settings.ScreenCountForSecondMonitor)
             {
@@ -2581,134 +2625,228 @@ namespace OfflineRetailV2
             strSelectedUserID = "";
             KeyPadPasswordControl.ResetPassCode();
             pnlEmp.Children.Clear();
+            _empCards.Clear();
+            _empCardIndex = 0;
+            _empRoles = null;
+            UpdateLoggingInAs(null);
             PosDataObject.Login employee = new PosDataObject.Login();
             employee.Connection = SystemVariables.Conn;
             DataTable dtbl = new DataTable();
             dtbl = employee.FetchAllEmployees();
+            if (dtbl == null) return;
+            // Pages of 4 across x 2 rows; the ScrollViewer shows one page (888 wide) at a time
+            System.Windows.Controls.Primitives.UniformGrid page = null;
+            int n = 0;
+            int total = dtbl.Rows.Count;
             foreach (DataRow dr in dtbl.Rows)
             {
-                Grid grd = new Grid();
-                grd.Margin = new Thickness(10, 10, 10, 20);
-                grd.Width = 120;
-                grd.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(106.03) });
-                grd.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(24) });
-                grd.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(16) });
-
-
-                DockPanel dockPanel = new DockPanel();
-                dockPanel.Width = 116.03;
-                dockPanel.Height = 116.03;
-                dockPanel.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Transparent);
-                dockPanel.PreviewMouseLeftButtonDown += ButtonEmpId_Click;
-                dockPanel.Tag = dr["EmployeeID"].ToString();
-
-                Button button = new Button();
-                button.Width = 96.03;
-                button.Height = 96.03;
-                //button.Margin = new Thickness(0,-20,0,0);
-                button.Content = dr["DisplayName"].ToString();
-                button.Tag = dr["EmployeeID"].ToString();
-                //button.Click += ButtonEmpId_Click; 
-                button.Style = this.FindResource("CustomEmp" + GetStyleIndex(dr["EmployeeID"].ToString().Substring(0, 1))) as Style;
-
-                if (SystemVariables.SelectedTheme == "Light")
+                if (n % EmpPageSize == 0)
                 {
-                    button.BorderBrush = new System.Windows.Media.SolidColorBrush(((System.Windows.Media.SolidColorBrush)button.Background).Color) { Opacity = 0.2 };
+                    int left = total - n;
+                    page = new System.Windows.Controls.Primitives.UniformGrid
+                    {
+                        Columns = 4,
+                        Rows = left > 4 ? 2 : 1,
+                        Width = 4 * EmpCardStep,
+                        VerticalAlignment = VerticalAlignment.Top
+                    };
+                    pnlEmp.Children.Add(page);
                 }
-                if (SystemVariables.SelectedTheme == "Dark")
-                {
-                    button.BorderBrush = new System.Windows.Media.SolidColorBrush(((System.Windows.Media.SolidColorBrush)button.Background).Color) { Opacity = 0.5 };
-                }
-
-                Grid grd1 = new Grid();
-                grd1.ColumnDefinitions.Add(new ColumnDefinition() { Width = GridLength.Auto });
-                grd1.ColumnDefinitions.Add(new ColumnDefinition() { Width = GridLength.Auto });
-
-                Grid grd2 = new Grid();
-                grd2.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
-                grd2.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
-
-
-                bool blflg1 = false;
-
-                PosDataObject.Login objLogin3 = new PosDataObject.Login();
-                objLogin3.Connection = SystemVariables.Conn;
-                blflg1 = objLogin3.IsNotClockoutEmployee(dr["EmployeeID"].ToString());
-
-                if (blflg1)
-                {
-                    System.Windows.Controls.Image img1 = new System.Windows.Controls.Image();
-                    img1.Source = this.FindResource("Online") as System.Windows.Media.ImageSource;
-                    img1.Width = 13.0;
-                    img1.Height = 13.0;
-                    img1.VerticalAlignment = VerticalAlignment.Top;
-                    img1.Margin = new Thickness(-10, 5, 0, 0);
-                    Grid.SetRow(img1, 0);
-                    grd2.Children.Add(img1);
-                }
-
-
-                bool blflg2 = false;
-                if (LoginSection == LoginSection.POS)
-                {
-                    PosDataObject.Login objLogin = new PosDataObject.Login();
-                    objLogin.Connection = SystemVariables.Conn;
-                    blflg2 = objLogin.IsNotForcedPasscode(dr["EmployeeID"].ToString());
-                }
-
-                if (!blflg2)
-                {
-                    System.Windows.Controls.Image img2 = new System.Windows.Controls.Image();
-                    img2.Source = this.FindResource("Lock") as System.Windows.Media.ImageSource;
-                    img2.Width = 11.0;
-                    img2.Height = 11.0;
-                    img2.VerticalAlignment = VerticalAlignment.Bottom;
-                    img2.Margin = new Thickness(-10, 5, 0, 5);
-                    Grid.SetRow(img2, 1);
-                    grd2.Children.Add(img2);
-                }
-
-                Grid.SetColumn(grd2, 1);
-                grd1.Children.Add(grd2);
-
-
-                dockPanel.Children.Add(button);
-                Grid.SetColumn(dockPanel, 0);
-                grd1.Children.Add(dockPanel);
-
-                grd1.HorizontalAlignment = HorizontalAlignment.Center;
-
-                grd.Children.Add(grd1);
-
-                TextBlock tb = new TextBlock();
-                tb.Text = dr["UserName"].ToString();
-                tb.Style = this.FindResource("LoginUser") as Style;
-                tb.TextAlignment = TextAlignment.Center;
-                tb.FontFamily = this.FindResource("OSSemiBold") as System.Windows.Media.FontFamily;
-                tb.FontSize = 13f;
-                tb.TextWrapping = TextWrapping.Wrap;
-                tb.Padding = new Thickness(5);
-                tb.VerticalAlignment = VerticalAlignment.Top;
-
-                Grid.SetRow(tb, 1);
-                grd.Children.Add(tb);
-
-                TextBlock tb1 = new TextBlock();
-                tb1.Text = dr["Email"].ToString();
-                tb1.Style = this.FindResource("ThemeTextColor") as Style;
-                tb1.FontSize = 8f;
-                tb1.TextAlignment = TextAlignment.Center;
-                tb1.TextWrapping = TextWrapping.Wrap;
-                tb1.TextTrimming = TextTrimming.CharacterEllipsis;
-                tb1.Padding = new Thickness(5);
-                tb1.VerticalAlignment = VerticalAlignment.Top;
-                Grid.SetRow(tb1, 2);
-                grd.Children.Add(tb1);
-
-
-                pnlEmp.Children.Add(grd);
-
+                page.Children.Add(CreateEmployeeCard(dr));
+                n++;
             }
+            ScrollViewerEmp.ScrollToHorizontalOffset(0);
+            UpdateEmpArrows();
+        }
+
+        /// <summary>Visual parts of one employee card, kept so selection can restyle it.</summary>
+        private class EmpCardParts
+        {
+            public string Name;
+            public Border Card;
+            public Border Ring;
+            public Border Avatar;
+            public TextBlock Initials;
+            public Border Tick;
+            public System.Windows.Shapes.Path LockIcon;
+            public TextBlock LockText;
+            public System.Windows.Media.Brush AvatarBg;
+            public System.Windows.Media.Brush AvatarFg;
+            public string IdleText;
+        }
+
+        private readonly Dictionary<string, EmpCardParts> _empCards = new Dictionary<string, EmpCardParts>();
+        private Dictionary<string, string> _empRoles;
+        private int _empCardIndex;
+
+        // Avatar tints from the mock-up (navy, teal, amber, purple) + green
+        private static readonly string[][] EmpTints =
+        {
+            new[] { "#E6E8F3", "#2F3460" }, new[] { "#E3F1F4", "#2D7F8F" }, new[] { "#FBEEDD", "#A8661B" },
+            new[] { "#EFE6F7", "#7647A3" }, new[] { "#E5F6EC", "#1F9D55" }
+        };
+
+        /// <summary>Employee role = security group name (Employee.ProfileID -> SecurityGroup.GroupName).</summary>
+        private Dictionary<string, string> LoadEmployeeRoles()
+        {
+            var roles = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            try
+            {
+                using (var conn = new System.Data.SqlClient.SqlConnection(SystemVariables.ConnectionString))
+                using (var cmd = new System.Data.SqlClient.SqlCommand(
+                    "select e.EmployeeID, g.GroupName from Employee e left join SecurityGroup g on g.ID = e.ProfileID", conn))
+                {
+                    conn.Open();
+                    using (var rd = cmd.ExecuteReader())
+                        while (rd.Read())
+                            roles[rd["EmployeeID"].ToString()] = rd["GroupName"] == DBNull.Value ? "" : rd["GroupName"].ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("LoadEmployeeRoles: " + ex.Message);
+            }
+            return roles;
+        }
+
+        private static System.Windows.Media.SolidColorBrush Hex(string hex)
+        {
+            return new System.Windows.Media.SolidColorBrush((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(hex));
+        }
+
+        /// <summary>Employee card (XeposDesign 03-employee-login): initials avatar, name, role, passcode status.</summary>
+        private FrameworkElement CreateEmployeeCard(DataRow dr)
+        {
+            if (_empRoles == null) _empRoles = LoadEmployeeRoles();
+            string empId = dr["EmployeeID"].ToString();
+            string fullName = dr["UserName"].ToString().Trim();
+            string initials = dr["DisplayName"].ToString().Trim();
+            if (initials.Length == 0 && fullName.Length > 0) initials = fullName.Substring(0, 1).ToUpper();
+            string role;
+            if (!_empRoles.TryGetValue(empId, out role) || string.IsNullOrWhiteSpace(role)) role = "Employee";
+
+            PosDataObject.Login objLogin3 = new PosDataObject.Login();
+            objLogin3.Connection = SystemVariables.Conn;
+            bool blClockedIn = objLogin3.IsNotClockoutEmployee(empId);
+
+            bool blNoPasscode = false;
+            if (LoginSection == LoginSection.POS)
+            {
+                PosDataObject.Login objLogin = new PosDataObject.Login();
+                objLogin.Connection = SystemVariables.Conn;
+                blNoPasscode = objLogin.IsNotForcedPasscode(empId);
+            }
+
+            string[] tint = EmpTints[_empCardIndex++ % EmpTints.Length];
+            var parts = new EmpCardParts
+            {
+                Name = fullName,
+                AvatarBg = Hex(tint[0]),
+                AvatarFg = Hex(tint[1]),
+                IdleText = blNoPasscode ? "Tap to login" : "Passcode"
+            };
+            var semi = this.FindResource("ND.Font.SemiBold") as System.Windows.Media.FontFamily;
+
+            // root: 206 x 178 card + 8px margin (= 16px gap); the ring sits 8px outside the card
+            Grid root = new Grid { Width = 206, Height = 178, Margin = new Thickness(8, 18, 8, 0), Tag = empId, Cursor = Cursors.Hand, VerticalAlignment = VerticalAlignment.Top };
+            root.PreviewMouseLeftButtonDown += ButtonEmpId_Click;
+            root.RenderTransform = new TranslateTransform();
+
+            parts.Ring = new Border { Margin = new Thickness(-8), CornerRadius = new CornerRadius(24), Background = Hex("#38FFFFFF"), Visibility = Visibility.Collapsed };
+            root.Children.Add(parts.Ring);
+
+            parts.Card = new Border
+            {
+                CornerRadius = new CornerRadius(18),
+                Background = System.Windows.Media.Brushes.White,
+                BorderThickness = new Thickness(3),
+                BorderBrush = System.Windows.Media.Brushes.Transparent,
+                Effect = this.FindResource("ND.Shadow") as System.Windows.Media.Effects.Effect,
+                ToolTip = blClockedIn ? fullName + " - clocked in" : fullName
+            };
+            root.Children.Add(parts.Card);
+
+            StackPanel stack = new StackPanel { VerticalAlignment = VerticalAlignment.Center, HorizontalAlignment = HorizontalAlignment.Center };
+            parts.Initials = new TextBlock
+            {
+                Text = initials,
+                FontFamily = this.FindResource("ND.Font.ExtraBold") as System.Windows.Media.FontFamily,
+                FontSize = 22,
+                Foreground = parts.AvatarFg,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center
+            };
+            parts.Avatar = new Border
+            {
+                Width = 62, Height = 62, CornerRadius = new CornerRadius(31),
+                Background = parts.AvatarBg, HorizontalAlignment = HorizontalAlignment.Center,
+                Child = parts.Initials
+            };
+            stack.Children.Add(parts.Avatar);
+            stack.Children.Add(new TextBlock
+            {
+                Text = fullName,
+                FontFamily = this.FindResource("ND.Font.Bold") as System.Windows.Media.FontFamily,
+                FontSize = 21,
+                Foreground = Hex("#1B1D33"),
+                HorizontalAlignment = HorizontalAlignment.Center,
+                TextTrimming = TextTrimming.CharacterEllipsis,
+                MaxWidth = 186,
+                Margin = new Thickness(0, 8, 0, 0)
+            });
+            stack.Children.Add(new TextBlock
+            {
+                Text = role,
+                FontFamily = semi,
+                FontSize = 13,
+                Foreground = Hex("#8A8EA8"),
+                HorizontalAlignment = HorizontalAlignment.Center,
+                TextTrimming = TextTrimming.CharacterEllipsis,
+                MaxWidth = 186,
+                Margin = new Thickness(0, -2, 0, 0)
+            });
+            StackPanel lockLine = new StackPanel { Orientation = System.Windows.Controls.Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0, 6, 0, 0) };
+            parts.LockIcon = NewIcon("ND.Icon.Lock", "#8A8EA8", 13, 15, 1.9);
+            lockLine.Children.Add(parts.LockIcon);
+            parts.LockText = new TextBlock { Text = parts.IdleText, FontFamily = semi, FontSize = 14, Foreground = Hex("#8A8EA8"), Margin = new Thickness(6, 0, 0, 0), VerticalAlignment = VerticalAlignment.Center };
+            lockLine.Children.Add(parts.LockText);
+            stack.Children.Add(lockLine);
+            root.Children.Add(stack);
+
+            if (blClockedIn)
+            {
+                root.Children.Add(new System.Windows.Shapes.Ellipse
+                {
+                    Width = 10, Height = 10, Fill = Hex("#1F9D55"),
+                    HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top,
+                    Margin = new Thickness(16, 16, 0, 0), ToolTip = "Clocked in"
+                });
+            }
+
+            var tickPath = NewIcon("ND.Icon.Check", "#2A1A00", 15, 12, 3);
+            parts.Tick = new Border
+            {
+                Width = 30, Height = 30, CornerRadius = new CornerRadius(15), Background = Hex("#F2A93B"),
+                HorizontalAlignment = HorizontalAlignment.Right, VerticalAlignment = VerticalAlignment.Top,
+                Margin = new Thickness(0, 12, 12, 0), Visibility = Visibility.Collapsed, Child = tickPath
+            };
+            root.Children.Add(parts.Tick);
+
+            _empCards[empId] = parts;
+            return root;
+        }
+
+        private System.Windows.Shapes.Path NewIcon(string key, string color, double w, double h, double thickness)
+        {
+            return new System.Windows.Shapes.Path
+            {
+                Data = this.FindResource(key) as System.Windows.Media.Geometry,
+                Style = this.FindResource("ND.IconPath") as Style,
+                Stroke = new System.Windows.Media.SolidColorBrush((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(color)),
+                StrokeThickness = thickness,
+                Width = w,
+                Height = h
+            };
         }
 
         private void InitializeUserControls()
@@ -2767,7 +2905,7 @@ namespace OfflineRetailV2
 
         private void ButtonEmpId_Click(object sender, RoutedEventArgs e)
         {
-            string selectedempId = (sender as System.Windows.Controls.DockPanel).Tag.ToString();
+            string selectedempId = (sender as FrameworkElement).Tag.ToString();
             Dispatcher.BeginInvoke(new System.Action(() => SetSeletionStyle(selectedempId)));
             strSelectedUserID = selectedempId;
             if (!string.IsNullOrEmpty(KeyPadPasswordControl.Password)) KeyPadPasswordControl.ResetPassCode();
@@ -2844,87 +2982,72 @@ namespace OfflineRetailV2
         public void ResetSeletionStyle()
         {
             strSelectedUserID = "";
-            foreach (UIElement c in pnlEmp.Children)
-            {
-                if (c is Grid)
-                {
-
-
-
-                    foreach (UIElement c1 in (c as Grid).Children)
-                    {
-
-                        if (c1 is Grid)
-                        {
-                            foreach (UIElement c2 in (c1 as Grid).Children)
-                            {
-                                if (c2 is System.Windows.Controls.Button)
-                                {
-                                    if (SystemVariables.SelectedTheme == "Light")
-                                    {
-                                        (c2 as System.Windows.Controls.Button).BorderBrush = new System.Windows.Media.SolidColorBrush(((System.Windows.Media.SolidColorBrush)(c2 as System.Windows.Controls.Button).Background).Color) { Opacity = 0.2 };
-                                    }
-                                    if (SystemVariables.SelectedTheme == "Dark")
-                                    {
-                                        (c2 as System.Windows.Controls.Button).BorderBrush = new System.Windows.Media.SolidColorBrush(((System.Windows.Media.SolidColorBrush)(c2 as System.Windows.Controls.Button).Background).Color) { Opacity = 0.5 };
-                                    }
-                                }
-                            }
-                        }
-
-
-                    }
-                }
-            }
+            SetSeletionStyle(null);
         }
 
+        /// <summary>Selected card: lifted, navy ring + soft white halo, filled avatar, amber tick (null clears all).</summary>
         private void SetSeletionStyle(string seletedTag)
         {
-            foreach (UIElement c in pnlEmp.Children)
+            EmpCardParts selected = null;
+            foreach (var kv in _empCards)
             {
-                if (c is Grid)
-                {
-                    foreach (UIElement c1 in (c as Grid).Children)
-                    {
-                        if (c1 is Grid)
-                        {
-                            foreach (UIElement c2 in (c1 as Grid).Children)
-                            {
-                                if (c2 is System.Windows.Controls.Button)
-                                {
-                                    if ((c2 as System.Windows.Controls.Button).Tag.ToString() != seletedTag)
-                                    {
-                                        if (SystemVariables.SelectedTheme == "Light")
-                                        {
-                                            (c2 as System.Windows.Controls.Button).BorderBrush = new System.Windows.Media.SolidColorBrush(((System.Windows.Media.SolidColorBrush)(c2 as System.Windows.Controls.Button).Background).Color) { Opacity = 0.2 };
-                                            (c2 as System.Windows.Controls.Button).Refresh();
-                                        }
-                                        if (SystemVariables.SelectedTheme == "Dark")
-                                        {
-                                            (c2 as System.Windows.Controls.Button).BorderBrush = new System.Windows.Media.SolidColorBrush(((System.Windows.Media.SolidColorBrush)(c2 as System.Windows.Controls.Button).Background).Color) { Opacity = 0.5 };
-                                            (c2 as System.Windows.Controls.Button).Refresh();
-                                        }
-                                    }
-                                    else
-                                    {
-                                        if (SystemVariables.SelectedTheme == "Light")
-                                        {
-                                            (c2 as System.Windows.Controls.Button).BorderBrush = new System.Windows.Media.SolidColorBrush(((System.Windows.Media.SolidColorBrush)(c2 as System.Windows.Controls.Button).Background).Color) { Opacity = 0.5 };
-                                            (c2 as System.Windows.Controls.Button).Refresh();
-                                        }
-                                        if (SystemVariables.SelectedTheme == "Dark")
-                                        {
-                                            (c2 as System.Windows.Controls.Button).BorderBrush = new System.Windows.Media.SolidColorBrush(((System.Windows.Media.SolidColorBrush)(c2 as System.Windows.Controls.Button).Background).Color) { Opacity = 0.2 };
-                                            (c2 as System.Windows.Controls.Button).Refresh();
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                var c = kv.Value;
+                bool isSel = seletedTag != null && kv.Key == seletedTag;
+                if (isSel) selected = c;
+                c.Card.BorderBrush = isSel ? (System.Windows.Media.Brush)Hex("#3B4175") : System.Windows.Media.Brushes.Transparent;
+                c.Ring.Visibility = isSel ? Visibility.Visible : Visibility.Collapsed;
+                c.Tick.Visibility = isSel ? Visibility.Visible : Visibility.Collapsed;
+                c.Avatar.Background = isSel ? Hex("#2F3460") : c.AvatarBg;
+                c.Initials.Foreground = isSel ? System.Windows.Media.Brushes.White : c.AvatarFg;
+                var accent = isSel ? Hex("#3B4175") : Hex("#8A8EA8");
+                c.LockText.Text = isSel ? "Selected" : c.IdleText;
+                c.LockText.Foreground = accent;
+                c.LockIcon.Stroke = accent;
+                c.LockIcon.Data = this.FindResource(isSel ? "ND.Icon.LockOpen" : "ND.Icon.Lock") as System.Windows.Media.Geometry;
+                var root = c.Card.Parent as FrameworkElement;
+                if (root != null && root.RenderTransform is TranslateTransform) ((TranslateTransform)root.RenderTransform).Y = isSel ? -10 : 0;
+            }
+            UpdateLoggingInAs(selected != null ? selected.Name : null);
+        }
+
+        /// <summary>"Logging in as <b>Name</b>" under Enter Passcode.</summary>
+        private void UpdateLoggingInAs(string name)
+        {
+            if (txtLoggingInAs == null) return;
+            txtLoggingInAs.Inlines.Clear();
+            if (string.IsNullOrEmpty(name))
+            {
+                txtLoggingInAs.Inlines.Add(new System.Windows.Documents.Run("Select your account to continue"));
+                return;
+            }
+            txtLoggingInAs.Inlines.Add(new System.Windows.Documents.Run("Logging in as "));
+            txtLoggingInAs.Inlines.Add(new System.Windows.Documents.Run(name)
+            {
+                FontFamily = this.FindResource("ND.Font.Bold") as System.Windows.Media.FontFamily,
+                Foreground = Hex("#1B1D33")
+            });
+        }
+
+        /// <summary>Online pill and footer line (product, version, date and time).</summary>
+        private void UpdateLoginInfo()
+        {
+            if (txtLoginFooter == null) return;
+            try
+            {
+                bool online = InternetChecker.IsConnectedToInternet();
+                txtLoginOnline.Text = online ? "Online" : "Offline";
+                dotLoginOnline.Fill = online ? Hex("#22C55E") : Hex("#9CA3AF");
+                var v = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+                string brand = SoftwareNameTextBlock != null && !string.IsNullOrWhiteSpace(SoftwareNameTextBlock.Text)
+                    ? SoftwareNameTextBlock.Text : "XEPOS Retail";
+                txtLoginFooter.Text = brand + "  ·  v" + v.Major + "." + v.Minor + "  ·  " + DateTime.Now.ToString("dddd d MMMM yyyy  ·  HH:mm");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("UpdateLoginInfo: " + ex.Message);
             }
         }
+
         /// <summary>
         ///     Replica of SetSeletionStyle with additional dockpanel handled.
         ///     As button is added in dockpanel to make border/side area clickable too
@@ -3553,14 +3676,177 @@ namespace OfflineRetailV2
             e.Handled = true;
         }
 
+        #region New design - Select Employee screen
+
+        private DateTime _supportPopupClosedAt = DateTime.MinValue;
+
         private void btnModule_T_Click(object sender, RoutedEventArgs e)
         {
-            //btnModule_A.Style = this.FindResource("ModuleButton") as Style;
-            //btnModule_O.Style = this.FindResource("ModuleButton") as Style;
-            //btnModule_R.Style = this.FindResource("ModuleButton") as Style;
-            btnModule_T.Style = this.FindResource("ModuleButtonTSelected") as Style;
+            // StaysOpen=False closes the popup on the same click that hits this button; don't reopen it.
+            if ((DateTime.Now - _supportPopupClosedAt).TotalMilliseconds < 300) return;
+            // Right-align the popup with the header navigation (as in the design).
+            popupTooltip.HorizontalOffset = pnlLoginNav.ActualWidth * _loginScale - popupTooltip.Width + 8;
             popupTooltip.IsOpen = !popupTooltip.IsOpen;
         }
+
+        private void PopupTooltip_Opened(object sender, EventArgs e)
+        {
+            btnModule_T.Tag = "Active";
+        }
+
+        private void PopupTooltip_Closed(object sender, EventArgs e)
+        {
+            btnModule_T.Tag = null;
+            _supportPopupClosedAt = DateTime.Now;
+        }
+
+        /// <summary>
+        /// Code across the app returns to the login screen by making the old module menu (LoginMenuBorder)
+        /// visible. The new design has no separate menu, so redirect to the Select Employee screen.
+        /// </summary>
+        private void LoginMenuBorder_VisibilityChanged(object sender, EventArgs e)
+        {
+            if (LoginMenuBorder.Visibility != Visibility.Visible) return;
+            LoginMenuBorder.Visibility = Visibility.Collapsed;
+            Dispatcher.BeginInvoke(new System.Action(ShowLoginHome), DispatcherPriority.Background);
+        }
+
+        /// <summary>Shows Select Employee with the default section (Ordering, or Admin when POS is not registered).</summary>
+        public void ShowLoginHome()
+        {
+            if (LoginGrid.Visibility != Visibility.Visible) return;   // a module is open
+            LoginMenuBorder.Visibility = Visibility.Collapsed;
+            popupTooltip.IsOpen = false;
+            KeyPadPasswordControl.ShowHeader = false;   // the pad shows its own centred title
+            SetClockMode(false);
+            UpdateLoginInfo();
+
+            RadioButton target = rbNavOrdering.Visibility == Visibility.Visible ? rbNavOrdering : rbNavAdmin;
+            if (target.IsChecked == true)
+                ActivateNavSection(target);
+            else
+                target.IsChecked = true;   // fires Checked -> ActivateNavSection
+        }
+
+        private void ActivateNavSection(RadioButton rb)
+        {
+            if (rb == rbNavAdmin) AdminButton_Click(rb, null);
+            else if (rb == rbNavRegister) CashOutButton_Click(rb, null);
+            else PointOfSaleButton_Click(rb, null);
+        }
+
+        private void RbNavAdmin_Checked(object sender, RoutedEventArgs e) { ActivateNavSection(rbNavAdmin); }
+        private void RbNavOrdering_Checked(object sender, RoutedEventArgs e) { ActivateNavSection(rbNavOrdering); }
+        private void RbNavRegister_Checked(object sender, RoutedEventArgs e) { ActivateNavSection(rbNavRegister); }
+
+        // Header "Exit" (new design): the open screen registers what Exit should do, e.g. Manage Register.
+        private System.Action _headerExitAction;
+
+        public void SetHeaderExit(System.Action action)
+        {
+            _headerExitAction = action;
+            if (btnHeaderExit != null) btnHeaderExit.Visibility = action != null ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        private void BtnHeaderExit_Click(object sender, RoutedEventArgs e)
+        {
+            var a = _headerExitAction;
+            if (a != null) a();
+        }
+
+        private void BtnSalesSnapshotLink_Click(object sender, RoutedEventArgs e)
+        {
+            rbNavAdmin.IsChecked = rbNavOrdering.IsChecked = rbNavRegister.IsChecked = false;
+            SalesSnapShotButton_Click(sender, e);
+        }
+
+        /// <summary>Clock In / Out link: toggles clock mode; the next 4-digit passcode opens Attendance.</summary>
+        private void BtnClockAction_Click(object sender, RoutedEventArgs e)
+        {
+            SetClockMode(!_clockMode);
+        }
+
+        /// <summary>Same as ClockButton_Click but keeps the selected employee and passcode.</summary>
+        private void ClockButton_ClickKeepSelection()
+        {
+            if (POSControl == null)
+            {
+                POSControl = new UserControls.POSControl();
+                POSControl.Name = "POSControl";
+                ControlsGrid.Children.Add(POSControl);
+                POSControl.Visibility = Visibility.Collapsed;
+            }
+            POSControl.blInitAutoSignOutAfterTender = false;
+            LoginSection = LoginSection.ClickInClockOut_Employee;
+        }
+
+        /// <summary>Keypad menu key: Sales Snapshot (no top-bar slot in the design) and Clear.</summary>
+        private void KeyPadPasswordControl_MenuRequested(object sender, EventArgs e)
+        {
+            ContextMenu menu = new ContextMenu();
+            MenuItem snapshot = new MenuItem { Header = Properties.Resources.SalesSnapShot };
+            snapshot.Click += (s, a) =>
+            {
+                rbNavAdmin.IsChecked = rbNavOrdering.IsChecked = rbNavRegister.IsChecked = false;
+                SalesSnapShotButton_Click(s, a);
+            };
+            MenuItem clear = new MenuItem { Header = "Clear" };
+            clear.Click += (s, a) => KeyPadPasswordControl.ClearPassCode();
+            menu.Items.Add(snapshot);
+            menu.Items.Add(clear);
+            menu.PlacementTarget = sender as UIElement;
+            menu.Placement = System.Windows.Controls.Primitives.PlacementMode.Top;
+            menu.IsOpen = true;
+        }
+
+        private const double EmpCardStep = 222;   // card 206 + 16 gap
+        private const int EmpPageSize = 8;        // 4 across x 2 rows
+
+        private const double DesignCanvasHeight = 941;   // XeposDesign login frame is 1672 x 941 (header included)
+        private const double DesignCanvasMinWidth = 1640; // keeps the card row clear of the passcode pad
+        private double _loginScale = 1.0;
+
+        /// <summary>
+        /// Keeps the Select Employee layout identical to the PDF at any resolution: the canvas is laid out
+        /// at 1024 x 712 and scaled to the available height; its width stretches so the keypad card stays
+        /// on the right edge on wide screens.
+        /// </summary>
+        private void LoginBorder_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            double h = LoginBorder.ActualHeight, w = LoginBorder.ActualWidth;
+            if (h < 1 || w < 1) return;
+            double s = h / DesignCanvasHeight;
+            if (w / s < DesignCanvasMinWidth) s = w / DesignCanvasMinWidth;   // narrower screens (4:3): fit the width
+            _loginScale = s;
+            LoginCanvas.LayoutTransform = new System.Windows.Media.ScaleTransform(s, s);
+            LoginCanvas.Width = w / s;
+            LoginCanvas.Height = Math.Max(DesignCanvasHeight, h / s);
+            LoginCanvas.VerticalAlignment = VerticalAlignment.Top;
+        }
+
+        private void BtnEmpPrev_Click(object sender, RoutedEventArgs e)
+        {
+            ScrollViewerEmp.ScrollToHorizontalOffset(Math.Max(0, ScrollViewerEmp.HorizontalOffset - EmpCardStep * 4));
+        }
+
+        private void BtnEmpNext_Click(object sender, RoutedEventArgs e)
+        {
+            ScrollViewerEmp.ScrollToHorizontalOffset(Math.Min(ScrollViewerEmp.ScrollableWidth, ScrollViewerEmp.HorizontalOffset + EmpCardStep * 4));
+        }
+
+        private void ScrollViewerEmp_ScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            UpdateEmpArrows();
+        }
+
+        private void UpdateEmpArrows()
+        {
+            if (btnEmpPrev == null || ScrollViewerEmp == null) return;
+            btnEmpPrev.IsEnabled = ScrollViewerEmp.HorizontalOffset > 0.5;
+            btnEmpNext.IsEnabled = ScrollViewerEmp.HorizontalOffset < ScrollViewerEmp.ScrollableWidth - 0.5;
+        }
+
+        #endregion
 
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {

@@ -8,61 +8,131 @@
         xmlns:lm="clr-namespace:OfflineRetailV2.LayoutManager"
         xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
         xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
-        xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" 
+        xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
         xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
         xmlns:tb="clr-namespace:OfflineRetailV2"
         xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
         AllowsTransparency="True" WindowStyle="None" Background="Transparent" WindowStartupLocation="CenterScreen"
-        Title="" Foreground="White"   Width="600" Height="260">
-    <cc:ModalWindow  x:Name="ModalWindow" >
-        <Grid Margin="9">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="9"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <TextBlock Text="Paid Out"  x:Name="Title" VerticalAlignment="Center" Style="{DynamicResource BlueHeading}" />
-            <Grid Grid.Column="1" HorizontalAlignment="Right" Margin="0,0,20,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                    <ColumnDefinition Width="9"></ColumnDefinition>
-                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                    <ColumnDefinition Width="9"></ColumnDefinition>
-                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
+        Title="" Foreground="White" Width="620" Height="490">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/NewDesignStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <Style x:Key="PoLabel" TargetType="{x:Type TextBlock}">
+                <Setter Property="FontFamily" Value="{StaticResource ND.Font.SemiBold}"/>
+                <Setter Property="FontSize" Value="16.5"/>
+                <Setter Property="Foreground" Value="#1B1D33"/>
+                <Setter Property="Margin" Value="0,0,0,10"/>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
 
-                <Button IsTabStop="False" Focusable="False" Grid.Column="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Content="KEYBOARD"
-                                 FontFamily="{StaticResource OSSemiBold}" Style="{DynamicResource GeneralButtonStyle}" Height="35" Width="120" Visibility="Collapsed" x:Name="FullKbd" Click="FullKbd_Click"/>
-                <Button IsTabStop="False" Focusable="False" Grid.Column="4" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Content="DONE"
-                                 FontFamily="{StaticResource OSSemiBold}" Style="{DynamicResource SaveButtonStyle}" x:Name="btnOK" Width="120" Height="35" Click="btnOK_Click"/>
+    <!-- New design (Paid Out): navy header with icon, title and close; white body; Cancel / Done.
+         Names used by the code-behind are unchanged (Title, txtExplanation, numAmount, btnOK, btnCancel, FullKbd, ModalWindow). -->
+    <Grid Margin="10">
+        <!-- kept for the code-behind (sets its CloseCommand); the visible chrome is drawn below -->
+        <cc:ModalWindow x:Name="ModalWindow" Visibility="Collapsed"/>
 
-                <Button IsTabStop="False" Focusable="False" Grid.Column="2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Content="CANCEL"
-                                 FontFamily="{StaticResource OSSemiBold}" Style="{DynamicResource CancelButtonStyle}" x:Name="btnCancel"  Height="35" Width="120" Click="BtnCancel_Click" />
-            </Grid>
-
-            <Rectangle Grid.Row="1" Style="{DynamicResource DefaultLineStyle}"  VerticalAlignment="Center"  Margin="-9,0"/>
-            
-            <Grid Grid.Row="2" Margin="0,9,0,0">
+        <Border CornerRadius="20" Background="#FFFFFF" Effect="{StaticResource ND.ShadowLarge}"/>
+        <!-- rounded clip set from the actual size in code (ClipToBounds ignores corner radius) -->
+        <Border CornerRadius="20" x:Name="dlgBody">
+            <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="6"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="6"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="6"/>
+                    <RowDefinition Height="104"/>
+                    <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                
-                <TextBlock Grid.Row="0" Text="Paid Out Explanation"/>
-                <dxe:TextEdit Grid.Row="2" x:Name="txtExplanation" MaxLength="150" GotTouchCapture="TxtExplanation_GotTouchCapture" GotFocus="TxtExplanation_GotFocus" LostFocus="TxtExplanation_LostFocus"/>
 
-                <TextBlock  Grid.Row="4" Text="Paid Out Amount"/>
-                <dxe:TextEdit Grid.Row="6"   x:Name="numAmount"  InputScope="Number"
-                                  Text="0.00" Mask="f2" MaskType="Numeric" MaskUseAsDisplayFormat="True" SelectAllOnGotFocus="True"  GotTouchCapture="NumAmount_GotTouchCapture" GotFocus="NumAmount_GotFocus" LostFocus="NumAmount_LostFocus"  >
-  
-                </dxe:TextEdit>
+                <!-- ===== header ===== -->
+                <Border Grid.Row="0" CornerRadius="20,20,0,0" ClipToBounds="True">
+                    <Grid>
+                        <Rectangle>
+                            <Rectangle.Fill>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="#1E2246" Offset="0"/>
+                                    <GradientStop Color="#2A2F5C" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <!-- gold wave accent (from the store artwork) on the right -->
+                        <Rectangle HorizontalAlignment="Right" Width="340" Opacity="0.85">
+                            <Rectangle.Fill>
+                                <ImageBrush ImageSource="pack://application:,,,/OfflineRetailV2;component/Resources/Images/LoginStore.jpg"
+                                            Stretch="UniformToFill" AlignmentX="Center" AlignmentY="Bottom" Viewbox="0.42,0.78,0.5,0.22"/>
+                            </Rectangle.Fill>
+                            <Rectangle.OpacityMask>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                    <GradientStop Color="#00000000" Offset="0"/>
+                                    <GradientStop Color="#FF000000" Offset="0.6"/>
+                                </LinearGradientBrush>
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                        <Grid Margin="24,0,22,0" VerticalAlignment="Center">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Path Data="{StaticResource ND.Icon.Coins}" Style="{StaticResource ND.IconPath}" Stroke="#FFFFFF" StrokeThickness="1.9" Width="34" Height="32"
+                                  VerticalAlignment="Center" Margin="0,0,18,0"/>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBlock x:Name="Title" Text="Paid Out" FontFamily="{StaticResource ND.Font.Bold}" FontSize="26" Foreground="#FFFFFF"/>
+                                <TextBlock Text="Record cash removed from the register" FontFamily="{StaticResource ND.Font.Regular}" FontSize="14.5" Foreground="#D8DBF0" Margin="0,1,0,0"/>
+                            </StackPanel>
+                            <Button Grid.Column="2" Style="{StaticResource ND.DialogCloseButton}" Click="BtnCancel_Click" ToolTip="Close"/>
+                        </Grid>
+                    </Grid>
+                </Border>
+
+                <!-- ===== body ===== -->
+                <StackPanel Grid.Row="1" Margin="30,26,30,0">
+                    <TextBlock Text="Paid Out Explanation" Style="{StaticResource PoLabel}"/>
+                    <Border Height="82" CornerRadius="10" BorderBrush="#C9CEDC" BorderThickness="1.3" Background="#FFFFFF" Padding="10,6">
+                        <dxe:TextEdit x:Name="txtExplanation" MaxLength="150" ShowBorder="False" Background="Transparent"
+                                      VerticalContentAlignment="Top" TextWrapping="Wrap" AcceptsReturn="False"
+                                      FontFamily="{StaticResource ND.Font.Regular}" FontSize="16" Foreground="#1B1D33"
+                                      GotTouchCapture="TxtExplanation_GotTouchCapture" GotFocus="TxtExplanation_GotFocus" LostFocus="TxtExplanation_LostFocus"/>
+                    </Border>
+
+                    <TextBlock Text="Paid Out Amount" Style="{StaticResource PoLabel}" Margin="0,22,0,10"/>
+                    <Border Height="50" CornerRadius="10" BorderBrush="#C9CEDC" BorderThickness="1.3" Background="#FFFFFF" ClipToBounds="True">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="48"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Background="#EEF1F6" CornerRadius="9,0,0,9" BorderBrush="#C9CEDC" BorderThickness="0,0,1.3,0">
+                                <TextBlock Text="£" x:Name="lbCurrency" FontFamily="{StaticResource ND.Font.SemiBold}" FontSize="18" Foreground="#1B1D33"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <dxe:TextEdit Grid.Column="1" x:Name="numAmount" InputScope="Number" ShowBorder="False" Background="Transparent" Margin="12,0,10,0"
+                                          VerticalContentAlignment="Center" FontFamily="{StaticResource ND.Font.Regular}" FontSize="19" Foreground="#1B1D33"
+                                          Text="0.00" Mask="f2" MaskType="Numeric" MaskUseAsDisplayFormat="True" SelectAllOnGotFocus="True"
+                                          GotTouchCapture="NumAmount_GotTouchCapture" GotFocus="NumAmount_GotFocus" LostFocus="NumAmount_LostFocus"/>
+                        </Grid>
+                    </Border>
+                </StackPanel>
+
+                <!-- ===== footer ===== -->
+                <Grid Grid.Row="2" Margin="18,22,18,22">
+                    <Rectangle Height="1" Fill="#E3E6EF" VerticalAlignment="Top" Margin="0,-12,0,0"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,12,0">
+                        <Button IsTabStop="False" Focusable="False" Content="KEYBOARD" Style="{StaticResource ND.PosSoftButton}" HorizontalContentAlignment="Center"
+                                Height="50" Width="130" Margin="0,0,14,0" Visibility="Collapsed" x:Name="FullKbd" Click="FullKbd_Click"/>
+                        <Button IsTabStop="False" Focusable="False" x:Name="btnCancel" Style="{StaticResource ND.PosSoftButton}" HorizontalContentAlignment="Center"
+                                Height="50" Width="122" Margin="0,0,14,0" Click="BtnCancel_Click">
+                            <TextBlock Text="Cancel" FontSize="18" FontFamily="{StaticResource ND.Font.SemiBold}"/>
+                        </Button>
+                        <Button IsTabStop="False" Focusable="False" x:Name="btnOK" Style="{StaticResource ND.SuccessButton}" Height="50" Width="164" Click="btnOK_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <Path Data="{StaticResource ND.Icon.CheckCircle}" Style="{StaticResource ND.IconPath}" Stroke="#FFFFFF" StrokeThickness="2" Width="22" Height="22" Margin="0,0,12,0"/>
+                                <TextBlock Text="Done" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Grid>
             </Grid>
-            
-        </Grid>
-    </cc:ModalWindow>
+        </Border>
+    </Grid>
 </Window>

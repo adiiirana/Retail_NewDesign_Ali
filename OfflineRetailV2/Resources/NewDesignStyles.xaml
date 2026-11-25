@@ -11,6 +11,7 @@
     <FontFamily x:Key="ND.Font.Medium">/Resources/Fonts/#Poppins Medium</FontFamily>
     <FontFamily x:Key="ND.Font.SemiBold">/Resources/Fonts/#Poppins SemiBold</FontFamily>
     <FontFamily x:Key="ND.Font.Bold">/Resources/Fonts/#Poppins Bold</FontFamily>
+    <FontFamily x:Key="ND.Font.ExtraBold">/Resources/Fonts/#Poppins ExtraBold</FontFamily>
 
     <!-- ===================== Palette ===================== -->
     <SolidColorBrush x:Key="ND.Navy" Color="#26324F"/>
@@ -88,7 +89,7 @@
     <!-- ===================== Header navigation (Admin / Ordering / Manage Register / Technical Support) ===================== -->
     <ControlTemplate x:Key="ND.NavTemplate" TargetType="{x:Type ButtonBase}">
         <Border x:Name="bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
-                BorderThickness="1.2" CornerRadius="6" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True">
+                BorderThickness="1.5" CornerRadius="14" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True">
             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center">
                 <ContentPresenter.Resources><Style TargetType="{x:Type TextBlock}"/></ContentPresenter.Resources>
             </ContentPresenter>
@@ -108,14 +109,14 @@
             <!-- shield content from the app-wide implicit TextBlock style so Foreground/FontFamily inherit -->
             <Style TargetType="{x:Type TextBlock}"/>
         </Style.Resources>
-        <Setter Property="Height" Value="36"/>
-        <Setter Property="Padding" Value="12,0"/>
-        <Setter Property="Margin" Value="4,0"/>
+        <Setter Property="Height" Value="54"/>
+        <Setter Property="Padding" Value="24,0"/>
+        <Setter Property="Margin" Value="8,0"/>
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="BorderBrush" Value="#B3FFFFFF"/>
+        <Setter Property="BorderBrush" Value="#59FFFFFF"/>
         <Setter Property="Foreground" Value="#FFFFFF"/>
-        <Setter Property="FontFamily" Value="{StaticResource ND.Font.Medium}"/>
-        <Setter Property="FontSize" Value="12.5"/>
+        <Setter Property="FontFamily" Value="{StaticResource ND.Font.SemiBold}"/>
+        <Setter Property="FontSize" Value="17"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Focusable" Value="False"/>
         <Setter Property="Template" Value="{StaticResource ND.NavTemplate}"/>
@@ -131,7 +132,7 @@
             <Trigger Property="IsChecked" Value="True">
                 <Setter Property="Background" Value="#FFFFFF"/>
                 <Setter Property="BorderBrush" Value="#FFFFFF"/>
-                <Setter Property="Foreground" Value="{StaticResource ND.Navy}"/>
+                <Setter Property="Foreground" Value="#272B4F"/>
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -157,11 +158,11 @@
             <!-- shield content from the app-wide implicit TextBlock style so Foreground/FontFamily inherit -->
             <Style TargetType="{x:Type TextBlock}"/>
         </Style.Resources>
-        <Setter Property="Width" Value="36"/>
-        <Setter Property="Height" Value="36"/>
-        <Setter Property="Margin" Value="5,0"/>
-        <Setter Property="Background" Value="#33FFFFFF"/>
-        <Setter Property="BorderBrush" Value="#80FFFFFF"/>
+        <Setter Property="Width" Value="56"/>
+        <Setter Property="Height" Value="54"/>
+        <Setter Property="Margin" Value="8,0,0,0"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="#59FFFFFF"/>
         <Setter Property="Foreground" Value="#FFFFFF"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Focusable" Value="False"/>
@@ -169,7 +170,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Border x:Name="bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="1.2" CornerRadius="6">
+                            BorderThickness="1.5" CornerRadius="14">
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center">
                             <ContentPresenter.Resources><Style TargetType="{x:Type TextBlock}"/></ContentPresenter.Resources>
                         </ContentPresenter>
@@ -190,29 +191,32 @@
     <!-- ===================== Keypad ===================== -->
     <Style x:Key="ND.KeyButton" TargetType="{x:Type Button}">
         <Style.Resources>
-            <!-- shield content from the app-wide implicit TextBlock style so Foreground/FontFamily inherit -->
             <Style TargetType="{x:Type TextBlock}"/>
         </Style.Resources>
-        <Setter Property="Background" Value="{StaticResource ND.KeyBg}"/>
-        <Setter Property="Foreground" Value="{StaticResource ND.TextDark}"/>
-        <Setter Property="FontFamily" Value="{StaticResource ND.Font.Medium}"/>
-        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="Background" Value="#F3F5FB"/>
+        <Setter Property="Foreground" Value="#1B1D33"/>
+        <Setter Property="FontFamily" Value="{StaticResource ND.Font.SemiBold}"/>
+        <Setter Property="FontSize" Value="30"/>
         <Setter Property="Focusable" Value="False"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="8" SnapsToDevicePixels="True">
-                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <ContentPresenter.Resources><Style TargetType="{x:Type TextBlock}"/></ContentPresenter.Resources>
-                        </ContentPresenter>
-                    </Border>
+                    <Grid>
+                        <Border Background="#DFE3EF" CornerRadius="14" Margin="0,2,0,0"/>
+                        <Border x:Name="bd" Background="{TemplateBinding Background}" BorderBrush="#E3E6F1" BorderThickness="1" CornerRadius="14" Margin="0,0,0,2" SnapsToDevicePixels="True">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <ContentPresenter.Resources><Style TargetType="{x:Type TextBlock}"/></ContentPresenter.Resources>
+                            </ContentPresenter>
+                        </Border>
+                    </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="bd" Property="Background" Value="#DFE5EF"/>
+                            <Setter TargetName="bd" Property="Background" Value="#EAEEF7"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="bd" Property="Background" Value="{StaticResource ND.KeyPressed}"/>
+                            <Setter TargetName="bd" Property="Background" Value="#E1E6F2"/>
+                            <Setter TargetName="bd" Property="Margin" Value="0,2,0,0"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -302,17 +306,17 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="20">
+                    <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="999" Effect="{StaticResource ND.ShadowSoft}">
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center">
                             <ContentPresenter.Resources><Style TargetType="{x:Type TextBlock}"/></ContentPresenter.Resources>
                         </ContentPresenter>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="bd" Property="Background" Value="#FFFFFF"/>
+                            <Setter TargetName="bd" Property="Background" Value="#F1F3FA"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="bd" Property="Opacity" Value="0.35"/>
+                            <Setter TargetName="bd" Property="Opacity" Value="0.55"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -505,9 +509,9 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type CheckBox}">
                     <StackPanel Orientation="Horizontal" Background="Transparent">
-                        <Grid Width="38" Height="20" VerticalAlignment="Center">
-                            <Border x:Name="track" CornerRadius="10" Background="#E2E2E2"/>
-                            <Ellipse x:Name="thumb" Width="14" Height="14" Fill="#FFFFFF" HorizontalAlignment="Left" Margin="3,0"
+                        <Grid Width="46" Height="26" VerticalAlignment="Center">
+                            <Border x:Name="track" CornerRadius="13" Background="#CFD3E4"/>
+                            <Ellipse x:Name="thumb" Width="20" Height="20" Fill="#FFFFFF" HorizontalAlignment="Left" Margin="3,0"
                                      Effect="{StaticResource ND.ShadowSoft}"/>
                         </Grid>
                         <ContentPresenter Margin="12,0,0,0" VerticalAlignment="Center">
@@ -517,7 +521,7 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="True">
                             <Setter TargetName="thumb" Property="HorizontalAlignment" Value="Right"/>
-                            <Setter TargetName="thumb" Property="Fill" Value="{StaticResource ND.Blue}"/>
+                            <Setter TargetName="track" Property="Background" Value="{StaticResource ND.Blue}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -1106,4 +1110,339 @@
     <!-- Close-up on hand + plate for the Manage Register hero -->
     <ImageBrush x:Key="ND.LoginPhotoHero" ImageSource="{StaticResource ND.LoginPhotoSource}" Stretch="UniformToFill"
                 Viewbox="0.05,0.05,0.72,0.9" ViewboxUnits="RelativeToBoundingBox"/>
+    <!-- ===================== Login (XeposDesign/01 login/03-employee-login) ===================== -->
+    <Geometry x:Key="ND.Icon.UserCog">M10,11 A3.5,3.5 0 1 0 10,4 A3.5,3.5 0 1 0 10,11 Z M3,20 C3,16.4 6,14 10,14 C11,14 11.9,14.15 12.7,14.45 M18,21 A3,3 0 1 0 18,15 A3,3 0 1 0 18,21 Z M18,13.6 V15 M18,21 V22.4 M14.6,18 H16 M20,18 H21.4</Geometry>
+    <Geometry x:Key="ND.Icon.LogOut">M9,21 H5 A2,2 0 0 1 3,19 V5 A2,2 0 0 1 5,3 H9 M16,17 L21,12 L16,7 M21,12 H9</Geometry>
+    <Geometry x:Key="ND.Icon.Store">M3,9 L4.5,4 H19.5 L21,9 Z M3,9 A3,3 0 0 0 9,9 A3,3 0 0 0 15,9 A3,3 0 0 0 21,9 M5,11.5 V20 H19 V11.5 M9.5,20 V15 H14.5 V20</Geometry>
+    <Geometry x:Key="ND.Icon.Monitor">M3,4 H21 V16 H3 Z M8,20.5 H16 M12,16 V20.5</Geometry>
+    <Geometry x:Key="ND.Icon.Wifi">M2,8.8 A15,15 0 0 1 22,8.8 M5,12.5 A10.5,10.5 0 0 1 19,12.5 M8.5,16 A5.5,5.5 0 0 1 15.5,16 M12,19.6 V19.7</Geometry>
+    <Geometry x:Key="ND.Icon.LockOpen">M5.5,11 H18.5 V21 H5.5 Z M8.5,11 V7.5 A3.5,3.5 0 0 1 15.4,6.6</Geometry>
+
+    <BitmapImage x:Key="ND.LoginStoreSource" UriSource="/Resources/Images/LoginStore.jpg"/>
+    <ImageBrush x:Key="ND.LoginStore" ImageSource="{StaticResource ND.LoginStoreSource}" Stretch="UniformToFill" AlignmentX="Left" AlignmentY="Top"/>
+
+    <DropShadowEffect x:Key="ND.ShadowLarge" BlurRadius="60" ShadowDepth="24" Direction="270" Opacity="0.18" Color="#171B3C"/>
+
+    <Style x:Key="ND.LoginChip" TargetType="{x:Type Border}">
+        <Setter Property="Height" Value="38"/>
+        <Setter Property="CornerRadius" Value="19"/>
+        <Setter Property="Background" Value="#1AFFFFFF"/>
+        <Setter Property="Padding" Value="14,0"/>
+        <Setter Property="Margin" Value="0,0,12,0"/>
+    </Style>
+    <Style x:Key="ND.LoginChipText" TargetType="{x:Type TextBlock}">
+        <Setter Property="FontFamily" Value="{StaticResource ND.Font.SemiBold}"/>
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="Foreground" Value="#E6E8F6"/>
+        <Setter Property="Margin" Value="8,0,0,0"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+
+    <!-- LOGIN: navy gradient, radius 14, soft shadow -->
+    <Style x:Key="ND.LoginButton" TargetType="{x:Type Button}">
+        <Style.Resources>
+            <Style TargetType="{x:Type TextBlock}"/>
+        </Style.Resources>
+        <Setter Property="Foreground" Value="#FFFFFF"/>
+        <Setter Property="FontFamily" Value="{StaticResource ND.Font.Bold}"/>
+        <Setter Property="FontSize" Value="24"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="bd" CornerRadius="14">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                <GradientStop Color="#3B4175" Offset="0"/>
+                                <GradientStop Color="#272B4F" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="20" ShadowDepth="8" Direction="270" Opacity="0.28" Color="#272B4F"/>
+                        </Border.Effect>
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <ContentPresenter.Resources><Style TargetType="{x:Type TextBlock}"/></ContentPresenter.Resources>
+                        </ContentPresenter>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="bd" Property="Opacity" Value="0.88"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="bd" Property="Opacity" Value="0.6"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Quiet text link (Clock In / Out, Sales Snapshot under LOGIN) -->
+    <Style x:Key="ND.LinkButton" TargetType="{x:Type Button}">
+        <Style.Resources>
+            <Style TargetType="{x:Type TextBlock}"/>
+        </Style.Resources>
+        <Setter Property="Foreground" Value="#4B4F6B"/>
+        <Setter Property="FontFamily" Value="{StaticResource ND.Font.SemiBold}"/>
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Background="Transparent" Padding="4,6">
+                        <ContentPresenter>
+                            <ContentPresenter.Resources><Style TargetType="{x:Type TextBlock}"/></ContentPresenter.Resources>
+                        </ContentPresenter>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Foreground" Value="#272B4F"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.45"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!-- Outlined pill in the main header (FRONT OFFICE) -->
+    <Style x:Key="ND.HeaderPill" TargetType="{x:Type Button}">
+        <Style.Resources>
+            <Style TargetType="{x:Type TextBlock}"/>
+        </Style.Resources>
+        <Setter Property="Height" Value="32"/>
+        <Setter Property="Padding" Value="22,0"/>
+        <Setter Property="Foreground" Value="#FFFFFF"/>
+        <Setter Property="FontFamily" Value="{StaticResource ND.Font.SemiBold}"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="bd" Background="#14FFFFFF" BorderBrush="#73FFFFFF" BorderThickness="1.2" CornerRadius="16" Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <ContentPresenter.Resources><Style TargetType="{x:Type TextBlock}"/></ContentPresenter.Resources>
+                        </ContentPresenter>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="#2EFFFFFF"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ===================== POS screen (XEPOS retail ordering design) ===================== -->
+    <Geometry x:Key="ND.Icon.Search">M10.5,17.5 A7,7 0 1 0 10.5,3.5 A7,7 0 1 0 10.5,17.5 Z M15.5,15.5 L21,21</Geometry>
+    <Geometry x:Key="ND.Icon.Barcode">M3,7 V4 H7 M17,4 H21 V7 M21,17 V20 H17 M7,20 H3 V17 M7,8 V16 M10,8 V16 M13,8 V16 M16,8 V16</Geometry>
+    <Geometry x:Key="ND.Icon.Dots">M12,5 V5.1 M12,12 V12.1 M12,19 V19.1</Geometry>
+    <Geometry x:Key="ND.Icon.CardPay">M2,6 H22 V18 H2 Z M2,10 H22 M6,14.5 H11</Geometry>
+    <Geometry x:Key="ND.Icon.NoteEdit">M4,4 H14 L20,10 V20 H4 Z M14,4 V10 H20 M8,14 H16 M8,17 H13</Geometry>
+    <Geometry x:Key="ND.Icon.Home">M3,11 L12,3 L21,11 M5,9.5 V20 H10 V14 H14 V20 H19 V9.5</Geometry>
+    <Geometry x:Key="ND.Icon.Back">M20,12 H4 M10,6 L4,12 L10,18</Geometry>
+
+    <!-- Purple Pay button -->
+    <Style x:Key="ND.PosPayButton" TargetType="{x:Type Button}">
+        <Style.Resources><Style TargetType="{x:Type TextBlock}"/></Style.Resources>
+        <Setter Property="Foreground" Value="#FFFFFF"/>
+        <Setter Property="FontFamily" Value="{StaticResource ND.Font.SemiBold}"/>
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="bd" CornerRadius="12">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#5B3CC4" Offset="0"/>
+                                <GradientStop Color="#3D2A8A" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="18" ShadowDepth="6" Direction="270" Opacity="0.25" Color="#3D2A8A"/>
+                        </Border.Effect>
+                        <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                            <ContentPresenter.Resources><Style TargetType="{x:Type TextBlock}"/></ContentPresenter.Resources>
+                        </ContentPresenter>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsPressed" Value="True"><Setter TargetName="bd" Property="Opacity" Value="0.88"/></Trigger>
+                        <Trigger Property="IsEnabled" Value="False"><Setter TargetName="bd" Property="Opacity" Value="0.55"/></Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Light outlined button inside the white sale card (Suspend, Add Discount, Order Note, customer) -->
+    <Style x:Key="ND.PosSoftButton" TargetType="{x:Type Button}">
+        <Style.Resources><Style TargetType="{x:Type TextBlock}"/></Style.Resources>
+        <Setter Property="Background" Value="#FFFFFF"/>
+        <Setter Property="Foreground" Value="#1B1D33"/>
+        <Setter Property="FontFamily" Value="{StaticResource ND.Font.SemiBold}"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="Padding" Value="14,0"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="bd" Background="{TemplateBinding Background}" BorderBrush="#DCE0EC" BorderThickness="1.2" CornerRadius="10" Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="Center">
+                            <ContentPresenter.Resources><Style TargetType="{x:Type TextBlock}"/></ContentPresenter.Resources>
+                        </ContentPresenter>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="bd" Property="Background" Value="#F7F4FE"/><Setter TargetName="bd" Property="BorderBrush" Value="#9B7BF0"/></Trigger>
+                        <Trigger Property="IsPressed" Value="True"><Setter TargetName="bd" Property="Background" Value="#E9ECF5"/></Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Square icon button in the sale card header (trash, more) -->
+    <Style x:Key="ND.PosIconButton" TargetType="{x:Type Button}">
+        <Setter Property="Width" Value="40"/>
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="bd" Background="#FFFFFF" BorderBrush="#DCE0EC" BorderThickness="1.2" CornerRadius="10">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="bd" Property="Background" Value="#F4F6FB"/></Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Translucent button on the dark POS background (scan, back, home) -->
+    <Style x:Key="ND.PosDarkButton" TargetType="{x:Type Button}">
+        <Setter Property="Width" Value="46"/>
+        <Setter Property="Height" Value="46"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="bd" Background="#14FFFFFF" BorderBrush="#40FFFFFF" BorderThickness="1.2" CornerRadius="12">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="bd" Property="Background" Value="#29FFFFFF"/></Trigger>
+                        <Trigger Property="IsPressed" Value="True"><Setter TargetName="bd" Property="Background" Value="#3DFFFFFF"/></Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- "POS Options" (bottom-left): deep purple with a light purple outline -->
+    <Style x:Key="ND.PosOptionsButton" TargetType="{x:Type Button}">
+        <Style.Resources><Style TargetType="{x:Type TextBlock}"/></Style.Resources>
+        <Setter Property="Foreground" Value="#FFFFFF"/>
+        <Setter Property="FontFamily" Value="{StaticResource ND.Font.SemiBold}"/>
+        <Setter Property="FontSize" Value="17"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="bd" CornerRadius="12" BorderBrush="#A98BF5" BorderThickness="2" Padding="26,0">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#4A2FA0" Offset="0"/>
+                                <GradientStop Color="#33236F" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <ContentPresenter.Resources><Style TargetType="{x:Type TextBlock}"/></ContentPresenter.Resources>
+                        </ContentPresenter>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="bd" Property="BorderBrush" Value="#C7B2FF"/></Trigger>
+                        <Trigger Property="IsPressed" Value="True"><Setter TargetName="bd" Property="Opacity" Value="0.88"/></Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Navy backdrop for the sale tab -->
+    <LinearGradientBrush x:Key="ND.PosBackdrop" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#1C1F3D" Offset="0"/>
+        <GradientStop Color="#232852" Offset="0.55"/>
+        <GradientStop Color="#1A1D38" Offset="1"/>
+    </LinearGradientBrush>
+    <!-- ===================== Dialogs (Paid Out etc.) ===================== -->
+    <Geometry x:Key="ND.Icon.Coins">M3,7 A6,2.5 0 1 0 15,7 A6,2.5 0 1 0 3,7 Z M3,7 V11 A6,2.5 0 0 0 15,11 V7 M3,11 V15 A6,2.5 0 0 0 9.5,17.4 M15,11 V12 M9,14.5 A6,2.5 0 1 0 21,14.5 A6,2.5 0 1 0 9,14.5 Z M9,14.5 V18.5 A6,2.5 0 0 0 21,18.5 V14.5</Geometry>
+    <Geometry x:Key="ND.Icon.CheckCircle">M3,12 A9,9 0 1 0 21,12 A9,9 0 1 0 3,12 Z M8,12.3 L11,15.2 L16.5,9.2</Geometry>
+
+    <!-- Green confirm button (Done) -->
+    <Style x:Key="ND.SuccessButton" TargetType="{x:Type Button}">
+        <Style.Resources><Style TargetType="{x:Type TextBlock}"/></Style.Resources>
+        <Setter Property="Foreground" Value="#FFFFFF"/>
+        <Setter Property="FontFamily" Value="{StaticResource ND.Font.SemiBold}"/>
+        <Setter Property="FontSize" Value="18"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="bd" CornerRadius="10">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                <GradientStop Color="#2FA845" Offset="0"/>
+                                <GradientStop Color="#1F8A33" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="12" ShadowDepth="3" Direction="270" Opacity="0.22" Color="#1F8A33"/>
+                        </Border.Effect>
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <ContentPresenter.Resources><Style TargetType="{x:Type TextBlock}"/></ContentPresenter.Resources>
+                        </ContentPresenter>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="bd" Property="Opacity" Value="0.94"/></Trigger>
+                        <Trigger Property="IsPressed" Value="True"><Setter TargetName="bd" Property="Opacity" Value="0.85"/></Trigger>
+                        <Trigger Property="IsEnabled" Value="False"><Setter TargetName="bd" Property="Opacity" Value="0.55"/></Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Square translucent close (X) button on a navy dialog header -->
+    <Style x:Key="ND.DialogCloseButton" TargetType="{x:Type Button}">
+        <Setter Property="Width" Value="42"/>
+        <Setter Property="Height" Value="42"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="bd" Background="#1FFFFFFF" BorderBrush="#59FFFFFF" BorderThickness="1.2" CornerRadius="10">
+                        <Path Data="{StaticResource ND.Icon.Close}" Style="{StaticResource ND.IconPath}" Stroke="#FFFFFF" StrokeThickness="2" Width="14" Height="14"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="bd" Property="Background" Value="#38FFFFFF"/></Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

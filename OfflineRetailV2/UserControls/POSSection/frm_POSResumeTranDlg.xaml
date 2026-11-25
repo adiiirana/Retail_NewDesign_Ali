@@ -8,125 +8,255 @@
         xmlns:lm="clr-namespace:OfflineRetailV2.LayoutManager"
         xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
         xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
-        xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" 
+        xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
         xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
         AllowsTransparency="True" WindowStyle="None" Background="Transparent" WindowStartupLocation="CenterScreen"
-        Title="" Foreground="White"   Width="1024" Height="740">
-    <cc:ModalWindow  x:Name="ModalWindow">
-        <Grid Margin="9">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="9"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="9"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+        Title="" Foreground="White" Width="940" Height="640">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/NewDesignStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <Geometry x:Key="RtIconReceipt">M6,3 H18 V21 L15.5,19.5 L13,21 L10.5,19.5 L8,21 L6,19.5 Z M9,8 H15 M9,11.5 H15 M9,15 H13</Geometry>
 
-            <Grid Grid.Row="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="Resume Transaction"  x:Name="Title" VerticalAlignment="Center" Style="{DynamicResource BlueHeading}" />
-                <Grid Grid.Column="1" HorizontalAlignment="Right" Margin="0,0,20,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"></ColumnDefinition>
-                        <ColumnDefinition Width="9"></ColumnDefinition>
-                        <ColumnDefinition Width="Auto"></ColumnDefinition>
-                        <ColumnDefinition Width="9"></ColumnDefinition>
-                        <ColumnDefinition Width="Auto"></ColumnDefinition>
-                        <ColumnDefinition Width="9"></ColumnDefinition>
-                        <ColumnDefinition Width="Auto"></ColumnDefinition>
-                        <ColumnDefinition Width="9"></ColumnDefinition>
-                        <ColumnDefinition Width="Auto"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
+            <!-- teal keypad key -->
+            <Style x:Key="RtKey" TargetType="{x:Type Button}">
+                <Style.Resources><Style TargetType="{x:Type TextBlock}"/></Style.Resources>
+                <Setter Property="Foreground" Value="#FFFFFF"/>
+                <Setter Property="FontFamily" Value="{StaticResource ND.Font.Medium}"/>
+                <Setter Property="FontSize" Value="24"/>
+                <Setter Property="Margin" Value="4"/>
+                <Setter Property="Background" Value="#2E8298"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Focusable" Value="False"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Grid>
+                                <Border CornerRadius="8" Background="#1E6274" Margin="0,2,0,0"/>
+                                <Border x:Name="bd" CornerRadius="8" Background="{TemplateBinding Background}" Margin="0,0,0,2">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <ContentPresenter.Resources><Style TargetType="{x:Type TextBlock}"/></ContentPresenter.Resources>
+                                    </ContentPresenter>
+                                </Border>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="bd" Property="Opacity" Value="0.92"/></Trigger>
+                                <Trigger Property="IsPressed" Value="True"><Setter TargetName="bd" Property="Margin" Value="0,2,0,0"/></Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="RtKeyLight" TargetType="{x:Type Button}" BasedOn="{StaticResource RtKey}">
+                <Setter Property="Background" Value="#4CB2CC"/>
+            </Style>
 
-                    <Button Grid.Column="0" Content="Help" Height="35" Width="120" FontFamily="{StaticResource OSSemiBold}" 
-                        Style="{DynamicResource GeneralButtonStyle}" x:Name="btnHelp" Click="btnHelp_Click" Visibility="Collapsed"/>
+            <!-- light lavender (Print) and light red (Cancel) header buttons -->
+            <Style x:Key="RtTintButton" TargetType="{x:Type Button}">
+                <Style.Resources><Style TargetType="{x:Type TextBlock}"/></Style.Resources>
+                <Setter Property="Background" Value="#EEF0FA"/>
+                <Setter Property="BorderBrush" Value="#C8CCE3"/>
+                <Setter Property="Foreground" Value="#1B1D33"/>
+                <Setter Property="FontFamily" Value="{StaticResource ND.Font.SemiBold}"/>
+                <Setter Property="FontSize" Value="17"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Focusable" Value="False"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border x:Name="bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1.3" CornerRadius="10">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <ContentPresenter.Resources><Style TargetType="{x:Type TextBlock}"/></ContentPresenter.Resources>
+                                </ContentPresenter>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="bd" Property="Opacity" Value="0.9"/></Trigger>
+                                <Trigger Property="IsPressed" Value="True"><Setter TargetName="bd" Property="Opacity" Value="0.8"/></Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
 
-                    <Button IsTabStop="False" Focusable="False" Grid.Column="2"  Content="KEYBOARD"  Height="35" Width="120"  Visibility="Collapsed" FontFamily="{StaticResource OSSemiBold}" FontSize="15"
-                        Style="{DynamicResource GeneralButtonStyle}" x:Name="btnKeyboard" Click="btnKeyboard_Click"/>
+    <!-- New design (Resume Transaction): navy header; Invoice # + Print / Cancel / Done; keypad (left) and suspended sales (right).
+         Names used by the code-behind are unchanged (Title, txtInv, grdTran, gridView1, col*, btn*, blurGrid, ModalWindow). -->
+    <Grid Margin="10">
+        <cc:ModalWindow x:Name="ModalWindow" Visibility="Collapsed"/>
 
-                    <Button Grid.Column="4" Content="PRINT"  Height="35" Width="120" FontFamily="{StaticResource OSSemiBold}" 
-                        Style="{DynamicResource PrintButtonStyle}" x:Name="btnPrint" Click="btnPrint_Click"/>
-                    <Button Grid.Column="6" Content="CANCEL"  Height="35" Width="120" FontFamily="{StaticResource OSSemiBold}" 
-                        Style="{DynamicResource CancelButtonStyle}" x:Name="btnCancel" Click="BtnCancel_Click"/>
-                    <Button Grid.Column="8" Content="DONE"  Height="35" Width="120" FontFamily="{StaticResource OSSemiBold}" 
-                        Style="{DynamicResource SaveButtonStyle}" x:Name="btnOK" Click="btnOK_Click"/>
-                    
-                </Grid>
-            </Grid>
-            <Rectangle Grid.Row="1" Style="{DynamicResource DefaultLineStyle}"  VerticalAlignment="Center"  Margin="-9,0"/>
-            
-            <Grid Grid.Row="2" Margin="0,9,0,0">
+        <Border CornerRadius="20" Background="#FFFFFF" Effect="{StaticResource ND.ShadowLarge}"/>
+        <Border CornerRadius="20" x:Name="dlgBody">
+            <Grid>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="104"/>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="11"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <Grid>
+
+                <!-- ===== header ===== -->
+                <Grid Grid.Row="0">
+                    <Rectangle>
+                        <Rectangle.Fill>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#1E2246" Offset="0"/>
+                                <GradientStop Color="#2A2F5C" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Rectangle.Fill>
+                    </Rectangle>
+                    <Rectangle HorizontalAlignment="Right" Width="480" Opacity="0.85">
+                        <Rectangle.Fill>
+                            <ImageBrush ImageSource="pack://application:,,,/OfflineRetailV2;component/Resources/Images/LoginStore.jpg"
+                                        Stretch="UniformToFill" AlignmentX="Center" AlignmentY="Bottom" Viewbox="0.42,0.78,0.5,0.22"/>
+                        </Rectangle.Fill>
+                        <Rectangle.OpacityMask>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                <GradientStop Color="#00000000" Offset="0"/>
+                                <GradientStop Color="#FF000000" Offset="0.6"/>
+                            </LinearGradientBrush>
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                    <Grid Margin="24,0,22,0" VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Width="52" Height="52" CornerRadius="12" Background="#FFFFFF" Margin="0,0,18,0">
+                            <Path Data="{StaticResource RtIconReceipt}" Style="{StaticResource ND.IconPath}" Stroke="#1E2246" StrokeThickness="1.9" Width="24" Height="28"/>
+                        </Border>
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock x:Name="Title" Text="Resume Transaction" FontFamily="{StaticResource ND.Font.Bold}" FontSize="26" Foreground="#FFFFFF"/>
+                            <TextBlock Text="Find and reopen a saved invoice or sale" FontFamily="{StaticResource ND.Font.Regular}" FontSize="15" Foreground="#D8DBF0" Margin="0,1,0,0"/>
+                        </StackPanel>
+                        <Button Grid.Column="2" Style="{StaticResource ND.DialogCloseButton}" Click="BtnCancel_Click" ToolTip="Close"/>
+                    </Grid>
+                </Grid>
+
+                <!-- ===== invoice # + actions ===== -->
+                <Grid Grid.Row="1" Margin="24,20,24,16">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="11"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Text="Invoice #"/>
-                    <dxe:TextEdit Grid.Column="2" Width="150" x:Name="txtInv" InputScope="Number" PreviewKeyDown="txtInv_PreviewKeyDown" GotFocus="Num_GotFocus" LostFocus="Num_LostFocus"/>
+                    <TextBlock Text="Invoice #" FontFamily="{StaticResource ND.Font.SemiBold}" FontSize="17" Foreground="#1B1D33" VerticalAlignment="Center" Margin="0,0,14,0"/>
+                    <Border Grid.Column="1" Width="200" Height="46" CornerRadius="8" BorderBrush="#4A8FD9" BorderThickness="1.6" Background="#FFFFFF" Padding="10,0">
+                        <dxe:TextEdit x:Name="txtInv" InputScope="Number" ShowBorder="False" Background="Transparent" VerticalContentAlignment="Center"
+                                      FontFamily="{StaticResource ND.Font.Regular}" FontSize="17" Foreground="#1B1D33"
+                                      PreviewKeyDown="txtInv_PreviewKeyDown" GotFocus="Num_GotFocus" LostFocus="Num_LostFocus"/>
+                    </Border>
+                    <StackPanel Grid.Column="3" Orientation="Horizontal">
+                        <Button Content="Help" Height="46" Width="100" Style="{StaticResource RtTintButton}" x:Name="btnHelp" Click="btnHelp_Click" Visibility="Collapsed" Margin="0,0,12,0"/>
+                        <Button IsTabStop="False" Focusable="False" Content="KEYBOARD" Height="46" Width="120" Visibility="Collapsed" Margin="0,0,12,0"
+                                Style="{StaticResource RtTintButton}" x:Name="btnKeyboard" Click="btnKeyboard_Click"/>
+                        <Button Height="46" Width="124" Style="{StaticResource RtTintButton}" x:Name="btnPrint" Click="btnPrint_Click" Margin="0,0,12,0">
+                            <StackPanel Orientation="Horizontal">
+                                <Path Data="{StaticResource ND.Icon.Printer}" Style="{StaticResource ND.IconPath}" Stroke="#1B1D33" Width="18" Height="18" Margin="0,0,10,0"/>
+                                <TextBlock Text="Print" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Height="46" Width="124" Style="{StaticResource RtTintButton}" Background="#FDECEC" BorderBrush="#F3B4B4" Foreground="#C53030"
+                                x:Name="btnCancel" Click="BtnCancel_Click" Margin="0,0,12,0">
+                            <StackPanel Orientation="Horizontal">
+                                <Path Data="{StaticResource ND.Icon.Close}" Style="{StaticResource ND.IconPath}" Stroke="#C53030" StrokeThickness="2" Width="11" Height="11" Margin="0,0,10,0"/>
+                                <TextBlock Text="Cancel" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Height="46" Width="138" Style="{StaticResource ND.SuccessButton}" x:Name="btnOK" Click="BtnResumeDone_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <Path Data="{StaticResource ND.Icon.CheckCircle}" Style="{StaticResource ND.IconPath}" Stroke="#FFFFFF" StrokeThickness="2" Width="20" Height="20" Margin="0,0,10,0"/>
+                                <TextBlock Text="Done" VerticalAlignment="Center" FontSize="17"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
                 </Grid>
-                <Grid Grid.Row="2">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="9"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <TextBlock Text="Select Invoice to Resume" FontWeight="SemiBold"/>
-                    <dxg:GridControl Grid.Row="2" ShowBorder="False" SelectionMode="Row" x:Name="grdTran">
-                        <dxg:GridControl.View>
-                            <dxg:TableView x:Name="gridView1" PreviewMouseDoubleClick="gridView1_PreviewMouseDoubleClick"/>
-                        </dxg:GridControl.View>
-                        <dxg:GridColumn FieldName="Image" Visible="False" VisibleIndex="-1" Width="*" AllowAutoFilter="False" Focusable="False">
-                            <dxg:GridColumn.EditSettings>
-                                <dxe:ImageEditSettings Stretch="UniformToFill"/>
-                            </dxg:GridColumn.EditSettings>
-                        </dxg:GridColumn>
-                        <dxg:GridColumn FieldName="InvoiceNo" Header="Invoice No." Width="*" x:Name="colInv"/>
-                        <dxg:GridColumn FieldName="Customer" Header="Customer" Width="*" x:Name="colCust"/>
-                        <dxg:GridColumn FieldName="DateTimeSuspended" Header="When Suspended" Width="*" x:Name="colDate"/>
-                        <dxg:GridColumn FieldName="Amount" Header="Amount    " HorizontalHeaderContentAlignment="Right" Width="*" x:Name="colAmount">
-                            <dxg:GridColumn.EditSettings>
-                                <dxe:TextEditSettings DisplayFormat="f" MaskType="Numeric"/>
-                            </dxg:GridColumn.EditSettings>
-                            <dxg:GridColumn.CellTemplate>
-                                <DataTemplate>
-                                    <dxe:TextEdit x:Name="PART_Editor"  HorizontalContentAlignment="Right" Margin="0,0,15,0" FontSize="13" Style="{DynamicResource RightAligned}" Mask="f2" MaskType="Numeric" MaskUseAsDisplayFormat="True" ></dxe:TextEdit>
-                                </DataTemplate>
-                            </dxg:GridColumn.CellTemplate>
-                        </dxg:GridColumn>
-                        <dxg:GridColumn FieldName="CustomerDOB" Header="Date of Birth" Width="*" x:Name="colDOB" Visible="False"/>
-                    </dxg:GridControl>
+
+                <!-- ===== keypad + list ===== -->
+                <Grid Grid.Row="2" Margin="24,0,24,24">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="14"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- keypad: types into Invoice # -->
+                    <Border Background="#F1F4FA" CornerRadius="14" BorderBrush="#E1E6F0" BorderThickness="1" Padding="10">
+                        <UniformGrid Columns="3" Rows="5" Width="240" VerticalAlignment="Top">
+                            <Button Style="{StaticResource RtKey}" Content="1" Tag="1" Click="RtKey_Click" Height="56"/>
+                            <Button Style="{StaticResource RtKey}" Content="2" Tag="2" Click="RtKey_Click"/>
+                            <Button Style="{StaticResource RtKey}" Content="3" Tag="3" Click="RtKey_Click"/>
+                            <Button Style="{StaticResource RtKey}" Content="4" Tag="4" Click="RtKey_Click"/>
+                            <Button Style="{StaticResource RtKey}" Content="5" Tag="5" Click="RtKey_Click"/>
+                            <Button Style="{StaticResource RtKey}" Content="6" Tag="6" Click="RtKey_Click"/>
+                            <Button Style="{StaticResource RtKey}" Content="7" Tag="7" Click="RtKey_Click"/>
+                            <Button Style="{StaticResource RtKey}" Content="8" Tag="8" Click="RtKey_Click"/>
+                            <Button Style="{StaticResource RtKey}" Content="9" Tag="9" Click="RtKey_Click"/>
+                            <Button Style="{StaticResource RtKey}" Content="-" Tag="-" Click="RtKey_Click"/>
+                            <Button Style="{StaticResource RtKey}" Content="0" Tag="0" Click="RtKey_Click"/>
+                            <Button Style="{StaticResource RtKey}" Content="." Tag="." Click="RtKey_Click"/>
+                            <Button Style="{StaticResource RtKeyLight}" Tag="CLEAR" Click="RtKey_Click" ToolTip="Clear">
+                                <Path Data="M3,12 A9,9 0 1 0 21,12 A9,9 0 1 0 3,12 Z M9,9 L15,15 M15,9 L9,15" Style="{StaticResource ND.IconPath}" Stroke="#FFFFFF" StrokeThickness="1.8" Width="22" Height="22"/>
+                            </Button>
+                            <Button Style="{StaticResource RtKeyLight}" Tag="BACK" Click="RtKey_Click" ToolTip="Back space">
+                                <Path Data="{StaticResource ND.Icon.Backspace}" Style="{StaticResource ND.IconPath}" Stroke="#FFFFFF" StrokeThickness="1.8" Width="26" Height="19"/>
+                            </Button>
+                            <Button Style="{StaticResource RtKeyLight}" Tag="ENTER" Click="RtKey_Click" ToolTip="Find invoice">
+                                <Path Data="{StaticResource ND.Icon.Search}" Style="{StaticResource ND.IconPath}" Stroke="#FFFFFF" StrokeThickness="2" Width="20" Height="20"/>
+                            </Button>
+                        </UniformGrid>
+                    </Border>
+
+                    <!-- suspended sales -->
+                    <Border Grid.Column="2" Background="#FFFFFF" CornerRadius="14" BorderBrush="#E1E6F0" BorderThickness="1" Padding="6,6,6,10">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <dxg:GridControl ShowBorder="False" SelectionMode="Row" x:Name="grdTran" FontFamily="{StaticResource ND.Font.Regular}" FontSize="15">
+                                <dxg:GridControl.View>
+                                    <dxg:TableView x:Name="gridView1" PreviewMouseDoubleClick="gridView1_PreviewMouseDoubleClick"
+                                                   AutoWidth="True" ShowGroupPanel="False" ShowIndicator="False" ShowVerticalLines="False"
+                                                   AllowEditing="False" NavigationStyle="Row" RowMinHeight="42" AllowColumnFiltering="False"/>
+                                </dxg:GridControl.View>
+                                <dxg:GridColumn FieldName="Image" Visible="False" VisibleIndex="-1" Width="*" AllowAutoFilter="False" Focusable="False">
+                                    <dxg:GridColumn.EditSettings>
+                                        <dxe:ImageEditSettings Stretch="UniformToFill"/>
+                                    </dxg:GridColumn.EditSettings>
+                                </dxg:GridColumn>
+                                <dxg:GridColumn FieldName="InvoiceNo" Header="Invoice No." Width="0.8*" x:Name="colInv"/>
+                                <dxg:GridColumn FieldName="Customer" Header="Customer" Width="1.3*" x:Name="colCust"/>
+                                <dxg:GridColumn FieldName="DateTimeSuspended" Header="Date / Time" Width="1.1*" x:Name="colDate"/>
+                                <dxg:GridColumn FieldName="Amount" Header="Amount" HorizontalHeaderContentAlignment="Right" Width="0.8*" x:Name="colAmount">
+                                    <dxg:GridColumn.EditSettings>
+                                        <dxe:TextEditSettings DisplayFormat="f" MaskType="Numeric"/>
+                                    </dxg:GridColumn.EditSettings>
+                                    <dxg:GridColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <dxe:TextEdit x:Name="PART_Editor" HorizontalContentAlignment="Right" Margin="0,0,12,0" FontSize="15" FontWeight="Bold"
+                                                          Style="{DynamicResource RightAligned}" Mask="f2" MaskType="Numeric" MaskUseAsDisplayFormat="True"/>
+                                        </DataTemplate>
+                                    </dxg:GridColumn.CellTemplate>
+                                </dxg:GridColumn>
+                                <dxg:GridColumn FieldName="CustomerDOB" Header="Date of Birth" Width="*" x:Name="colDOB" Visible="False"/>
+                            </dxg:GridControl>
+                            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,6,0">
+                                <Button Style="{StaticResource RtTintButton}" Width="78" Height="44" Margin="0,0,10,0" x:Name="btnUpHeader" Click="BtnUpHeader_Click" ToolTip="Previous">
+                                    <Path Data="M5,15 L12,8 L19,15" Style="{StaticResource ND.IconPath}" Stroke="#1B1D33" StrokeThickness="2.2" Width="16" Height="9"/>
+                                </Button>
+                                <Button Style="{StaticResource RtTintButton}" Width="78" Height="44" x:Name="btnDownHeader" Click="BtnDownHeader_Click" ToolTip="Next">
+                                    <Path Data="{StaticResource ND.Icon.ChevronDown}" Style="{StaticResource ND.IconPath}" Stroke="#1B1D33" StrokeThickness="2.2" Width="16" Height="9"/>
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
                 </Grid>
-            </Grid>
-            <Grid Grid.Row="4" Margin="9" HorizontalAlignment="Right">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="9"/>
-                    
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                
 
-                <Button Grid.Column="0"  VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Width="100" Height="35"
-                                Style="{DynamicResource YellowButtonStyle}" x:Name="btnUpHeader" Click="BtnUpHeader_Click"  >
-                    <Image Source="{DynamicResource Arrow_U}" Width="21" Height="21"/>
-                </Button>
-                <Button Grid.Column="2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Width="100" Height="35"
-                                Style="{DynamicResource YellowButtonStyle}" x:Name="btnDownHeader" Click="BtnDownHeader_Click" >
-                    <Image Source="{DynamicResource Arrow_D}" Width="21" Height="21"/>
-                </Button>
-
-                
+                <Grid Background="#3D000000" Grid.RowSpan="3" x:Name="blurGrid" Visibility="Collapsed"/>
             </Grid>
-            <Grid Background="#3D000000" Margin="-15" Grid.RowSpan="5" x:Name="blurGrid" Visibility="Collapsed"/>
-        </Grid>
-    </cc:ModalWindow>
+        </Border>
+    </Grid>
 </Window>

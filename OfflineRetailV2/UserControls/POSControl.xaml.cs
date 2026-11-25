@@ -148,6 +148,7 @@ namespace OfflineRetailV2.UserControls
         public POSControl()
         {
             InitializeComponent();
+            posScroll.LayoutUpdated += NdPosScroll_LayoutUpdated;   // new design tile skin
             AppEvents.RunMiscFunctionRequested += OnRunMiscFunctionRequested;
             timerdisplay = new DispatcherTimer();
             timerdisplay.Tick += Timerdisplay_Tick;
@@ -208,12 +209,13 @@ namespace OfflineRetailV2.UserControls
             }
             else
             {
-                txtSearch.CornerRadius = new CornerRadius(0);
-                txtSearch.ClearValue(System.Windows.Controls.Control.BorderBrushProperty);
-                txtSearch.BorderThickness = new Thickness(1);
-                txtSearch.Padding = new Thickness(5, 0, 5, 0);
+                // New design: translucent rounded search box on the navy POS background
+                txtSearch.CornerRadius = new CornerRadius(12);
+                txtSearch.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#40FFFFFF"));
+                txtSearch.BorderThickness = new Thickness(1.2);
+                txtSearch.Padding = new Thickness(10, 0, 10, 0);
                 txtSearch.IconOnRight = false;
-                txtSearch.Height = 30;
+                txtSearch.Height = 46;
             }
         }
         private void ApplyConvenienceNavButtons(bool enabled)
@@ -351,7 +353,7 @@ namespace OfflineRetailV2.UserControls
                 if (colConvenienceKeypad != null) colConvenienceKeypad.Width = new GridLength(10);
                 if (pnlConvenienceKeypad != null) pnlConvenienceKeypad.Visibility = Visibility.Collapsed;
                 if (pnlOriginalKeypadArea != null) pnlOriginalKeypadArea.Visibility = Visibility.Visible;
-                if (colPOSCart != null) colPOSCart.Width = new GridLength(375);
+                if (colPOSCart != null) colPOSCart.Width = new GridLength(430);   // new design: wider sale card
 
                 // Tabs Hide
                 if (pnlConvenienceTabs != null) pnlConvenienceTabs.Visibility = Visibility.Collapsed;
@@ -20959,12 +20961,12 @@ namespace OfflineRetailV2.UserControls
             const int HeaderHeightMedium = 105;
             const int HeaderHeightLarge = 125;
 
-            const int ItemHeightTier1 = 80;
-            const int ItemHeightTier2 = 95;
-            const int ItemHeightTier3 = 110;
-            const int ItemHeightTier4 = 125;
-            const int ItemHeightTier5 = 140;
-            const int ItemHeightTier6 = 155;
+            const int ItemHeightTier1 = 112;
+            const int ItemHeightTier2 = 127;
+            const int ItemHeightTier3 = 142;
+            const int ItemHeightTier4 = 157;
+            const int ItemHeightTier5 = 172;
+            const int ItemHeightTier6 = 187;
 
             Grid grd = new Grid();
             grd.Name = "contentgrid";
@@ -21832,13 +21834,13 @@ namespace OfflineRetailV2.UserControls
                         // New height calculation based on LoadPOSItemsNew
                         Size sz = MeasureString(tb, tb.Text);
                         double szMultiply = GeneralFunctions.FormatDouble(sz.Width * sz.Height);
-                        double ApproxHeight = 80; // Default to smallest item height (ItemHeightTier1)
+                        double ApproxHeight = 112; // Default to smallest item height (ItemHeightTier1, new design +32)
 
-                        if (szMultiply > 2499.99) ApproxHeight = 155; // ItemHeightTier6
-                        else if (szMultiply > 1999.99) ApproxHeight = 140; // ItemHeightTier5
-                        else if (szMultiply > 1499.99) ApproxHeight = 125; // ItemHeightTier4
-                        else if (szMultiply > 999.99) ApproxHeight = 110;  // ItemHeightTier3
-                        else if (szMultiply > 499.99) ApproxHeight = 95; // ItemHeightTier2
+                        if (szMultiply > 2499.99) ApproxHeight = 187; // ItemHeightTier6
+                        else if (szMultiply > 1999.99) ApproxHeight = 172; // ItemHeightTier5
+                        else if (szMultiply > 1499.99) ApproxHeight = 157; // ItemHeightTier4
+                        else if (szMultiply > 999.99) ApproxHeight = 142;  // ItemHeightTier3
+                        else if (szMultiply > 499.99) ApproxHeight = 127; // ItemHeightTier2
 
                         btn.Height = ApproxHeight;
                         boxHeight = boxHeight + ApproxHeight;
@@ -25933,6 +25935,361 @@ namespace OfflineRetailV2.UserControls
             dtblFn.Dispose();
         }
 
+        #region New design - POS screen (navy backdrop, tiles, small handlers)
+
+        /// <summary>Navy backdrop + waves only while the sale tab is showing (Customer / Product / Setup tabs keep the light theme).</summary>
+        private void NdApplyPosBackdrop()
+        {
+            if (pnlPosRoot == null || tcPOS == null) return;
+            bool sale = tcPOS.SelectedItem == POSTItem || tcPOS.SelectedIndex == 0;
+            if (sale)
+                pnlPosRoot.Background = TryFindResource("ND.PosBackdrop") as System.Windows.Media.Brush;
+            else
+                pnlPosRoot.ClearValue(System.Windows.Controls.Panel.BackgroundProperty);
+            if (ndPosWaves != null) ndPosWaves.Visibility = sale ? Visibility.Visible : Visibility.Collapsed;
+            if (txtPosTitle != null) txtPosTitle.Foreground = sale ? System.Windows.Media.Brushes.White : NdBrush("#1B1D33");
+            if (lbCategory != null) lbCategory.Foreground = sale ? System.Windows.Media.Brushes.White : NdBrush("#1B1D33");
+        }
+
+        private void BtnPosScan_Click(object sender, RoutedEventArgs e)
+        {
+            GeneralFunctions.SetFocus(txtSKU);
+        }
+
+        private void BtnPosCustomer_Click(object sender, RoutedEventArgs e)
+        {
+            BtnFrontOffice_PreviewMouseLeftButtonDown(sender, null);
+        }
+
+        // ---- tiles: once the canvases change, re-skin them (layout, sizes, handlers stay as built) ----
+        private string _ndTileSignature = "";
+        private bool _ndTilesPending;
+
+        private System.Windows.Controls.Canvas[] NdTileCanvases()
+        {
+            return new[] { pnlCat1, pnlCat2, pnlCat3, pnlCat4, pnlCat5, pnlCat1_2, pnlCat2_2, pnlCat3_2, pnlCat4_2, pnlCat5_2 };
+        }
+
+        private void NdPosScroll_LayoutUpdated(object sender, EventArgs e)
+        {
+            if (_ndTilesPending) return;
+            var sb = new System.Text.StringBuilder();
+            foreach (var c in NdTileCanvases())
+            {
+                if (c == null) continue;
+                sb.Append(c.Children.Count).Append(',');
+                if (c.Children.Count > 0) sb.Append(c.Children[0].GetHashCode()).Append(';');
+            }
+            string sig = sb.ToString();
+            if (sig == _ndTileSignature) return;
+            _ndTileSignature = sig;
+            _ndTilesPending = true;
+            Dispatcher.BeginInvoke(new Action(ApplyNewDesignTiles), System.Windows.Threading.DispatcherPriority.Background);
+        }
+
+        private void ApplyNewDesignTiles()
+        {
+            _ndTilesPending = false;
+            var products = new List<Tuple<System.Windows.Controls.Button, POSControls.POSItem, double>>();
+            try
+            {
+                foreach (var canvas in NdTileCanvases())
+                {
+                    if (canvas == null) continue;
+                    foreach (UIElement child in canvas.Children)
+                    {
+                        var box = child as System.Windows.Controls.Border;
+                        if (box == null || box.Uid == "nd") continue;
+                        box.Uid = "nd";
+                        box.Background = System.Windows.Media.Brushes.Transparent;
+                        box.BorderBrush = System.Windows.Media.Brushes.Transparent;
+                        foreach (var btn in NdFindButtons(box.Child))
+                        {
+                            if (btn.Tag is POSControls.POSCategory) NdStyleCategoryTile(btn, (POSControls.POSCategory)btn.Tag);
+                            else if (btn.Tag is POSControls.POSItem) products.Add(Tuple.Create(btn, (POSControls.POSItem)btn.Tag, box.Width));
+                        }
+                    }
+                }
+                if (products.Count == 0) return;
+                var prices = NdFetchPrices(products.Select(p => p.Item2.ItemID));
+                foreach (var p in products)
+                {
+                    double price;
+                    NdStyleProductTile(p.Item1, p.Item2, prices.TryGetValue(p.Item2.ItemID, out price) ? (double?)price : null, p.Item3);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ApplyNewDesignTiles: " + ex.Message);   // never break the POS over styling
+            }
+        }
+
+        private IEnumerable<System.Windows.Controls.Button> NdFindButtons(object root)
+        {
+            if (root == null) yield break;
+            if (root is System.Windows.Controls.Button) { yield return (System.Windows.Controls.Button)root; yield break; }
+            var dep = root as DependencyObject;
+            if (dep == null) yield break;
+            foreach (object c in LogicalTreeHelper.GetChildren(dep))
+                foreach (var b in NdFindButtons(c)) yield return b;
+        }
+
+        private System.Windows.Media.ImageSource NdFindImage(object root)
+        {
+            var img = root as System.Windows.Controls.Image;
+            if (img != null && img.Source != null) return img.Source;
+            var dep = root as DependencyObject;
+            if (dep == null) return null;
+            foreach (object c in LogicalTreeHelper.GetChildren(dep))
+            {
+                var s = NdFindImage(c);
+                if (s != null) return s;
+            }
+            return null;
+        }
+
+        private Dictionary<int, double> NdFetchPrices(IEnumerable<int> ids)
+        {
+            var result = new Dictionary<int, double>();
+            var list = ids.Where(i => i > 0).Distinct().ToList();
+            if (list.Count == 0) return result;
+            try
+            {
+                using (var conn = new SqlConnection(SystemVariables.ConnectionString))
+                using (var cmd = new SqlCommand("select ID, PriceA from Product where ID in (" + string.Join(",", list) + ")", conn))
+                {
+                    conn.Open();
+                    using (var rd = cmd.ExecuteReader())
+                        while (rd.Read())
+                            result[GeneralFunctions.fnInt32(rd["ID"].ToString())] = GeneralFunctions.fnDouble(rd["PriceA"].ToString());
+                }
+            }
+            catch (Exception ex) { Console.WriteLine("NdFetchPrices: " + ex.Message); }
+            return result;
+        }
+
+        private static System.Windows.Media.SolidColorBrush NdBrush(string hex)
+        {
+            return new System.Windows.Media.SolidColorBrush((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(hex));
+        }
+
+        // badge tints (background, text): purple, green, amber, red, blue, teal
+        private static readonly string[][] NdBadgeTints =
+        {
+            new[] { "#EEE7FB", "#6B46C1" }, new[] { "#E3F6E9", "#1F9D55" }, new[] { "#FFF1D6", "#B7791F" },
+            new[] { "#FDE8E8", "#C53030" }, new[] { "#E3EEFC", "#2B6CB0" }, new[] { "#E2F5F3", "#2C7A7B" }
+        };
+
+        private static string NdInitials(string name)
+        {
+            var words = (name ?? "").Split(new[] { ' ', '-', '/' }, StringSplitOptions.RemoveEmptyEntries)
+                                    .Where(w => char.IsLetterOrDigit(w[0])).ToArray();
+            if (words.Length == 0) return "?";
+            if (words.Length == 1) return words[0].Substring(0, Math.Min(2, words[0].Length)).ToUpper();
+            return (words[0].Substring(0, 1) + words[1].Substring(0, 1)).ToUpper();
+        }
+
+        private Border NdBadge(string text)
+        {
+            int h = 0; foreach (char ch in text) h = h * 31 + ch;
+            var tint = NdBadgeTints[Math.Abs(h) % NdBadgeTints.Length];
+            return new Border
+            {
+                Background = NdBrush(tint[0]), CornerRadius = new CornerRadius(5), Padding = new Thickness(6, 1, 6, 1),
+                HorizontalAlignment = System.Windows.HorizontalAlignment.Left,
+                Child = new TextBlock { Text = text, Foreground = NdBrush(tint[1]), FontSize = 10.5,
+                                        FontFamily = TryFindResource("ND.Font.Bold") as System.Windows.Media.FontFamily }
+            };
+        }
+
+        private void NdStyleCategoryTile(System.Windows.Controls.Button btn, POSControls.POSCategory cat)
+        {
+            if (NdFindImage(btn.Content) != null) return;   // category photo tiles keep their look
+            string name = (cat.CategoryName ?? "").Trim();
+            var stack = new StackPanel { VerticalAlignment = VerticalAlignment.Center, HorizontalAlignment = System.Windows.HorizontalAlignment.Center, Margin = new Thickness(8) };
+            if (cat.CategoryID == 0 || name == "+")
+            {
+                stack.Children.Add(new System.Windows.Shapes.Path
+                {
+                    Data = TryFindResource("ND.Icon.Plus") as System.Windows.Media.Geometry, Style = TryFindResource("ND.IconPath") as Style,
+                    Stroke = NdBrush("#1B1D33"), StrokeThickness = 2, Width = 24, Height = 24
+                });
+            }
+            else
+            {
+                var badge = NdBadge(NdInitials(name));
+                badge.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
+                stack.Children.Add(badge);
+                stack.Children.Add(new TextBlock
+                {
+                    Text = name, Foreground = NdBrush("#1B1D33"), FontSize = 13.5, Margin = new Thickness(0, 8, 0, 0),
+                    FontFamily = TryFindResource("ND.Font.SemiBold") as System.Windows.Media.FontFamily,
+                    TextAlignment = TextAlignment.Center, TextWrapping = TextWrapping.Wrap, TextTrimming = TextTrimming.CharacterEllipsis, MaxHeight = 40
+                });
+            }
+            btn.Background = System.Windows.Media.Brushes.White;
+            btn.Content = stack;
+            btn.Template = TryFindResource("ND.PosCardTemplate") as ControlTemplate;
+        }
+
+        /// <summary>Product card: photo (when wide enough), initials badge, name, price, stock pill.</summary>
+        private void NdStyleProductTile(System.Windows.Controls.Button btn, POSControls.POSItem item, double? price, double tileWidth)
+        {
+            var photo = NdFindImage(btn.Content);
+            string name = item.ShowSKU ? item.ItemSKU + " - " + item.ItemName : (item.ItemName ?? "");
+            var semi = TryFindResource("ND.Font.SemiBold") as System.Windows.Media.FontFamily;
+            var bold = TryFindResource("ND.Font.Bold") as System.Windows.Media.FontFamily;
+
+            var root = new Grid { Margin = new Thickness(10, 8, 10, 8) };
+            bool showPhoto = photo != null && tileWidth >= 190;
+            if (showPhoto)
+            {
+                root.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(0.42, GridUnitType.Star) });
+                root.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(0.58, GridUnitType.Star) });
+                var img = new System.Windows.Controls.Image { Source = photo, Stretch = Stretch.Uniform, Margin = new Thickness(0, 0, 10, 0), VerticalAlignment = VerticalAlignment.Center };
+                RenderOptions.SetBitmapScalingMode(img, BitmapScalingMode.HighQuality);
+                root.Children.Add(img);
+            }
+            var text = new StackPanel { VerticalAlignment = VerticalAlignment.Center };
+            if (showPhoto) Grid.SetColumn(text, 1);
+            text.Children.Add(NdBadge(NdInitials(item.ItemName)));
+            text.Children.Add(new TextBlock
+            {
+                Text = name, Foreground = NdBrush("#1B1D33"), FontFamily = semi, FontSize = 13, Margin = new Thickness(0, 4, 0, 0),
+                TextWrapping = TextWrapping.Wrap, TextTrimming = TextTrimming.CharacterEllipsis, MaxHeight = 36, LineHeight = 17
+            });
+            if (price.HasValue)
+            {
+                text.Children.Add(new TextBlock
+                {
+                    Text = Settings.CurrencySymbol + price.Value.ToString("0.00") + (IsWeightedPosItem(item) ? " /kg" : ""),
+                    Foreground = NdBrush("#1B1D33"), FontFamily = bold, FontSize = 18, Margin = new Thickness(0, 2, 0, 0)
+                });
+            }
+            if (item.DisplayStockinPOS)
+            {
+                int stock = item.CurrentStock;
+                string pill = stock <= 0 ? "Out of stock" : (stock <= 5 ? "⚠ " + stock + " left" : stock + " in stock");
+                string bg = stock <= 0 ? "#FDE8E8" : (stock <= 5 ? "#FFF1C7" : "#EEF1F6");
+                string fg = stock <= 0 ? "#C53030" : (stock <= 5 ? "#8A5A00" : "#4B4F6B");
+                text.Children.Add(new Border
+                {
+                    Background = NdBrush(bg), CornerRadius = new CornerRadius(6), Padding = new Thickness(8, 1, 8, 1),
+                    Margin = new Thickness(0, 4, 0, 0), HorizontalAlignment = System.Windows.HorizontalAlignment.Left,
+                    Child = new TextBlock { Text = pill, Foreground = NdBrush(fg), FontFamily = semi, FontSize = 11 }
+                });
+            }
+            root.Children.Add(text);
+
+            btn.Background = System.Windows.Media.Brushes.White;
+            btn.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Stretch;
+            btn.VerticalContentAlignment = VerticalAlignment.Stretch;
+            btn.Content = root;
+            btn.Template = TryFindResource("ND.PosCardTemplate") as ControlTemplate;
+        }
+
+        #endregion
+
+        #region New design - POS options modal
+
+        private void BtnPosOptions_Click(object sender, RoutedEventArgs e)
+        {
+            tglMoreFunctions.IsChecked = false;
+            tglMoreFunctions.Visibility = HasVisibleFunctionButtons() ? Visibility.Visible : Visibility.Collapsed;
+            POSActionScrollViewer.ScrollToTop();
+            pnlPosOptions.Visibility = Visibility.Visible;
+        }
+
+        /// <summary>PDF "POS options" tiles mapped to the existing POS actions (each keeps its own permission checks).</summary>
+        private async void PosTile_Click(object sender, RoutedEventArgs e)
+        {
+            string tag = (sender as FrameworkElement)?.Tag as string;
+            ClosePosOptions();
+            switch (tag)
+            {
+                case "Print": btnReprint_Click(sender, e); break;                 // reprint receipts
+                case "Discount": btnCoupon_Click(sender, e); break;               // discount ticket (whole sale)
+                case "Notes": btnINVNotes_Click(sender, e); break;                // invoice item notes
+                case "CancelItem": btnDelete_Click(sender, e); break;             // remove the selected item
+                case "Edit": simpleButton6_Click(sender, e); break;               // edit item
+                case "Retrieve": btnResumeSuspend_Click(sender, e); break;        // resume a suspended sale
+                case "Recall": btnReprint_Click(sender, e); break;                // recall an invoice (return / reprint)
+                case "ManualDiscount": BtnDiscount1_Click(sender, e); break;      // manual item discount
+                case "AddMisc": open_misc_screen(); break;                        // misc item calculator
+                case "VoidOrder": btnCancel_Click(sender, e); break;              // cancel transaction (asks to confirm)
+            }
+            await System.Threading.Tasks.Task.CompletedTask;
+        }
+
+        private bool HasVisibleFunctionButtons()
+        {
+            foreach (UIElement c in pnlFB.Children)
+                if (c is System.Windows.Controls.Button && c.Visibility == Visibility.Visible) return true;
+            return false;
+        }
+
+        private void ClosePosOptions()
+        {
+            pnlPosOptions.Visibility = Visibility.Collapsed;
+        }
+
+        private void BtnPosOptionsClose_Click(object sender, RoutedEventArgs e)
+        {
+            ClosePosOptions();
+        }
+
+        // Tap outside the card closes the modal
+        private void PnlPosOptions_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (ReferenceEquals(e.OriginalSource, pnlPosOptions)) ClosePosOptions();
+        }
+
+        // A function tile was used (its own handler has already run): close the modal
+        private void PnlFB_Click(object sender, RoutedEventArgs e)
+        {
+            ClosePosOptions();
+        }
+
+        // "Clear Order" = the existing clear-the-whole-sale action (Void button)
+        private void BtnPosOptionsClearOrder_Click(object sender, RoutedEventArgs e)
+        {
+            ClosePosOptions();
+            BtnDelete1_Click(sender, e);
+        }
+
+        /// <summary>Picks a line icon for a function tile from its configured function name.</summary>
+        private System.Windows.Media.Geometry GetPosOptionIcon(string functionName)
+        {
+            string n = (functionName ?? "").ToLowerInvariant();
+            string key;
+            if (n.Contains("qty (+)") || n.Contains("fees") || n.Contains("misc")) key = "ND.Icon.Plus";
+            else if (n.Contains("qty (-)")) key = "ND.Icon.Minus";
+            else if (n.Contains("discount") || n.Contains("coupon") || n.Contains("points")) key = "ND.Icon.Percent";
+            else if (n.Contains("price")) key = "ND.Icon.Tag";
+            else if (n.Contains("note")) key = "ND.Icon.Edit";
+            else if (n.Contains("suspend")) key = "ND.Icon.Pause";
+            else if (n.Contains("recall") || n.Contains("resume") || n.Contains("open invoice")) key = "ND.Icon.History";
+            else if (n.Contains("print") || n.Contains("reprint") || n.Contains("label") || n.Contains("receipt")) key = "ND.Icon.Printer";
+            else if (n.Contains("report")) key = "ND.Icon.Report";
+            else if (n.Contains("cash") || n.Contains("paid out") || n.Contains("no sale") || n.Contains("lotto")) key = "ND.Icon.Cash";
+            else if (n.Contains("cc") || n.Contains("card") || n.Contains("gift") || n.Contains("ebt") || n.Contains("tran")) key = "ND.Icon.Card";
+            else if (n.Contains("layaway") || n.Contains("acct") || n.Contains("account")) key = "ND.Icon.Wallet";
+            else if (n.Contains("refund") || n.Contains("return") || n.Contains("bottle")) key = "ND.Icon.Swap";
+            else if (n.Contains("refresh")) key = "ND.Icon.Refresh";
+            else if (n.Contains("cancel") || n.Contains("void")) key = "ND.Icon.Close";
+            else if (n.Contains("help")) key = "ND.Icon.Help";
+            else if (n.Contains("appt") || n.Contains("check in")) key = "ND.Icon.Calendar";
+            else if (n.Contains("picture") || n.Contains("photo") || n.Contains("cust")) key = "ND.Icon.Person";
+            else if (n.Contains("save") || n.Contains("sales") || n.Contains("order")) key = "ND.Icon.Cart";
+            else if (n.Contains("rent") || n.Contains("repair") || n.Contains("work")) key = "ND.Icon.Edit";
+            else if (n.Contains("tare") || n.Contains("weigh")) key = "ND.Icon.BarChart";
+            else if (n.Contains("send")) key = "ND.Icon.Send";
+            else key = "ND.Icon.Grid";
+            return TryFindResource(key) as System.Windows.Media.Geometry;
+        }
+
+        #endregion
+
         private void DisplayFunctionButtons()
         {
             bool_btnsupnd = false;
@@ -25948,10 +26305,13 @@ namespace OfflineRetailV2.UserControls
 
                 System.Windows.Controls.Button btn = new System.Windows.Controls.Button();
 
-                btn.Height = 42;
-                btn.Width = 70;
-                btn.Margin = new Thickness(2, 2, 2, 3);
-                btn.Style = this.FindResource("POSFunctionButtonStyle") as Style;
+                // New design: POS options tile (icon above label), shown in the POS options modal
+                btn.Height = 78;
+                btn.Width = 96;
+                btn.Margin = new Thickness(4);
+                btn.Style = this.FindResource("ND.PosOptionTile") as Style;
+                System.Windows.Media.Geometry tileIcon = GetPosOptionIcon(dr["NAME"].ToString());
+                if (tileIcon != null) btn.Resources["ND.TileIcon"] = tileIcon;
 
                 if ((dr["NAME"].ToString() == "Save Invoice") || (dr["NAME"].ToString() == "Open Invoice"))
                 {
@@ -26527,7 +26887,7 @@ namespace OfflineRetailV2.UserControls
                             else
                             {
                                 (cr as System.Windows.Controls.Button).Opacity = 0.9;
-                                ((cr as System.Windows.Controls.Button).Content as TextBlock).Foreground = System.Windows.Media.Brushes.White; //(SolidColorBrush)new BrushConverter().ConvertFromString("#64C2DB");
+                                ((cr as System.Windows.Controls.Button).Content as TextBlock).Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0x26, 0x32, 0x4F)); // new design tile text
                             }
                         }
                     }
@@ -26594,6 +26954,7 @@ namespace OfflineRetailV2.UserControls
         private void tcPOS_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             (Window.GetWindow(this) as MainWindow).SearchMemberTextBox.InfoText = "Find Item";
+            Dispatcher.BeginInvoke(new Action(NdApplyPosBackdrop), System.Windows.Threading.DispatcherPriority.Background);
 
             if (tcPOS.SelectedIndex == 0)//POS
             {
@@ -59575,6 +59936,7 @@ namespace OfflineRetailV2.UserControls
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
+            NdApplyPosBackdrop();
             var window = Window.GetWindow(this);
             window.KeyDown += HandleKeyPress;
 
