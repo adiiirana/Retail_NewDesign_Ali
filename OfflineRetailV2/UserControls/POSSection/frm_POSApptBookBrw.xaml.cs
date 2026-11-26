@@ -88,6 +88,9 @@ namespace OfflineRetailV2.UserControls.POSSection
         {
             InitializeComponent();
             ModalWindow.CloseCommand = new CommandBase(OnCloseCOmmand);
+
+            // new design: rounded corners
+            dlgBody.SizeChanged += (s, e) => dlgBody.Clip = new System.Windows.Media.RectangleGeometry(new Rect(dlgBody.RenderSize), 20, 20);
         }
 
         private void OnCloseCOmmand(object obj)
@@ -709,10 +712,14 @@ namespace OfflineRetailV2.UserControls.POSSection
             if (strApptAction == "Booking")
             {
                 Title.Text = "Book Appointment";
+                txtSubtitle.Text = "Pick a time to book or update an appointment";
+                txtCloseLabel.Text = "Done";
             }
             else
             {
                 Title.Text = "Recall Appointment";
+                txtSubtitle.Text = "Select an appointment to recall";
+                txtCloseLabel.Text = "Cancel";
             }
 
 

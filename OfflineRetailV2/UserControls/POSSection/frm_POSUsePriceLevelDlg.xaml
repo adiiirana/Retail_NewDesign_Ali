@@ -8,91 +8,175 @@
         xmlns:lm="clr-namespace:OfflineRetailV2.LayoutManager"
         xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
         xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
-        xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" 
+        xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
         xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
         AllowsTransparency="True" WindowStyle="None" Background="Transparent" WindowStartupLocation="CenterScreen"
-        Title="" Foreground="White"   Width="600" Height="300">
-    <cc:ModalWindow  x:Name="ModalWindow">
-        <Grid Margin="9">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="9"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Grid Grid.Row="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="Select Price Lavel"  x:Name="Title" VerticalAlignment="Center" Style="{DynamicResource BlueHeading}" />
-                <Grid Grid.Column="1" HorizontalAlignment="Right" Margin="0,0,20,0">
+        Title="" Foreground="White"   Width="620" SizeToContent="Height">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/NewDesignStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <Geometry x:Key="PlIconTag">M3,12 V4 A1,1 0 0 1 4,3 H12 L21,12 L12,21 Z M7.5,9 A1.5,1.5 0 1 0 7.5,6 A1.5,1.5 0 1 0 7.5,9 Z</Geometry>
+            <Geometry x:Key="PlIconTarget">M12,21 A9,9 0 1 0 12,3 A9,9 0 1 0 12,21 Z M12,15 A3,3 0 1 0 12,9 A3,3 0 1 0 12,15 Z</Geometry>
+
+            <!-- radio: white circle, blue dot when chosen -->
+            <Style x:Key="PlRadio" TargetType="{x:Type RadioButton}">
+                <Style.Resources><Style TargetType="{x:Type TextBlock}"/></Style.Resources>
+                <Setter Property="Foreground" Value="#1B1D33"/>
+                <Setter Property="FontFamily" Value="{StaticResource ND.Font.Regular}"/>
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Margin" Value="0,0,0,8"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type RadioButton}">
+                            <StackPanel Orientation="Horizontal" Background="Transparent">
+                                <Grid Width="22" Height="22" VerticalAlignment="Center">
+                                    <Ellipse x:Name="ring" Stroke="#C9CEDC" StrokeThickness="1.4" Fill="#FFFFFF"/>
+                                    <Ellipse x:Name="dot" Width="12" Height="12" Fill="#1FA3E0" Visibility="Collapsed"/>
+                                </Grid>
+                                <ContentPresenter Margin="12,0,0,0" VerticalAlignment="Center">
+                                    <ContentPresenter.Resources><Style TargetType="{x:Type TextBlock}"/></ContentPresenter.Resources>
+                                </ContentPresenter>
+                            </StackPanel>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter TargetName="dot" Property="Visibility" Value="Visible"/>
+                                    <Setter TargetName="ring" Property="Stroke" Value="#1FA3E0"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="PlCard" TargetType="{x:Type Border}">
+                <Setter Property="Background" Value="#F4F5FA"/>
+                <Setter Property="CornerRadius" Value="12"/>
+                <Setter Property="BorderBrush" Value="#E1E5EE"/>
+                <Setter Property="BorderThickness" Value="1"/>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <!-- New design (Select Price Level): navy header with tag icon; Scope (green) and Price Level (purple) cards; Cancel / OK.
+         Names used by the code-behind are unchanged (Title, cmbScope1-3, rg1-4, btnOK, btnCancel, ModalWindow). -->
+    <Grid Margin="10">
+        <cc:ModalWindow x:Name="ModalWindow" Visibility="Collapsed"/>
+
+        <Border CornerRadius="20" Background="#FFFFFF" Effect="{StaticResource ND.ShadowLarge}"/>
+        <Border CornerRadius="20" x:Name="dlgBody">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="80"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- ===== header ===== -->
+                <Grid Grid.Row="0">
+                    <Rectangle>
+                        <Rectangle.Fill>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#1E2246" Offset="0"/>
+                                <GradientStop Color="#2A2F5C" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Rectangle.Fill>
+                    </Rectangle>
+                    <Rectangle HorizontalAlignment="Right" Width="380" Opacity="0.85">
+                        <Rectangle.Fill>
+                            <ImageBrush ImageSource="pack://application:,,,/OfflineRetailV2;component/Resources/Images/LoginStore.jpg"
+                                        Stretch="UniformToFill" AlignmentX="Center" AlignmentY="Bottom" Viewbox="0.42,0.78,0.5,0.22"/>
+                        </Rectangle.Fill>
+                        <Rectangle.OpacityMask>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                <GradientStop Color="#00000000" Offset="0"/>
+                                <GradientStop Color="#FF000000" Offset="0.6"/>
+                            </LinearGradientBrush>
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                    <Grid Margin="22,0,18,0" VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Path Data="{StaticResource PlIconTag}" Style="{StaticResource ND.IconPath}" Stroke="#FFFFFF" StrokeThickness="1.8"
+                              Width="30" Height="30" Margin="0,0,16,0" VerticalAlignment="Center"/>
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock x:Name="Title" Text="Select Price Level" FontFamily="{StaticResource ND.Font.Bold}" FontSize="22" Foreground="#FFFFFF" TextTrimming="CharacterEllipsis"/>
+                            <TextBlock Text="Choose the scope and price level for this item" FontFamily="{StaticResource ND.Font.Regular}" FontSize="13" Foreground="#D8DBF0" Margin="0,1,0,0"/>
+                        </StackPanel>
+                        <Button Grid.Column="2" Style="{StaticResource ND.DialogCloseButton}" Click="BtnCancel_Click" ToolTip="Close"/>
+                    </Grid>
+                </Grid>
+
+                <!-- ===== Scope + Price Level ===== -->
+                <Grid Grid.Row="1" Margin="20,18,20,0">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"></ColumnDefinition>
-                        <ColumnDefinition Width="9"></ColumnDefinition>
-                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="14"/>
+                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Button Grid.Column="2" Content="CANCEL" Height="35" Width="120" FontFamily="{StaticResource OSSemiBold}" 
-                        Style="{DynamicResource CancelButtonStyle}" x:Name="btnCancel" Click="BtnCancel_Click"/>
-                    <Button Grid.Column="4" Content="Ok" Height="35" Width="120" FontFamily="{StaticResource OSSemiBold}" 
-                        Style="{DynamicResource SaveButtonStyle}" x:Name="btnOK" Click="btnOK_Click"/>
-                </Grid>
-            </Grid>
-            <Rectangle Grid.Row="1" Style="{DynamicResource DefaultLineStyle}"  VerticalAlignment="Center"  Margin="-9,0"/>
-            <Grid Grid.Row="2" Margin="0,9,0,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="15"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Grid Grid.Column="0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"></RowDefinition>
-                        <RowDefinition Height="9"></RowDefinition>
-                        <RowDefinition Height="Auto"></RowDefinition>
-                        <RowDefinition Height="6"></RowDefinition>
-                        <RowDefinition Height="Auto"></RowDefinition>
-                        <RowDefinition Height="6"></RowDefinition>
-                        <RowDefinition Height="Auto"></RowDefinition>
-                        <RowDefinition Height="6"></RowDefinition>
-                        <RowDefinition Height="Auto"></RowDefinition>
-                    </Grid.RowDefinitions>
-                    <Border Style="{DynamicResource GreenBorder}">
-                        <TextBlock Text="Scope" Style="{DynamicResource GreenBorderInfo}"></TextBlock>
+                    <Border Grid.Column="0" Style="{StaticResource PlCard}">
+                        <DockPanel>
+                            <Border DockPanel.Dock="Top" Height="38" CornerRadius="11,11,0,0" Background="#DDF3E1" BorderBrush="#C3E8CA" BorderThickness="0,0,0,1">
+                                <StackPanel Orientation="Horizontal" Margin="14,0" VerticalAlignment="Center">
+                                    <Path Data="{StaticResource PlIconTarget}" Style="{StaticResource ND.IconPath}" Stroke="#1E8A3A" StrokeThickness="2" Width="15" Height="15" Margin="0,0,10,0"/>
+                                    <TextBlock Text="Scope" FontFamily="{StaticResource ND.Font.SemiBold}" FontSize="15" Foreground="#1E7A34"/>
+                                </StackPanel>
+                            </Border>
+                            <StackPanel Margin="16,14,12,8">
+                                <RadioButton Content="Today Only" x:Name="cmbScope1" Style="{StaticResource PlRadio}"/>
+                                <RadioButton Content="This Sale Only" x:Name="cmbScope2" Style="{StaticResource PlRadio}"/>
+                                <RadioButton Content="One Time Only" x:Name="cmbScope3" Style="{StaticResource PlRadio}"/>
+                            </StackPanel>
+                        </DockPanel>
                     </Border>
 
-                    <RadioButton Grid.Row="2" Content="Today Only" x:Name="cmbScope1"/>
-                    <RadioButton Grid.Row="4" Content="This Sale Only" x:Name="cmbScope2"/>
-                    <RadioButton Grid.Row="6" Content="One Time Only" x:Name="cmbScope3"/>
-                    
+                    <Border Grid.Column="2" Style="{StaticResource PlCard}">
+                        <DockPanel>
+                            <Border DockPanel.Dock="Top" Height="38" CornerRadius="11,11,0,0" Background="#ECE6FB" BorderBrush="#DCD3F6" BorderThickness="0,0,0,1">
+                                <StackPanel Orientation="Horizontal" Margin="14,0" VerticalAlignment="Center">
+                                    <Path Data="{StaticResource ND.Icon.Layers}" Style="{StaticResource ND.IconPath}" Stroke="#5B3CC4" StrokeThickness="2" Width="16" Height="16" Margin="0,0,10,0"/>
+                                    <TextBlock Text="Price Level" FontFamily="{StaticResource ND.Font.SemiBold}" FontSize="15" Foreground="#4A2FA8"/>
+                                </StackPanel>
+                            </Border>
+                            <StackPanel Margin="16,14,12,8">
+                                <RadioButton Content="Customer Price Level (Default)" x:Name="rg1" Checked="rg1_Checked" Style="{StaticResource PlRadio}"/>
+                                <RadioButton Content="Price Level 1" x:Name="rg2" Checked="rg1_Checked" Style="{StaticResource PlRadio}"/>
+                                <RadioButton Content="Price Level 2" x:Name="rg3" Checked="rg1_Checked" Style="{StaticResource PlRadio}"/>
+                                <RadioButton Content="Price Level 3" x:Name="rg4" Checked="rg1_Checked" Style="{StaticResource PlRadio}"/>
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
                 </Grid>
 
-                <Grid Grid.Column="2">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"></RowDefinition>
-                        <RowDefinition Height="9"></RowDefinition>
-                        <RowDefinition Height="Auto"></RowDefinition>
-                        <RowDefinition Height="6"></RowDefinition>
-                        <RowDefinition Height="Auto"></RowDefinition>
-                        <RowDefinition Height="6"></RowDefinition>
-                        <RowDefinition Height="Auto"></RowDefinition>
-                        <RowDefinition Height="6"></RowDefinition>
-                        <RowDefinition Height="Auto"></RowDefinition>
-                        <RowDefinition Height="6"></RowDefinition>
-                        <RowDefinition Height="Auto"></RowDefinition>
-                    </Grid.RowDefinitions>
-                    <Border Style="{DynamicResource PurpleBorder}">
-                        <TextBlock Text="Price Level" Style="{DynamicResource PurpleBorderInfo}"></TextBlock>
-                    </Border>
-
-                    <RadioButton Grid.Row="2" Content="Customer Price Level (Default)" x:Name="rg1" Checked="rg1_Checked"/>
-                    <RadioButton Grid.Row="4" Content="Price Level 1" x:Name="rg2" Checked="rg1_Checked"/>
-                    <RadioButton Grid.Row="6" Content="Price Level 2" x:Name="rg3" Checked="rg1_Checked"/>
-                    <RadioButton Grid.Row="8" Content="Price Level 3" x:Name="rg4" Checked="rg1_Checked"/>
-                    
+                <!-- ===== footer ===== -->
+                <Grid Grid.Row="2" Margin="20,16,20,20">
+                    <Rectangle Height="1" Fill="#E3E6EF" VerticalAlignment="Top" Margin="-20,-2,-20,0"/>
+                    <Grid Margin="0,16,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="14"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" x:Name="btnCancel" Height="48" Style="{StaticResource ND.PosSoftButton}" HorizontalContentAlignment="Center" Click="BtnCancel_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <Path Data="{StaticResource ND.Icon.Close}" Style="{StaticResource ND.IconPath}" Stroke="#1B1D33" StrokeThickness="2.4" Width="13" Height="13" Margin="0,0,12,0"/>
+                                <TextBlock Text="Cancel" VerticalAlignment="Center" FontSize="17"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Grid.Column="2" x:Name="btnOK" Height="48" Style="{StaticResource ND.SuccessButton}" Click="btnOK_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <Path Data="{StaticResource ND.Icon.Check}" Style="{StaticResource ND.IconPath}" Stroke="#FFFFFF" StrokeThickness="2.4" Width="18" Height="16" Margin="0,0,12,0"/>
+                                <TextBlock Text="OK" VerticalAlignment="Center" FontSize="17"/>
+                            </StackPanel>
+                        </Button>
+                    </Grid>
                 </Grid>
             </Grid>
-            
-        </Grid>
-    </cc:ModalWindow>
+        </Border>
+    </Grid>
 </Window>

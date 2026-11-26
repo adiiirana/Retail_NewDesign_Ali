@@ -13,7 +13,7 @@
         xmlns:tb="clr-namespace:OfflineRetailV2"
         xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
         AllowsTransparency="True" WindowStyle="None" Background="Transparent" WindowStartupLocation="CenterScreen"
-        Title="" Foreground="White" Width="620" Height="490">
+        Title="" Foreground="White" Width="620" SizeToContent="Height">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

@@ -35,6 +35,28 @@ namespace OfflineRetailV2.UserControls.POSSection
 
             Loaded += Frm_POSWorkOrderDlg_Loaded;
             ModalWindow.CloseCommand = new CommandBase(OnCloseCommandExecute);
+
+            // new design: rounded corners
+            dlgBody.SizeChanged += (s, e) => dlgBody.Clip = new RectangleGeometry(new System.Windows.Rect(dlgBody.RenderSize), 20, 20);
+            // new design: each editor sits in a rounded frame that follows the editor's visibility (set by the code below)
+            foreach (FrameworkElement ed in new FrameworkElement[] { cmbStore, dtF, dtT })
+            {
+                FrameworkElement frame = ed.Parent as FrameworkElement;
+                if (frame == null) continue;
+                System.ComponentModel.DependencyPropertyDescriptor.FromProperty(UIElement.VisibilityProperty, ed.GetType())
+                    .AddValueChanged(ed, (s, e) => frame.Visibility = ed.Visibility);
+                frame.Visibility = ed.Visibility;
+            }
+            // new design: "No Work Orders Found" while the list is empty
+            System.ComponentModel.DependencyPropertyDescriptor.FromProperty(DevExpress.Xpf.Grid.GridControl.ItemsSourceProperty, typeof(DevExpress.Xpf.Grid.GridControl))
+                .AddValueChanged(grdTran, (s, e) => UpdateWorkOrderEmptyState());
+            UpdateWorkOrderEmptyState();
+        }
+
+        private void UpdateWorkOrderEmptyState()
+        {
+            DataTable dt = grdTran.ItemsSource as DataTable;
+            pnlNoWorkOrders.Visibility = (dt == null || dt.Rows.Count == 0) ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private void OnCloseCommandExecute(object obj)

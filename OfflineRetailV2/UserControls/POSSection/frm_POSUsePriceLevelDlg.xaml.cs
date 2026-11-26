@@ -26,6 +26,9 @@ namespace OfflineRetailV2.UserControls.POSSection
 
             Loaded += Frm_POSUsePriceLevelDlg_Loaded;
             ModalWindow.CloseCommand = new CommandBase(OnClose);
+
+            // new design: rounded corners
+            dlgBody.SizeChanged += (s, e) => dlgBody.Clip = new RectangleGeometry(new Rect(dlgBody.RenderSize), 20, 20);
         }
 
         private void OnClose(object obj)

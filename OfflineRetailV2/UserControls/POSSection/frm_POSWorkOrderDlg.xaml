@@ -8,249 +8,399 @@
         xmlns:lm="clr-namespace:OfflineRetailV2.LayoutManager"
         xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
         xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
-        xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" 
+        xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
         xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
         AllowsTransparency="True" WindowStyle="None" Background="Transparent" WindowStartupLocation="CenterScreen"
-        Title="" Foreground="White"   
-        Width="1024" Height="740">
-    <cc:ModalWindow  x:Name="ModalWindow">
-        <Grid Margin="9">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="9"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="15"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="9"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <Grid Grid.Row="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="Work Order Transaction"  x:Name="Title" VerticalAlignment="Center" Style="{DynamicResource BlueHeading}" />
-                <Grid Grid.Column="1" HorizontalAlignment="Right" Margin="0,0,20,0">
+        Title="" Foreground="White"
+        Width="1024" Height="700">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/NewDesignStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <Geometry x:Key="WoIconTools">M15,3.2 A4.6,4.6 0 0 0 10.6,9.4 L3.6,16.4 A2,2 0 0 0 6.4,19.2 L13.4,12.2 A4.6,4.6 0 0 0 19.6,7.8 L16.9,9.6 L14.7,9.1 L14.2,6.9 Z M3,3 L5,5 L4,6 L6.5,8.5 M12.5,14.5 L18.5,20.5 A1.4,1.4 0 0 0 20.5,18.5 L14.5,12.5</Geometry>
+            <Geometry x:Key="WoIconSliders">M4,6 H20 M4,12 H20 M4,18 H20 M8,4 V8 M15,10 V14 M10,16 V20</Geometry>
+            <Geometry x:Key="WoIconClipboard">M8,4 H16 V7 H8 Z M6,5.5 H4.5 V21 H19.5 V5.5 H18 M8.5,17.5 L15.5,10.5 M14.5,17.5 L9.5,12.5 M15.5,10.5 A1.4,1.4 0 1 1 15.5,10.49 M8.5,17.5 A1.4,1.4 0 1 1 8.5,17.49</Geometry>
+
+            <Style x:Key="WoLabel" TargetType="{x:Type TextBlock}">
+                <Setter Property="FontFamily" Value="{StaticResource ND.Font.Medium}"/>
+                <Setter Property="FontSize" Value="13"/>
+                <Setter Property="Foreground" Value="#1B1D33"/>
+                <Setter Property="Margin" Value="2,0,0,5"/>
+            </Style>
+            <Style x:Key="WoField" TargetType="{x:Type Border}">
+                <Setter Property="Height" Value="38"/>
+                <Setter Property="CornerRadius" Value="8"/>
+                <Setter Property="Background" Value="#FFFFFF"/>
+                <Setter Property="BorderBrush" Value="#C9CEDC"/>
+                <Setter Property="BorderThickness" Value="1.2"/>
+                <Setter Property="Padding" Value="6,0,4,0"/>
+            </Style>
+            <Style x:Key="WoEditor" TargetType="{x:Type dxe:BaseEdit}">
+                <Setter Property="ShowBorder" Value="False"/>
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="FontFamily" Value="{StaticResource ND.Font.Regular}"/>
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="Foreground" Value="#1B1D33"/>
+            </Style>
+            <Style x:Key="WoCard" TargetType="{x:Type Border}">
+                <Setter Property="Background" Value="#F4F5FA"/>
+                <Setter Property="CornerRadius" Value="12"/>
+                <Setter Property="BorderBrush" Value="#E1E5EE"/>
+                <Setter Property="BorderThickness" Value="1"/>
+            </Style>
+
+            <!-- header buttons -->
+            <Style x:Key="WoHeadButton" TargetType="{x:Type Button}">
+                <Style.Resources><Style TargetType="{x:Type TextBlock}"/></Style.Resources>
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="BorderBrush" Value="#C9CDE6"/>
+                <Setter Property="Foreground" Value="#FFFFFF"/>
+                <Setter Property="FontFamily" Value="{StaticResource ND.Font.SemiBold}"/>
+                <Setter Property="FontSize" Value="15"/>
+                <Setter Property="Height" Value="42"/>
+                <Setter Property="MinWidth" Value="104"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Focusable" Value="False"/>
+                <Setter Property="IsTabStop" Value="False"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border x:Name="bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1.4" CornerRadius="9">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="14,0">
+                                    <ContentPresenter.Resources><Style TargetType="{x:Type TextBlock}"/></ContentPresenter.Resources>
+                                </ContentPresenter>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="bd" Property="Opacity" Value="0.88"/></Trigger>
+                                <Trigger Property="IsPressed" Value="True"><Setter TargetName="bd" Property="Opacity" Value="0.75"/></Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="WoArrowButton" TargetType="{x:Type Button}">
+                <Setter Property="Width" Value="68"/>
+                <Setter Property="Height" Value="36"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Focusable" Value="False"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border x:Name="bd" Background="#ECE6FB" BorderBrush="#B9A6EE" BorderThickness="1.2" CornerRadius="9">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="bd" Property="Background" Value="#E2D9FA"/></Trigger>
+                                <Trigger Property="IsPressed" Value="True"><Setter TargetName="bd" Property="Background" Value="#D5C8F6"/></Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="WoGridHeader" TargetType="{x:Type dxg:GridColumnHeader}">
+                <Setter Property="Background" Value="#26324F"/>
+                <Setter Property="Foreground" Value="#FFFFFF"/>
+                <Setter Property="FontFamily" Value="{StaticResource ND.Font.SemiBold}"/>
+                <Setter Property="FontSize" Value="13.5"/>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <!-- New design (Work Order Transaction): navy header with Print / Cancel / Done; search cards; records with empty state.
+         Names used by the code-behind are unchanged. -->
+    <Grid Margin="10">
+        <cc:ModalWindow x:Name="ModalWindow" Visibility="Collapsed"/>
+
+        <Border CornerRadius="20" Background="#FFFFFF" Effect="{StaticResource ND.ShadowLarge}"/>
+        <Border CornerRadius="20" x:Name="dlgBody">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="92"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- ===== header ===== -->
+                <Grid Grid.Row="0">
+                    <Rectangle>
+                        <Rectangle.Fill>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#1E2246" Offset="0"/>
+                                <GradientStop Color="#2A2F5C" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Rectangle.Fill>
+                    </Rectangle>
+                    <Rectangle HorizontalAlignment="Right" Width="620" Opacity="0.85">
+                        <Rectangle.Fill>
+                            <ImageBrush ImageSource="pack://application:,,,/OfflineRetailV2;component/Resources/Images/LoginStore.jpg"
+                                        Stretch="UniformToFill" AlignmentX="Center" AlignmentY="Bottom" Viewbox="0.42,0.78,0.5,0.22"/>
+                        </Rectangle.Fill>
+                        <Rectangle.OpacityMask>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                <GradientStop Color="#00000000" Offset="0"/>
+                                <GradientStop Color="#FF000000" Offset="0.6"/>
+                            </LinearGradientBrush>
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                    <Grid Margin="22,0,18,0" VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Path Data="{StaticResource WoIconTools}" Style="{StaticResource ND.IconPath}" Stroke="#FFFFFF" StrokeThickness="1.8"
+                              Width="32" Height="32" Margin="0,0,16,0" VerticalAlignment="Center"/>
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock x:Name="Title" Text="Work Order Transaction" FontFamily="{StaticResource ND.Font.Bold}" FontSize="23" Foreground="#FFFFFF" TextTrimming="CharacterEllipsis"/>
+                            <TextBlock Text="Create and manage work order transactions" FontFamily="{StaticResource ND.Font.Regular}" FontSize="13.5" Foreground="#D8DBF0" Margin="0,1,0,0" TextTrimming="CharacterEllipsis"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="2" Orientation="Horizontal" Margin="0,0,14,0">
+                            <Button Content="Help" Style="{StaticResource WoHeadButton}" x:Name="btnHelp" Click="btnHelp_Click" Visibility="Collapsed" Margin="0,0,10,0"/>
+                            <Button Content="KEYBOARD" Style="{StaticResource WoHeadButton}" x:Name="btnKeyboard" Click="btnKeyboard_Click" Visibility="Collapsed" Margin="0,0,10,0"/>
+                            <Button Style="{StaticResource WoHeadButton}" x:Name="btnPrint" Click="btnPrint_Click" Margin="0,0,10,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <Path Data="{StaticResource ND.Icon.Printer}" Style="{StaticResource ND.IconPath}" Stroke="#FFFFFF" StrokeThickness="1.8" Width="17" Height="17" Margin="0,0,9,0"/>
+                                    <TextBlock Text="Print" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Style="{StaticResource WoHeadButton}" Background="#E05555" BorderBrush="#E05555" x:Name="btnCancel" Click="BtnCancel_Click" Margin="0,0,10,0">
+                                <TextBlock Text="Cancel" VerticalAlignment="Center"/>
+                            </Button>
+                            <Button Style="{StaticResource ND.SuccessButton}" Height="42" MinWidth="112" x:Name="btnOK" Click="btnOK_Click">
+                                <StackPanel Orientation="Horizontal" Margin="14,0">
+                                    <Path Data="{StaticResource ND.Icon.Check}" Style="{StaticResource ND.IconPath}" Stroke="#FFFFFF" StrokeThickness="2.4" Width="15" Height="13" Margin="0,0,9,0"/>
+                                    <TextBlock Text="Done" VerticalAlignment="Center" FontSize="15"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                        <Button Grid.Column="3" Style="{StaticResource ND.DialogCloseButton}" Click="BtnCancel_Click" ToolTip="Close"/>
+                    </Grid>
+                </Grid>
+
+                <!-- ===== search cards ===== -->
+                <Grid Grid.Row="1" Margin="18,16,18,0">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"></ColumnDefinition>
-                        <ColumnDefinition Width="9"></ColumnDefinition>
-                        <ColumnDefinition Width="Auto"></ColumnDefinition>
-                        <ColumnDefinition Width="9"></ColumnDefinition>
-                        <ColumnDefinition Width="Auto"></ColumnDefinition>
-                        <ColumnDefinition Width="9"></ColumnDefinition>
-                        <ColumnDefinition Width="Auto"></ColumnDefinition>
-                        <ColumnDefinition Width="9"></ColumnDefinition>
-                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="14"/>
+                        <ColumnDefinition Width="1.75*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Button Grid.Column="0" Content="Help" Height="35" FontFamily="{StaticResource OSSemiBold}" 
-                        Style="{DynamicResource GeneralButtonStyle}" x:Name="btnHelp" Click="btnHelp_Click" Visibility="Collapsed"/>
-
-                    <Button IsTabStop="False" Focusable="False" Grid.Column="2" Content="KEYBOARD" Visibility="Collapsed"  FontFamily="{StaticResource OSSemiBold}" 
-                        Style="{DynamicResource GeneralButtonStyle}" x:Name="btnKeyboard" Click="btnKeyboard_Click"/>
-
-                    <Button Grid.Column="4" Content="PRINT" Height="35" Width="120" FontFamily="{StaticResource OSSemiBold}" 
-                        Style="{DynamicResource PrintButtonStyle}" x:Name="btnPrint" Click="btnPrint_Click"/>
-                    <Button Grid.Column="6" Content="CANCEL" Height="35" Width="120" FontFamily="{StaticResource OSSemiBold}" 
-                        Style="{DynamicResource CancelButtonStyle}" x:Name="btnCancel" Click="BtnCancel_Click"/>
-                    <Button Grid.Column="8" Content="DONE" Height="35" Width="120" FontFamily="{StaticResource OSSemiBold}" 
-                        Style="{DynamicResource SaveButtonStyle}" x:Name="btnOK" Click="btnOK_Click"/>
-                </Grid>
-            </Grid>
-            <Rectangle Grid.Row="1" Style="{DynamicResource DefaultLineStyle}"  VerticalAlignment="Center"  Margin="-9,0"/>
-
-
-            <Grid Margin="9,0" Grid.Row="2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                    <ColumnDefinition Width="2"></ColumnDefinition>
-                    <ColumnDefinition Width="2*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-
-                <Grid Grid.Column="0" Margin="7,0,7,0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"></RowDefinition>
-                        <RowDefinition Height="9"></RowDefinition>
-                        <RowDefinition Height="Auto"></RowDefinition>
-                        <RowDefinition Height="3"></RowDefinition>
-                        <RowDefinition Height="Auto"></RowDefinition>
-                       
-                    </Grid.RowDefinitions>
-                    
-
-                    <Border Grid.Row="0" Grid.ColumnSpan="3" Style="{DynamicResource GreenBorder}">
-                        <TextBlock Style="{DynamicResource GreenBorderInfo}" Text="Search with Work order Number" Height="21" VerticalAlignment="Top"></TextBlock>
+                    <!-- by number -->
+                    <Border Style="{StaticResource WoCard}">
+                        <DockPanel>
+                            <Border DockPanel.Dock="Top" Height="38" CornerRadius="11,11,0,0" Background="#DDF3E1" BorderBrush="#C3E8CA" BorderThickness="0,0,0,1">
+                                <StackPanel Orientation="Horizontal" Margin="14,0" VerticalAlignment="Center">
+                                    <Path Data="{StaticResource ND.Icon.Search}" Style="{StaticResource ND.IconPath}" Stroke="#1E8A3A" StrokeThickness="2" Width="15" Height="15" Margin="0,0,10,0"/>
+                                    <TextBlock Text="Search with Work Order Number" FontFamily="{StaticResource ND.Font.SemiBold}" FontSize="14" Foreground="#1E7A34" TextTrimming="CharacterEllipsis"/>
+                                </StackPanel>
+                            </Border>
+                            <StackPanel Margin="14,12,14,14">
+                                <TextBlock Text="Work Order #" Style="{StaticResource WoLabel}"/>
+                                <Border Style="{StaticResource WoField}">
+                                    <dxe:TextEdit x:Name="txtInv" Style="{StaticResource WoEditor}" NullText="Enter work order number..." NullTextForeground="#9AA1B5"
+                                                  PreviewKeyDown="txtInv_PreviewKeyDown" GotFocus="Num_GotFocus" LostFocus="Num_LostFocus"/>
+                                </Border>
+                            </StackPanel>
+                        </DockPanel>
                     </Border>
 
-                    <TextBlock Text="Work Order #" Grid.Row="2"/>
-                    <dxe:TextEdit Grid.Row="4"  x:Name="txtInv" PreviewKeyDown="txtInv_PreviewKeyDown" GotFocus="Num_GotFocus" LostFocus="Num_LostFocus"/>
-                    
+                    <!-- general -->
+                    <Border Grid.Column="2" Style="{StaticResource WoCard}">
+                        <DockPanel>
+                            <Border DockPanel.Dock="Top" Height="38" CornerRadius="11,11,0,0" Background="#ECE6FB" BorderBrush="#DCD3F6" BorderThickness="0,0,0,1">
+                                <StackPanel Orientation="Horizontal" Margin="14,0" VerticalAlignment="Center">
+                                    <Path Data="{StaticResource WoIconSliders}" Style="{StaticResource ND.IconPath}" Stroke="#5B3CC4" StrokeThickness="2" Width="16" Height="15" Margin="0,0,10,0"/>
+                                    <TextBlock Text="General Search Criteria" FontFamily="{StaticResource ND.Font.SemiBold}" FontSize="14" Foreground="#4A2FA8"/>
+                                </StackPanel>
+                            </Border>
+                            <Grid Margin="14,12,14,14">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="14"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
 
+                                <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,0,10">
+                                    <TextBlock Text="Work Order Type" Style="{StaticResource WoLabel}"/>
+                                    <Border Style="{StaticResource WoField}">
+                                        <dxe:ComboBoxEdit SelectedIndex="0" IsTextEditable="False" x:Name="cmbType" Style="{StaticResource WoEditor}"
+                                                          SelectedIndexChanged="cmbType_SelectedIndexChanged" PreviewMouseLeftButtonDown="CmbStore_PreviewMouseLeftButtonDown">
+                                            <dxe:ComboBoxEditItem>Unpaid</dxe:ComboBoxEditItem>
+                                            <dxe:ComboBoxEditItem>Paid</dxe:ComboBoxEditItem>
+                                            <dxe:ComboBoxEditItem>All</dxe:ComboBoxEditItem>
+                                        </dxe:ComboBoxEdit>
+                                    </Border>
+                                </StackPanel>
+
+                                <StackPanel Grid.Row="0" Grid.Column="2" Margin="0,0,0,10">
+                                    <TextBlock Text="Show Work Order for this Customer" Style="{StaticResource WoLabel}" TextTrimming="CharacterEllipsis"/>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <!-- store picker: only visible with central export/import -->
+                                        <Border Style="{StaticResource WoField}" Width="96" Margin="0,0,8,0">
+                                            <dxe:ComboBoxEdit x:Name="cmbStore" Style="{StaticResource WoEditor}"
+                                                              SelectedIndexChanged="cmbStore_SelectedIndexChanged" PreviewMouseLeftButtonDown="CmbStore_PreviewMouseLeftButtonDown"/>
+                                        </Border>
+                                        <Border Grid.Column="1" Style="{StaticResource WoField}">
+                                            <dxg:LookUpEdit x:Name="cmbC" ItemsSource="{Binding}" Style="{StaticResource WoEditor}"
+                                                            DisplayMember="LastName"
+                                                            ValueMember="ID"
+                                                            AutoPopulateColumns="False"
+                                                            AutoComplete="True"
+                                                            IncrementalFiltering="True"
+                                                            ImmediatePopup="True"
+                                                            NullText="All" NullTextForeground="#1B1D33"
+                                                            IsPopupAutoWidth="False" EditValueChanged="CmbC_EditValueChanged"
+                                                            PreviewMouseLeftButtonDown="CmbC_PreviewMouseLeftButtonDown" PopupOpened="gen_PopupOpened" >
+                                                <dxg:LookUpEdit.PopupContentTemplate>
+                                                    <ControlTemplate>
+                                                        <dxg:GridControl Name="PART_GridControl" AutoGenerateColumns="None">
+                                                            <dxg:GridControl.Columns>
+                                                                <dxg:GridColumn FieldName="Image" Visible="False" VisibleIndex="-1" Width="*" AllowAutoFilter="False" Focusable="False">
+                                                                    <dxg:GridColumn.EditSettings>
+                                                                        <dxe:ImageEditSettings Stretch="UniformToFill"/>
+                                                                    </dxg:GridColumn.EditSettings>
+                                                                </dxg:GridColumn>
+                                                                <dxg:GridColumn FieldName="ID" Visible="False" VisibleIndex="-1"/>
+                                                                <dxg:GridColumn FieldName="CustomerID" Header="Cust. ID" Visible="True" VisibleIndex="1" />
+                                                                <dxg:GridColumn FieldName="FirstName" Header="First Name" Visible="True" VisibleIndex="2"/>
+                                                                <dxg:GridColumn FieldName="LastName" Header="Last Name" Visible="True" VisibleIndex="3"/>
+                                                            </dxg:GridControl.Columns>
+                                                            <dxg:GridControl.View>
+                                                                <dxg:TableView AutoWidth="True" />
+                                                            </dxg:GridControl.View>
+                                                        </dxg:GridControl>
+                                                    </ControlTemplate>
+                                                </dxg:LookUpEdit.PopupContentTemplate>
+                                            </dxg:LookUpEdit>
+                                        </Border>
+                                    </Grid>
+                                </StackPanel>
+
+                                <StackPanel Grid.Row="1" Grid.Column="0">
+                                    <TextBlock Text="Date" Style="{StaticResource WoLabel}"/>
+                                    <Border Style="{StaticResource WoField}">
+                                        <dxe:ComboBoxEdit x:Name="cmbDate" SelectedIndex="0" IsTextEditable="False" Style="{StaticResource WoEditor}"
+                                                          SelectedIndexChanged="cmbDate_SelectedIndexChanged" PreviewMouseLeftButtonDown="CmbStore_PreviewMouseLeftButtonDown">
+                                            <dxe:ComboBoxEditItem>None</dxe:ComboBoxEditItem>
+                                            <dxe:ComboBoxEditItem>Greater than</dxe:ComboBoxEditItem>
+                                            <dxe:ComboBoxEditItem>Less than</dxe:ComboBoxEditItem>
+                                            <dxe:ComboBoxEditItem>Between</dxe:ComboBoxEditItem>
+                                        </dxe:ComboBoxEdit>
+                                    </Border>
+                                </StackPanel>
+
+                                <!-- From / To: shown by the code-behind for the chosen Date option -->
+                                <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Border Grid.Column="0" Style="{StaticResource WoField}">
+                                        <dxe:DateEdit x:Name="dtF" Style="{StaticResource WoEditor}" NullText="From Date" NullTextForeground="#9AA1B5"
+                                                      EditValueChanged="dtF_EditValueChanged" PreviewMouseLeftButtonDown="DtF_PreviewMouseLeftButtonDown"/>
+                                    </Border>
+                                    <TextBlock Grid.Column="1" Text="To" x:Name="lbDate" Style="{StaticResource WoLabel}" Margin="12,0" VerticalAlignment="Center"/>
+                                    <Border Grid.Column="2" Style="{StaticResource WoField}">
+                                        <dxe:DateEdit x:Name="dtT" Style="{StaticResource WoEditor}" NullText="To Date" NullTextForeground="#9AA1B5"
+                                                      EditValueChanged="dtT_EditValueChanged" PreviewMouseLeftButtonDown="DtF_PreviewMouseLeftButtonDown"/>
+                                    </Border>
+                                </Grid>
+                            </Grid>
+                        </DockPanel>
+                    </Border>
                 </Grid>
-                
-                <Grid Grid.Column="2" Margin="7,0,7,0">
 
+                <!-- ===== records ===== -->
+                <Grid Grid.Row="2" Margin="18,14,18,18">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"></RowDefinition>
-                        <RowDefinition Height="9"></RowDefinition>
-                        <RowDefinition Height="Auto"></RowDefinition>
-                        <RowDefinition Height="3"></RowDefinition>
-                        <RowDefinition Height="Auto"></RowDefinition>
-                        <RowDefinition Height="3"></RowDefinition>
-                        <RowDefinition Height="Auto"></RowDefinition>
-                        <RowDefinition Height="3"></RowDefinition>
-                        <RowDefinition Height="Auto"></RowDefinition>
-                        <RowDefinition Height="3"></RowDefinition>
-                        <RowDefinition Height="Auto"></RowDefinition>
-                        
-
+                        <RowDefinition Height="38"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                        <ColumnDefinition Width="9"></ColumnDefinition>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-
-                    <Border Grid.Row="0" Grid.ColumnSpan="3" Style="{DynamicResource OrangeBorder}">
-                        <TextBlock Style="{DynamicResource OrangeBorderInfo}" Text="General Search Criteria"></TextBlock>
+                    <Border CornerRadius="10" Background="#ECE6FB" BorderBrush="#DCD3F6" BorderThickness="1">
+                        <StackPanel Orientation="Horizontal" Margin="14,0" VerticalAlignment="Center">
+                            <Path Data="{StaticResource ND.Icon.List}" Style="{StaticResource ND.IconPath}" Stroke="#5B3CC4" StrokeThickness="2" Width="17" Height="15" Margin="0,0,10,0"/>
+                            <TextBlock Text="Workorder Records" FontFamily="{StaticResource ND.Font.SemiBold}" FontSize="14.5" Foreground="#4A2FA8"/>
+                        </StackPanel>
                     </Border>
 
-                    <TextBlock Grid.Row="2" Text="Work Order Type"/>
-                    <dxe:ComboBoxEdit Grid.Row="4" Grid.Column="0" SelectedIndex="0" IsTextEditable="False" x:Name="cmbType" SelectedIndexChanged="cmbType_SelectedIndexChanged" PreviewMouseLeftButtonDown="CmbStore_PreviewMouseLeftButtonDown">
-                        <dxe:ComboBoxEditItem>Unpaid</dxe:ComboBoxEditItem>
-                        <dxe:ComboBoxEditItem>Paid</dxe:ComboBoxEditItem>
-                        <dxe:ComboBoxEditItem>All</dxe:ComboBoxEditItem>
-                    </dxe:ComboBoxEdit>
+                    <Border Grid.Row="1" Margin="0,8,0,0" CornerRadius="10" BorderBrush="#DDE2EC" BorderThickness="1" ClipToBounds="True">
+                        <Grid>
+                            <dxg:GridControl ShowBorder="False" SelectionMode="Row" x:Name="grdTran" FontFamily="{StaticResource ND.Font.Regular}" FontSize="14">
+                                <dxg:GridControl.Resources>
+                                    <Style TargetType="{x:Type dxg:GridColumnHeader}" BasedOn="{StaticResource WoGridHeader}"/>
+                                </dxg:GridControl.Resources>
+                                <dxg:GridControl.View>
+                                    <dxg:TableView x:Name="gridView1" PreviewMouseDoubleClick="gridView1_PreviewMouseDoubleClick"
+                                                   AutoWidth="True" ShowGroupPanel="False" ShowIndicator="False" ShowVerticalLines="False"
+                                                   AllowEditing="False" NavigationStyle="Row" RowMinHeight="38" AllowColumnFiltering="False">
+                                        <dxg:TableView.RuntimeLocalizationStrings>
+                                            <dxg:GridRuntimeStringCollection>
+                                                <dxg:RuntimeStringIdInfo Id="NoRecordsFound" Value=" "/>
+                                            </dxg:GridRuntimeStringCollection>
+                                        </dxg:TableView.RuntimeLocalizationStrings>
+                                    </dxg:TableView>
+                                </dxg:GridControl.View>
+                                <dxg:GridColumn FieldName="Image" Visible="False" VisibleIndex="-1" Width="*" AllowAutoFilter="False" Focusable="False">
+                                    <dxg:GridColumn.EditSettings>
+                                        <dxe:ImageEditSettings Stretch="UniformToFill"/>
+                                    </dxg:GridColumn.EditSettings>
+                                </dxg:GridColumn>
+                                <dxg:GridColumn FieldName="InvoiceNo" Header="Work Order No." Width="*" x:Name="colInv"/>
+                                <dxg:GridColumn FieldName="Customer" Header="Customer" Width="1.2*" x:Name="colCust"/>
+                                <dxg:GridColumn FieldName="CreatedOn" Header="Work Order Date" Width="*" x:Name="colDate"/>
+                                <dxg:GridColumn FieldName="PaymentDate" Header="Payment Date" Width="*" x:Name="colPaymentDate"/>
+                                <dxg:GridColumn FieldName="Amount" Header="Amount" HorizontalHeaderContentAlignment="Right" Width="0.8*" x:Name="colAmount">
+                                    <dxg:GridColumn.EditSettings>
+                                        <dxe:TextEditSettings DisplayFormat="f" MaskType="Numeric"/>
+                                    </dxg:GridColumn.EditSettings>
+                                    <dxg:GridColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <dxe:TextEdit x:Name="PART_Editor"  HorizontalContentAlignment="Right" Margin="0,0,15,0" FontSize="14" FontWeight="SemiBold" Style="{DynamicResource RightAligned}" Mask="f2" MaskType="Numeric" MaskUseAsDisplayFormat="True" ></dxe:TextEdit>
+                                        </DataTemplate>
+                                    </dxg:GridColumn.CellTemplate>
+                                </dxg:GridColumn>
+                            </dxg:GridControl>
 
-                    <TextBlock Grid.Row="6" Grid.Column="0" Text="Date"/>
-                    <dxe:ComboBoxEdit Grid.Row="8" Grid.Column="0" x:Name="cmbDate" SelectedIndex="0" IsTextEditable="False" SelectedIndexChanged="cmbDate_SelectedIndexChanged" PreviewMouseLeftButtonDown="CmbStore_PreviewMouseLeftButtonDown">
-                        <dxe:ComboBoxEditItem>None</dxe:ComboBoxEditItem>
-                        <dxe:ComboBoxEditItem>Greater than</dxe:ComboBoxEditItem>
-                        <dxe:ComboBoxEditItem>Less than</dxe:ComboBoxEditItem>
-                        <dxe:ComboBoxEditItem>Between</dxe:ComboBoxEditItem>
-                    </dxe:ComboBoxEdit>
+                            <!-- empty state: shown by the code-behind while the list has no rows -->
+                            <StackPanel x:Name="pnlNoWorkOrders" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,30,0,0" IsHitTestVisible="False">
+                                <Border Width="84" Height="84" CornerRadius="42" Background="#EEF0F7" HorizontalAlignment="Center">
+                                    <Path Data="{StaticResource WoIconClipboard}" Style="{StaticResource ND.IconPath}" Stroke="#8C93A8" StrokeThickness="1.6" Width="40" Height="42"/>
+                                </Border>
+                                <TextBlock Text="No Work Orders Found" FontFamily="{StaticResource ND.Font.SemiBold}" FontSize="15" Foreground="#3A4058" HorizontalAlignment="Center" Margin="0,12,0,2"/>
+                                <TextBlock Text="Try adjusting your search criteria to find work orders." FontFamily="{StaticResource ND.Font.Regular}" FontSize="13" Foreground="#6B7289" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
 
-                    <Grid Grid.Row="10" Grid.Column="0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"></ColumnDefinition>
-                            <ColumnDefinition Width="9"></ColumnDefinition>
-                            <ColumnDefinition Width="Auto"></ColumnDefinition>
-                            <ColumnDefinition Width="9"></ColumnDefinition>
-                            <ColumnDefinition Width="*"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-
-                        <dxe:DateEdit Grid.Column="0" x:Name="dtF" EditValueChanged="dtF_EditValueChanged" PreviewMouseLeftButtonDown="DtF_PreviewMouseLeftButtonDown"/>
-                        <TextBlock  Grid.Column="2" Text="To" x:Name="lbDate"/>
-                        <dxe:DateEdit  Grid.Column="4" x:Name="dtT" EditValueChanged="dtT_EditValueChanged" PreviewMouseLeftButtonDown="DtF_PreviewMouseLeftButtonDown"/>
-
-                        
-
-                    </Grid>
-
-
-                    <TextBlock Grid.Row="2" Grid.Column="2"  Text="Show Work Order for this Customer"/>
-
-                    <Grid Grid.Row="4" Grid.Column="2">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="0.5*"></ColumnDefinition>
-                            <ColumnDefinition Width="9"></ColumnDefinition>
-                            <ColumnDefinition Width="*"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <dxe:ComboBoxEdit Grid.Column="0" x:Name="cmbStore" SelectedIndexChanged="cmbStore_SelectedIndexChanged" PreviewMouseLeftButtonDown="CmbStore_PreviewMouseLeftButtonDown"/>
-                        <dxg:LookUpEdit Grid.Row="0" Grid.Column="2"  x:Name="cmbC" ItemsSource="{Binding}"
-                                        DisplayMember="LastName"
-                                        ValueMember="ID"
-                                        AutoPopulateColumns="False"
-                                        AutoComplete="True"
-                                        IncrementalFiltering="True"
-                                        ImmediatePopup="True"
-                                        IsPopupAutoWidth="False" EditValueChanged="CmbC_EditValueChanged"
-                                        PreviewMouseLeftButtonDown="CmbC_PreviewMouseLeftButtonDown" PopupOpened="gen_PopupOpened" >
-                            <dxg:LookUpEdit.PopupContentTemplate>
-                                <ControlTemplate>
-                                    <dxg:GridControl Name="PART_GridControl" AutoGenerateColumns="None">
-                                        <dxg:GridControl.Columns>
-                                            <dxg:GridColumn FieldName="Image" Visible="False" VisibleIndex="-1" Width="*" AllowAutoFilter="False" Focusable="False">
-                                                <dxg:GridColumn.EditSettings>
-                                                    <dxe:ImageEditSettings Stretch="UniformToFill"/>
-                                                </dxg:GridColumn.EditSettings>
-                                            </dxg:GridColumn>
-                                            <dxg:GridColumn FieldName="ID" Visible="False" VisibleIndex="-1"/>
-                                            <dxg:GridColumn FieldName="CustomerID" Header="Cust. ID" Visible="True" VisibleIndex="1" />
-                                            <dxg:GridColumn FieldName="FirstName" Header="First Name" Visible="True" VisibleIndex="2"/>
-                                            <dxg:GridColumn FieldName="LastName" Header="Last Name" Visible="True" VisibleIndex="3"/>
-                                        </dxg:GridControl.Columns>
-                                        <dxg:GridControl.View>
-                                            <dxg:TableView AutoWidth="True" />
-                                        </dxg:GridControl.View>
-                                    </dxg:GridControl>
-                                </ControlTemplate>
-                            </dxg:LookUpEdit.PopupContentTemplate>
-                        </dxg:LookUpEdit>
-                    </Grid>
-                    
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+                        <Button Style="{StaticResource WoArrowButton}" Margin="0,0,10,0" x:Name="btnUpHeader" Click="BtnUpHeader_Click" ToolTip="Previous">
+                            <Path Data="M5,15 L12,8 L19,15" Style="{StaticResource ND.IconPath}" Stroke="#4A2FA8" StrokeThickness="2.4" Width="15" Height="8"/>
+                        </Button>
+                        <Button Style="{StaticResource WoArrowButton}" x:Name="btnDownHeader" Click="BtnDownHeader_Click" ToolTip="Next">
+                            <Path Data="{StaticResource ND.Icon.ChevronDown}" Style="{StaticResource ND.IconPath}" Stroke="#4A2FA8" StrokeThickness="2.4" Width="15" Height="8"/>
+                        </Button>
+                    </StackPanel>
                 </Grid>
-               
+
+                <Grid Background="#3D000000" Grid.RowSpan="3" x:Name="blurGrid" Visibility="Collapsed"/>
             </Grid>
-
-
-            <Border Style="{DynamicResource PurpleBorder}" Grid.Row="4" Margin="9,0">
-                <TextBlock Style="{DynamicResource PurpleBorderInfo}" Text="Workorder Records"/>
-            </Border>
-
-            <dxg:GridControl Grid.Row="6" Margin="9,0" ShowBorder="True" SelectionMode="Row" x:Name="grdTran">
-                <dxg:GridControl.View>
-                    <dxg:TableView x:Name="gridView1" PreviewMouseDoubleClick="gridView1_PreviewMouseDoubleClick"/>
-                </dxg:GridControl.View>
-                <dxg:GridColumn FieldName="Image" Visible="False" VisibleIndex="-1" Width="*" AllowAutoFilter="False" Focusable="False">
-                    <dxg:GridColumn.EditSettings>
-                        <dxe:ImageEditSettings Stretch="UniformToFill"/>
-                    </dxg:GridColumn.EditSettings>
-                </dxg:GridColumn>
-                <dxg:GridColumn FieldName="InvoiceNo" Header="Work Order No." Width="*" x:Name="colInv"/>
-                <dxg:GridColumn FieldName="Customer" Header="Customer" Width="*" x:Name="colCust"/>
-                <dxg:GridColumn FieldName="CreatedOn" Header="Work Order Date" Width="*" x:Name="colDate"/>
-                <dxg:GridColumn FieldName="PaymentDate" Header="Payment Date" Width="*" x:Name="colPaymentDate"/>
-                <dxg:GridColumn FieldName="Amount" Header="Amount    " HorizontalHeaderContentAlignment="Right" Width="*" x:Name="colAmount">
-                    <dxg:GridColumn.EditSettings>
-                        <dxe:TextEditSettings DisplayFormat="f" MaskType="Numeric"/>
-                    </dxg:GridColumn.EditSettings>
-                    <dxg:GridColumn.CellTemplate>
-                        <DataTemplate>
-                            <dxe:TextEdit x:Name="PART_Editor"  HorizontalContentAlignment="Right" Margin="0,0,15,0" FontSize="13" Style="{DynamicResource RightAligned}" Mask="f2" MaskType="Numeric" MaskUseAsDisplayFormat="True" ></dxe:TextEdit>
-                        </DataTemplate>
-                    </dxg:GridColumn.CellTemplate>
-                </dxg:GridColumn>
-            </dxg:GridControl>
-
-            <Grid Grid.Row="8" Margin="9,0" HorizontalAlignment="Right" >
-                <Grid.ColumnDefinitions>
-
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="9"/>
-                    <ColumnDefinition Width="Auto"/>
-                    
-                </Grid.ColumnDefinitions>
-
-                
-                <Button Grid.Column="0"  VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Width="100" Height="35"
-                                Style="{DynamicResource YellowButtonStyle}" x:Name="btnUpHeader" Click="BtnUpHeader_Click"  >
-                    <Image Source="{DynamicResource Arrow_U}" Width="21" Height="21"/>
-                </Button>
-                <Button Grid.Column="2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Width="100" Height="35"
-                                Style="{DynamicResource YellowButtonStyle}" x:Name="btnDownHeader" Click="BtnDownHeader_Click" >
-                    <Image Source="{DynamicResource Arrow_D}" Width="21" Height="21"/>
-                </Button>
-
-
-                
-            </Grid>
-
-
-            <Grid Background="#3D000000" Margin="-15" Grid.RowSpan="5" x:Name="blurGrid" Visibility="Collapsed"/>
-        </Grid>
-    </cc:ModalWindow>
+        </Border>
+    </Grid>
 </Window>

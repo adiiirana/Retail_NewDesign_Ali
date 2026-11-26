@@ -34,6 +34,32 @@ namespace OfflineRetailV2.UserControls.POSSection
         {
             InitializeComponent();
             ModalWindow.CloseCommand = new CommandBase(OnClose);
+
+            // new design: rounded corners
+            dlgBody.SizeChanged += (s, e) => dlgBody.Clip = new RectangleGeometry(new Rect(dlgBody.RenderSize), 20, 20);
+            // new design: the silhouette shows only while no photo is loaded
+            System.ComponentModel.DependencyPropertyDescriptor.FromProperty(Image.SourceProperty, typeof(Image))
+                .AddValueChanged(picPhoto, (s, e) => UpdatePhotoPlaceholder());
+            UpdatePhotoPlaceholder();
+        }
+
+        /// <summary>
+        /// Shortcut picked on the new-design tiles ("CustPicture", "CustNotes", "Picture", "ClearOrder");
+        /// empty when the dialog was simply closed. The POS screen runs it after this dialog closes.
+        /// </summary>
+        public string RequestedAction { get; private set; } = "";
+
+        private void Shortcut_Click(object sender, RoutedEventArgs e)
+        {
+            RequestedAction = (sender as Button)?.CommandParameter as string ?? "";
+            Close();
+        }
+
+        private void UpdatePhotoPlaceholder()
+        {
+            BitmapSource bs = picPhoto.Source as BitmapSource;
+            bool hasPhoto = bs != null && bs.PixelWidth > 1;
+            picPlaceholder.Visibility = hasPhoto ? Visibility.Collapsed : Visibility.Visible;
         }
 
         private void OnClose(object obj)

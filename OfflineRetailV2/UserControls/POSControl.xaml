@@ -22,6 +22,99 @@
                 <ResourceDictionary Source="/Resources/NewDesignStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <BooleanToVisibilityConverter x:Key="ND.BoolToVis"/>
+            <!-- New design: one clean cart row (normal view). Set on gridView1.DataRowTemplate from code;
+                 Convenience View clears it and keeps its own columns. DataContext = the grid's RowData. -->
+            <Style x:Key="NdCartRoundButton" TargetType="{x:Type Button}">
+                <Setter Property="Background" Value="#FFFFFF"/>
+                <Setter Property="BorderBrush" Value="#DCE0EC"/>
+                <Setter Property="Width" Value="26"/>
+                <Setter Property="Height" Value="26"/>
+                <Setter Property="Focusable" Value="False"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border x:Name="bd" CornerRadius="13" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="bd" Property="Background" Value="#F1F3FA"/></Trigger>
+                                <Trigger Property="IsPressed" Value="True"><Setter TargetName="bd" Property="Background" Value="#E4E8F2"/></Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <DataTemplate x:Key="NdCartRowTemplate">
+                <Border x:Name="rowBd" Background="#FFFFFF" BorderBrush="#ECEEF4" BorderThickness="0,0,0,1" Padding="8,9,4,9" MinHeight="58">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="40"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="96"/>
+                            <ColumnDefinition Width="64"/>
+                            <ColumnDefinition Width="74"/>
+                            <ColumnDefinition Width="30"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- initials badge -->
+                        <Border Width="30" Height="30" CornerRadius="8" HorizontalAlignment="Left" VerticalAlignment="Center"
+                                Background="{Binding Path=Row.PRODUCT, Converter={x:Static local:NdBadgeConverter.Background}}">
+                            <TextBlock Text="{Binding Path=Row.PRODUCT, Converter={x:Static local:NdBadgeConverter.Initials}}"
+                                       Foreground="{Binding Path=Row.PRODUCT, Converter={x:Static local:NdBadgeConverter.Foreground}}"
+                                       FontFamily="{StaticResource ND.Font.Bold}" FontSize="11" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+
+                        <!-- name + promotion / discount / fee note -->
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="0,0,6,0">
+                            <TextBlock Text="{Binding Path=Row.PRODUCT}" FontFamily="{StaticResource ND.Font.Medium}" FontSize="13" Foreground="#1B1D33"
+                                       TextWrapping="Wrap" TextTrimming="CharacterEllipsis" MaxHeight="36" LineHeight="17"/>
+                            <TextBlock Text="{Binding Path=Row.DISPLAY_ITEM, Converter={x:Static local:NdBadgeConverter.Extra}}"
+                                       Visibility="{Binding Path=Row.DISPLAY_ITEM, Converter={x:Static local:NdBadgeConverter.ExtraVisibility}}"
+                                       FontFamily="{StaticResource ND.Font.Regular}" FontStyle="Italic" FontSize="11" Foreground="#2B6CB0"
+                                       TextWrapping="Wrap" TextTrimming="CharacterEllipsis" MaxHeight="30" Margin="0,1,0,0"/>
+                        </StackPanel>
+
+                        <!-- − qty + -->
+                        <Border Grid.Column="2" Height="34" CornerRadius="17" Background="#F1F3F8" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="4,0">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <Button x:Name="btnNdMinus" Style="{StaticResource NdCartRoundButton}" Click="NdCartMinus_Click" ToolTip="Less" Visibility="Hidden">
+                                    <Path Data="M4,12 H20" Stroke="#1B1D33" StrokeThickness="2.4" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Stretch="Uniform" Width="9" Height="2"/>
+                                </Button>
+                                <TextBlock Text="{Binding Path=Row.DISPLAY_QTY, Converter={x:Static local:NdBadgeConverter.Plain}}" MinWidth="26" TextAlignment="Center"
+                                           FontFamily="{StaticResource ND.Font.SemiBold}" FontSize="13" Foreground="#1B1D33" VerticalAlignment="Center" Margin="2,0"/>
+                                <Button x:Name="btnNdPlus" Style="{StaticResource NdCartRoundButton}" Click="NdCartPlus_Click" ToolTip="More" Visibility="Hidden">
+                                    <Path Data="M12,4 V20 M4,12 H20" Stroke="#1B1D33" StrokeThickness="2.4" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Stretch="Uniform" Width="9" Height="9"/>
+                                </Button>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- each / total -->
+                        <TextBlock Grid.Column="3" Text="{Binding Path=Row.RATE, Converter={x:Static local:NdBadgeConverter.Money}}" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                   FontFamily="{StaticResource ND.Font.Regular}" FontSize="12.5" Foreground="#4B4F6B"/>
+                        <TextBlock Grid.Column="4" Text="{Binding Path=Row.DISPLAY_TOTAL, Converter={x:Static local:NdBadgeConverter.Plain}}" HorizontalAlignment="Right" VerticalAlignment="Center"
+                                   FontFamily="{StaticResource ND.Font.Bold}" FontSize="14" Foreground="#1B1D33" Margin="0,0,4,0"/>
+
+                        <!-- remove line -->
+                        <Button Grid.Column="5" Style="{StaticResource NdCartRoundButton}" Background="Transparent" BorderBrush="Transparent" Click="NdCartRemove_Click" ToolTip="Remove"
+                                HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Path Data="M6,6 L18,18 M18,6 L6,18" Stroke="#6B7089" StrokeThickness="2" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Stretch="Uniform" Width="9" Height="9"/>
+                        </Button>
+                    </Grid>
+                </Border>
+                <DataTemplate.Triggers>
+                    <DataTrigger Binding="{Binding Path=Row.PM}" Value="Y">
+                        <Setter TargetName="btnNdMinus" Property="Visibility" Value="Visible"/>
+                        <Setter TargetName="btnNdPlus" Property="Visibility" Value="Visible"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=SelectionState}" Value="Focused">
+                        <Setter TargetName="rowBd" Property="Background" Value="#F4F1FD"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=SelectionState}" Value="Selected">
+                        <Setter TargetName="rowBd" Property="Background" Value="#F4F1FD"/>
+                    </DataTrigger>
+                </DataTemplate.Triggers>
+            </DataTemplate>
             <!-- New design: navy side menu on the POS screen (theme default is teal) -->
             <Style TargetType="{x:Type DockPanel}" x:Key="AdminMenuHeaderMainBackground"><Setter Property="Background" Value="#1A1D38"/></Style>
             <Style TargetType="{x:Type DockPanel}" x:Key="AdminMenuHeaderBackground"><Setter Property="Background" Value="#1A1D38"/></Style>
@@ -401,8 +494,11 @@
                                 <ColumnDefinition Width="12"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
+                            <!-- New design: XEPOS logo (as on the main screen) on the navy sale view; "POS" text on the light tabs -->
+                            <Image Grid.Column="0" x:Name="imgPosLogo" Source="pack://application:,,,/OfflineRetailV2;component/Resources/Icons/Logo.png" Height="40" Stretch="Uniform" VerticalAlignment="Center"
+                                   Margin="0,0,20,0" RenderOptions.BitmapScalingMode="HighQuality"/>
                             <TextBlock Grid.Column="0" x:Name="txtPosTitle" Text="POS" FontFamily="{StaticResource ND.Font.Bold}" FontSize="30" Foreground="#FFFFFF"
-                                       VerticalAlignment="Center" Margin="0,0,18,0"/>
+                                       VerticalAlignment="Center" Margin="0,0,18,0" Visibility="Collapsed"/>
                             <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                                 <Image Source="{DynamicResource Back}" Height="38" Width="38" x:Name="btnBack" PreviewMouseLeftButtonDown="BtnBack_PreviewMouseLeftButtonDown" ></Image>
                                 <Button x:Name="btnBackConv" Style="{StaticResource ConvNavBtnStyle}"
@@ -437,9 +533,17 @@
                             </Button>
                         </Grid>
 
+                        <!-- New design: category sidebar ("All Items" + top-level categories), filled by NdBuildCategorySidebar -->
+                        <Border Grid.Row="1" x:Name="pnlCatSidebar" Width="200" HorizontalAlignment="Left" Margin="22,4,0,14"
+                                Background="#14FFFFFF" BorderBrush="#26FFFFFF" BorderThickness="1" CornerRadius="16">
+                            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Focusable="False" PanningMode="VerticalOnly">
+                                <StackPanel x:Name="pnlCatSidebarItems" Margin="10,12,10,12"/>
+                            </ScrollViewer>
+                        </Border>
+
                         <TabControl Grid.Row="1"   x:Name="tcPOS" Visibility="Visible"
                     Style="{DynamicResource OuterPOSTabControlStyle}" SelectionChanged="tcPOS_SelectionChanged"
-                                Margin="-6,-2,3,0" >
+                                Margin="208,-2,3,0" >
                             <TabItem Header="POS" x:Name="POSTItem" Width="100"
              Style="{DynamicResource OuterPOSTabItemStyle}" Visibility="Collapsed">
                                 <Grid Margin="0,0">
@@ -1248,6 +1352,22 @@
                                     <RowDefinition Height="*"/>
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
+                                <!-- New design: cart column header (normal view; hidden in Convenience View) -->
+                                <Border x:Name="pnlNdCartHeader" Grid.Row="0" Height="32" Margin="6,4,6,2" CornerRadius="8" Background="#F1F3F8">
+                                    <Grid Margin="12,0,10,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="96"/>
+                                            <ColumnDefinition Width="64"/>
+                                            <ColumnDefinition Width="74"/>
+                                            <ColumnDefinition Width="30"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="Item" VerticalAlignment="Center" FontFamily="{StaticResource ND.Font.SemiBold}" FontSize="12.5" Foreground="#4B4F6B"/>
+                                        <TextBlock Grid.Column="1" Text="Qty" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="{StaticResource ND.Font.SemiBold}" FontSize="12.5" Foreground="#4B4F6B"/>
+                                        <TextBlock Grid.Column="2" Text="Each" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="{StaticResource ND.Font.SemiBold}" FontSize="12.5" Foreground="#4B4F6B"/>
+                                        <TextBlock Grid.Column="3" Text="Total" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="6,0,0,0" FontFamily="{StaticResource ND.Font.SemiBold}" FontSize="12.5" Foreground="#4B4F6B"/>
+                                    </Grid>
+                                </Border>
                                 <Grid x:Name="pnlConvenienceCartHeader" Grid.Row="0" Height="28" Margin="4,2,4,0" Visibility="Collapsed">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
@@ -1491,8 +1611,18 @@
 
                                             <dxg:GridColumn.CellDisplayTemplate>
                                                 <DataTemplate>
-                                                    <dxre:RichEditControl x:Name="PART_Editor" Height="48" Margin="0,0,0,1" Style="{DynamicResource richEditStyle}"  IsEnabled="False"  
+                                                    <!-- New design: initials badge + item text -->
+                                                    <Grid Height="48">
+                                                        <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                                        <Border Width="30" Height="30" CornerRadius="8" Margin="2,0,8,0" VerticalAlignment="Center"
+                                                                Background="{Binding Path=Data.PRODUCT, Converter={x:Static local:NdBadgeConverter.Background}}">
+                                                            <TextBlock Text="{Binding Path=Data.PRODUCT, Converter={x:Static local:NdBadgeConverter.Initials}}"
+                                                                       Foreground="{Binding Path=Data.PRODUCT, Converter={x:Static local:NdBadgeConverter.Foreground}}"
+                                                                       FontFamily="{StaticResource ND.Font.Bold}" FontSize="11" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                        </Border>
+                                                        <dxre:RichEditControl Grid.Column="1" x:Name="PART_Editor" Height="48" Margin="0,0,0,1" Style="{DynamicResource richEditStyle}"  IsEnabled="False"  
                                                   Content="{Binding Path=Value, Mode=OneWay, Converter={StaticResource htmlToContentConverter}}" Loaded="PART_Editor_Loaded_1" />
+                                                    </Grid>
                                                 </DataTemplate>
                                             </dxg:GridColumn.CellDisplayTemplate>
 
@@ -1511,7 +1641,9 @@
                                                         </Grid.RowDefinitions>
 
                                                         <Button Margin="0,4,0,0" Grid.Row="1" Padding="0" HorizontalAlignment="Center" Cursor="Hand" Focusable="False" x:Name="btnMinus" Visibility="Hidden" Style="{DynamicResource {x:Static ToolBar.ButtonStyleKey}}" Click="BtnMinus_Click" >
-                                                            <Image Source="{DynamicResource POSMinusQty}" Stretch="Uniform" Height="28" Width="28" ></Image>
+                                                            <Border Width="26" Height="26" CornerRadius="13" Background="#EEF0F6">
+                                                                <Path Data="M4,12 H20" Stroke="#1B1D33" StrokeThickness="2.4" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Stretch="Uniform" Width="10" Height="2"/>
+                                                            </Border>
                                                         </Button>
                                                     </Grid>
                                                     <DataTemplate.Triggers>
@@ -1589,7 +1721,9 @@
                                                             <RowDefinition Height="15"></RowDefinition>
                                                         </Grid.RowDefinitions>
                                                         <Button Margin="0,-4,0,0" Grid.Row="1" Padding="0"  HorizontalAlignment="Center"  Cursor="Hand" Focusable="False"  x:Name="btnPlus" Visibility="Hidden" Style="{DynamicResource {x:Static ToolBar.ButtonStyleKey}}" Click="BtnPlus_Click" >
-                                                            <Image Source="{DynamicResource POSAddQty}" Stretch="Uniform" Height="28" Width="28" ></Image>
+                                                            <Border Width="26" Height="26" CornerRadius="13" Background="#EEF0F6">
+                                                                <Path Data="M12,4 V20 M4,12 H20" Stroke="#1B1D33" StrokeThickness="2.4" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Stretch="Uniform" Width="10" Height="10"/>
+                                                            </Border>
                                                         </Button>
                                                     </Grid>
                                                     <DataTemplate.Triggers>
@@ -1604,6 +1738,16 @@
 
                                             </dxg:GridColumn.CellTemplate>
 
+                                        </dxg:GridColumn>
+
+                                        <!-- New design: unit price ("Each") -->
+                                        <dxg:GridColumn FieldName="" x:Name="colNdEach" Header="Each" Width="64" FixedWidth="True">
+                                            <dxg:GridColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Path=Data.RATE, Converter={x:Static local:NdBadgeConverter.Money}}" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                                               FontFamily="{StaticResource ND.Font.Regular}" FontSize="12.5" Foreground="#4B4F6B" Height="48" Padding="0,15,0,0"/>
+                                                </DataTemplate>
+                                            </dxg:GridColumn.CellTemplate>
                                         </dxg:GridColumn>
 
                                         <!--<dxg:GridColumn FieldName="DISPLAY_RATE" x:Name="colDispRate" Header="Item" Width="2*" Visible="False" >
@@ -1640,7 +1784,9 @@
                                                             <RowDefinition Height="15"></RowDefinition>
                                                         </Grid.RowDefinitions>
                                                         <Button Margin="1,-2,0,0" Grid.Row="1" Padding="0"  HorizontalAlignment="Left"  Cursor="Hand" Focusable="False"  x:Name="btnRowDelete" Visibility="Visible" Style="{DynamicResource {x:Static ToolBar.ButtonStyleKey}}" Click="BtnRowDelete_Click" >
-                                                            <Image Source="{StaticResource POSDeleteRow}" Stretch="Uniform" Height="24" Width="24" ></Image>
+                                                            <Border Width="24" Height="24" Background="Transparent">
+                                                                <Path Data="M6,6 L18,18 M18,6 L6,18" Stroke="#6B7089" StrokeThickness="2" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Stretch="Uniform" Width="10" Height="10"/>
+                                                            </Border>
                                                         </Button>
                                                     </Grid>
 

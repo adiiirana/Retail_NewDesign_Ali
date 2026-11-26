@@ -21,6 +21,34 @@ namespace OfflineRetailV2
         {
             InitializeComponent();
             ModalWindow.CloseCommand = new CommandBase(OnCloseCommand);
+            // new design: rounded corners
+            dlgBody.SizeChanged += (s, e) => dlgBody.Clip = new System.Windows.Media.RectangleGeometry(new Rect(dlgBody.RenderSize), 18, 18);
+        }
+
+        // new design: header icon + tint follow the message type
+        private void ApplyIcon(MessageBoxImage image, MessageBoxButton button)
+        {
+            string key = "MbIconInfo", color = "#3B6FE0";
+            switch (image)
+            {
+                case MessageBoxImage.Error: key = "MbIconError"; color = "#D9534F"; break;          // also Hand / Stop
+                case MessageBoxImage.Warning: key = "MbIconWarning"; color = "#E0901C"; break;      // also Exclamation
+                case MessageBoxImage.Question: key = "MbIconQuestion"; color = "#5B3CC4"; break;
+                case MessageBoxImage.None:
+                    if (button == MessageBoxButton.YesNo || button == MessageBoxButton.YesNoCancel) { key = "MbIconQuestion"; color = "#5B3CC4"; }
+                    break;
+            }
+            iconPath.Data = (System.Windows.Media.Geometry)FindResource(key);
+            iconPath.Stroke = new System.Windows.Media.SolidColorBrush((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(color));
+        }
+
+        // new design: the header X behaves like the "no / cancel" choice of the current button set
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (messageBoxButton == MessageBoxButton.YesNo) Result = MessageBoxResult.No;
+            else if (messageBoxButton == MessageBoxButton.OKCancel || messageBoxButton == MessageBoxButton.YesNoCancel) Result = MessageBoxResult.Cancel;
+            else Result = MessageBoxResult.OK;
+            Close();
         }
 
         private void OnCloseCommand(object obj)
@@ -39,23 +67,23 @@ namespace OfflineRetailV2
 
             if (ContentTextBlock.Text.Length <= 69)
             {
-                ContentTextBlock.SetValue(FontSizeProperty, 24.0);
+                ContentTextBlock.SetValue(FontSizeProperty, 17.0);
             }
             else if ((ContentTextBlock.Text.Length >= 70) && (ContentTextBlock.Text.Length <= 90))
             {
-                ContentTextBlock.SetValue(FontSizeProperty, 22.0);
+                ContentTextBlock.SetValue(FontSizeProperty, 16.0);
             }
             else if ((ContentTextBlock.Text.Length >= 91) && (ContentTextBlock.Text.Length <= 110))
             {
-                ContentTextBlock.SetValue(FontSizeProperty, 20.0);
+                ContentTextBlock.SetValue(FontSizeProperty, 15.5);
             }
             else if ((ContentTextBlock.Text.Length >= 111) && (ContentTextBlock.Text.Length <= 130))
             {
-                ContentTextBlock.SetValue(FontSizeProperty, 18.0);
+                ContentTextBlock.SetValue(FontSizeProperty, 15.0);
             }
             else if ((ContentTextBlock.Text.Length >= 131) && (ContentTextBlock.Text.Length <= 150))
             {
-                ContentTextBlock.SetValue(FontSizeProperty, 16.0);
+                ContentTextBlock.SetValue(FontSizeProperty, 14.5);
             }
             else
             {
@@ -72,6 +100,7 @@ namespace OfflineRetailV2
             Grid.SetColumnSpan(RightButton, 3);
 
             messageBoxButton = button;
+            ApplyIcon(image, button);
 
             switch (button)
             {
@@ -81,11 +110,11 @@ namespace OfflineRetailV2
                     RightButton.IsDefault = true;
                     Grid.SetColumn(RightButton, 2);
                     Grid.SetColumnSpan(RightButton, 7);
-                    RightButton.Width = 120;
+                    RightButton.Width = 170;
                     break;
 
                 case MessageBoxButton.OKCancel:
-                    RightButton.Content = "OK"; LeftButton.Content = "CANCEL";
+                    RightButton.Content = "OK"; LeftButton.Content = "Cancel";
                     LeftButton.Visibility = RightButton.Visibility = Visibility.Visible;
 
                     RightButton.IsDefault = true;
@@ -98,13 +127,13 @@ namespace OfflineRetailV2
                     break;
 
                 case MessageBoxButton.YesNo:
-                    CenterButton.Content = "CANCEL" ; RightButton.Content = "CONFIRM";
+                    CenterButton.Content = "Cancel" ; RightButton.Content = "Confirm";
                     CenterButton.Visibility = RightButton.Visibility = Visibility.Visible;
                     RightButton.IsDefault = true;
 
                     if (text == "Do you want to void order and exit?")
                     {
-                        CenterButton.Content = "GO BACK"; RightButton.Content = "YES";
+                        CenterButton.Content = "Go Back"; RightButton.Content = "Yes";
 
                         //Grid.SetColumn(CenterButton, 0);
                         //Grid.SetColumn(RightButton, 6);
@@ -124,7 +153,7 @@ namespace OfflineRetailV2
                     break;
 
                 case MessageBoxButton.YesNoCancel:
-                    LeftButton.Content = "CANCEL"; CenterButton.Content = "NO"; RightButton.Content = "YES";
+                    LeftButton.Content = "Cancel"; CenterButton.Content = "No"; RightButton.Content = "Yes";
                     LeftButton.Visibility = RightButton.Visibility = CenterButton.Visibility = Visibility.Visible;
 
                     RightButton.IsDefault = true; //if (whichButtonIsDefault == true)
@@ -146,8 +175,8 @@ namespace OfflineRetailV2
 
         public MessageBoxResult ShowLargeScrollable(string mainText, string detailText, string caption, MessageBoxButton button, MessageBoxImage image, Grid blur = null)
         {
-            this.Width = 450;
-            this.Height = 300;
+            this.Width = 480;
+            this.Height = 340;
 
             if (!(ContentTextBlock.Parent is ScrollViewer))
             {
@@ -193,6 +222,7 @@ namespace OfflineRetailV2
             Grid.SetColumnSpan(RightButton, 3);
 
             messageBoxButton = button;
+            ApplyIcon(image, button);
 
             switch (button)
             {
@@ -202,11 +232,11 @@ namespace OfflineRetailV2
                     RightButton.IsDefault = true;
                     Grid.SetColumn(RightButton, 2);
                     Grid.SetColumnSpan(RightButton, 7);
-                    RightButton.Width = 120;
+                    RightButton.Width = 170;
                     break;
 
                 case MessageBoxButton.OKCancel:
-                    RightButton.Content = "OK"; LeftButton.Content = "CANCEL";
+                    RightButton.Content = "OK"; LeftButton.Content = "Cancel";
                     LeftButton.Visibility = RightButton.Visibility = Visibility.Visible;
                     RightButton.IsDefault = true;
                     Grid.SetColumn(LeftButton, 0);

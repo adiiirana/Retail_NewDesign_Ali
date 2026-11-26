@@ -179,7 +179,7 @@
         <Grid Grid.Row="2" Visibility="Visible" x:Name="LoginGrid" Background="{StaticResource ND.Navy}">
 
             <!-- ===================== Select Employee (new design) ===================== -->
-            <Border VerticalAlignment="Stretch" HorizontalAlignment="Stretch" x:Name="LoginBorder" Visibility="Collapsed" BorderThickness="0" SizeChanged="LoginBorder_SizeChanged"
+            <Border VerticalAlignment="Stretch" HorizontalAlignment="Stretch" x:Name="LoginBorder" Visibility="Visible" BorderThickness="0" SizeChanged="LoginBorder_SizeChanged"
                     Background="{StaticResource ND.Navy}" ClipToBounds="True">
                 <Grid>
                     <!-- Store photo (composed from XeposDesign/assets/retail-store-clean*.png) + navy shade, as in 03-employee-login.html -->
@@ -334,8 +334,8 @@
                                        Text="Please remember password. It is the password of the Store Owner user. You may change it anytime from the Employee Setup."/>
                         </StackPanel>
 
-                        <!-- Employee grid: pages of 4 across x 2 rows (8 per page), arrows page through -->
-                        <Grid Margin="52,420,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Height="430">
+                        <!-- Employee area: from under the welcome copy to above the footer; pages (up to 4 x 2) are centred in it -->
+                        <Grid Margin="52,330,0,64" VerticalAlignment="Stretch" HorizontalAlignment="Left">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="52"/>
                                 <ColumnDefinition Width="8"/>
@@ -350,7 +350,7 @@
                             <ScrollViewer x:Name="ScrollViewerEmp" Grid.Column="2" Focusable="False" FocusVisualStyle="{x:Null}" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Disabled"
                                           PanningMode="HorizontalOnly" PanningRatio="1" PanningDeceleration="2"
                                           ManipulationBoundaryFeedback="ScrlViewer_ManipulationBoundaryFeedback" ScrollChanged="ScrollViewerEmp_ScrollChanged">
-                                <StackPanel x:Name="pnlEmp" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                <StackPanel x:Name="pnlEmp" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
                             </ScrollViewer>
                             <Button x:Name="btnEmpNext" Grid.Column="4" Style="{StaticResource ND.RoundArrowButton}" Width="52" Height="52" Background="#FFFFFF"
                                     Click="BtnEmpNext_Click">
@@ -362,19 +362,18 @@
                         <TextBlock x:Name="txtLoginFooter" Margin="82,0,0,24" VerticalAlignment="Bottom" HorizontalAlignment="Left"
                                    FontFamily="{StaticResource ND.Font.Regular}" FontSize="14" Foreground="#9DA2C5" Text="XEPOS Retail"/>
 
-                        <!-- Passcode pad (546 x 796, top 116, right 30) -->
-                        <Border Width="546" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,116,30,0" Background="#FFFFFF" CornerRadius="26" Padding="36,26,36,24"
+                        <!-- Passcode pad: full height on the right (top 116, bottom 48); the keys grow into the extra height -->
+                        <Border Width="546" VerticalAlignment="Stretch" HorizontalAlignment="Right" Margin="0,116,30,48" Background="#FFFFFF" CornerRadius="26" Padding="36,34,36,28"
                                 Effect="{StaticResource ND.ShadowLarge}">
-                            <StackPanel VerticalAlignment="Top">
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <DockPanel LastChildFill="True">
+                                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Center">
                                     <Path Data="{StaticResource ND.Icon.Lock}" Style="{StaticResource ND.IconPath}" Stroke="#1B1D33" StrokeThickness="2" Width="19" Height="22"/>
                                     <TextBlock Text="Enter Passcode" Margin="12,0,0,0" FontFamily="{StaticResource ND.Font.ExtraBold}" FontSize="26" Foreground="#1B1D33" VerticalAlignment="Center"/>
                                 </StackPanel>
-                                <TextBlock x:Name="txtLoggingInAs" HorizontalAlignment="Center" Margin="0,4,0,0" FontFamily="{StaticResource ND.Font.Regular}" FontSize="16" Foreground="#4B4F6B"
+                                <TextBlock DockPanel.Dock="Top" x:Name="txtLoggingInAs" HorizontalAlignment="Center" Margin="0,4,0,0" FontFamily="{StaticResource ND.Font.Regular}" FontSize="16" Foreground="#4B4F6B"
                                            Text="Select your account to continue"/>
-                                <cc:KeyPadPasswordControl x:Name="KeyPadPasswordControl" PasswordChanged="KeyPadPasswordControl_PasswordChanged"/>
                                 <!-- Not in the mock-up: Clock In / Out mode and Sales Snapshot. Logging in happens on the 4th digit. -->
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,16,0,0">
+                                <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,16,0,0">
                                     <Button x:Name="btnClockIn" Style="{StaticResource ND.LinkButton}" Click="BtnClockAction_Click"
                                             ToolTip="Tap, then enter your passcode to clock in, take a break or clock out">
                                         <StackPanel Orientation="Horizontal">
@@ -393,7 +392,8 @@
                                     <Button x:Name="btnStartBreak" Visibility="Collapsed"/>
                                     <Button x:Name="btnClockOut" Visibility="Collapsed"/>
                                 </StackPanel>
-                            </StackPanel>
+                                <cc:KeyPadPasswordControl x:Name="KeyPadPasswordControl" PasswordChanged="KeyPadPasswordControl_PasswordChanged"/>
+                            </DockPanel>
                         </Border>
                     </Grid>
 

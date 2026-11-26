@@ -6,23 +6,67 @@
         xmlns:cc="clr-namespace:OfflineRetailV2.Controls"
         xmlns:local="clr-namespace:OfflineRetailV2"
         mc:Ignorable="d"
-        Title="" Height="180"  Width="350"  WindowStyle="None" Topmost="True" ResizeMode="NoResize"  WindowStartupLocation="CenterScreen"
+        Title="" Height="290"  Width="480"  WindowStyle="None" Topmost="True" ResizeMode="NoResize"  WindowStartupLocation="CenterScreen"
         AllowsTransparency="True"  Background="Transparent">
 
-    <Grid>
-        <Border Style="{DynamicResource Border1}" BorderBrush="Transparent"  BorderThickness="0" CornerRadius="3.5"/>
-        <Border Style="{DynamicResource Border2}" BorderBrush="#B31F5364"  BorderThickness="1" CornerRadius="3">
-            <Grid Margin="5">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
+    <!-- New design loading card (same look as the start-up screen): store photo under a blue wash, logo,
+         message (ContentTextBlock, set by the code-behind) and a sliding amber bar. -->
+    <Grid Margin="12">
+        <Border CornerRadius="18" Background="#244E96">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="30" ShadowDepth="8" Direction="270" Opacity="0.35" Color="#0B1A3A"/>
+            </Border.Effect>
+        </Border>
+        <Border CornerRadius="18" x:Name="cardBody">
+            <Grid>
+                <Rectangle>
+                    <Rectangle.Fill>
+                        <ImageBrush ImageSource="pack://application:,,,/OfflineRetailV2;component/Resources/Images/LoginStore.jpg"
+                                    Stretch="UniformToFill" AlignmentX="Center" AlignmentY="Center"/>
+                    </Rectangle.Fill>
+                    <Rectangle.Effect>
+                        <BlurEffect Radius="6" KernelType="Gaussian"/>
+                    </Rectangle.Effect>
+                </Rectangle>
+                <Rectangle>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <GradientStop Color="#D92B5AA8" Offset="0"/>
+                            <GradientStop Color="#C7244E96" Offset="0.55"/>
+                            <GradientStop Color="#E61B3C78" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
 
-                <TextBlock Grid.Row="2" x:Name="ContentTextBlock" TextAlignment="Center" Padding="0" TextWrapping="WrapWithOverflow" 
-                   Text="Loading..." FontSize="24" FontWeight="UltraLight" FontFamily="{StaticResource OSLight}" 
-                   VerticalAlignment="Center" HorizontalAlignment="Center" Height="Auto"/>
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="24,0">
+                    <Image Source="pack://application:,,,/OfflineRetailV2;component/Resources/Icons/Logo.png" Stretch="Uniform" Height="50"
+                           HorizontalAlignment="Center" RenderOptions.BitmapScalingMode="HighQuality">
+                        <Image.Effect>
+                            <DropShadowEffect BlurRadius="12" ShadowDepth="2" Opacity="0.35" Color="#0B1A3A"/>
+                        </Image.Effect>
+                    </Image>
+                    <Border Width="42" Height="4" CornerRadius="2" Background="#F2A93B" HorizontalAlignment="Center" Margin="0,14,0,0"/>
+                    <TextBlock x:Name="ContentTextBlock" Text="Loading, please wait..." TextAlignment="Center" TextWrapping="Wrap" MaxWidth="400"
+                               FontFamily="pack://application:,,,/OfflineRetailV2;component/Resources/Fonts/#Poppins Medium" FontSize="15"
+                               Foreground="#FFFFFF" HorizontalAlignment="Center" Margin="0,14,0,0"/>
 
+                    <!-- progress track with a sliding amber segment -->
+                    <Border Width="200" Height="7" CornerRadius="3.5" Background="#4DFFFFFF" Margin="0,16,0,0" ClipToBounds="True">
+                        <Rectangle Width="76" HorizontalAlignment="Left" RadiusX="3.5" RadiusY="3.5">
+                            <Rectangle.Fill>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                    <GradientStop Color="#FFF7B84B" Offset="0"/>
+                                    <GradientStop Color="#FFF29A1F" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                            <Rectangle.RenderTransform>
+                                <TranslateTransform x:Name="barMove" X="-76"/>
+                            </Rectangle.RenderTransform>
+                            <!-- slide animation is started in code (InitCard) -->
+                        </Rectangle>
+                    </Border>
+                </StackPanel>
             </Grid>
-
         </Border>
     </Grid>
 </Window>

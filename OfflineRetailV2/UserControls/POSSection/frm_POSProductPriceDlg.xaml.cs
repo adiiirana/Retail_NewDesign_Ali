@@ -24,6 +24,30 @@ namespace OfflineRetailV2.UserControls.POSSection
 
             Loaded += Frm_POSProductPriceDlg_Loaded;
             ModalWindow.CloseCommand = new CommandBase(OnClose);
+
+            // new design: rounded corners, blue frame around the price being edited
+            dlgBody.SizeChanged += (s, e) => dlgBody.Clip = new System.Windows.Media.RectangleGeometry(new Rect(dlgBody.RenderSize), 20, 20);
+            var idle = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0xC9, 0xCE, 0xDC));
+            var active = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0x4A, 0x8F, 0xD9));
+            foreach (var pair in new[] { Tuple.Create((FrameworkElement)numPriceA, frameA), Tuple.Create((FrameworkElement)numPriceB, frameB), Tuple.Create((FrameworkElement)numPriceC, frameC) })
+            {
+                var frame = pair.Item2;
+                pair.Item1.IsKeyboardFocusWithinChanged += (s, e) =>
+                {
+                    bool on = (bool)e.NewValue;
+                    frame.BorderBrush = on ? active : idle;
+                    frame.BorderThickness = new Thickness(on ? 2 : 1.3);
+                };
+            }
+        }
+
+        // new design: header subtitle and footer layout follow the mode (View has no Save)
+        private void ApplyNewDesignMode()
+        {
+            Title.Text = (Title.Text ?? "").Trim();
+            bool view = btnUpdate.Visibility != Visibility.Visible;
+            txtSubtitle.Text = view ? "Price levels for this item" : "Set multiple price levels for this item";
+            System.Windows.Controls.Grid.SetColumnSpan(btnClose, view ? 3 : 1);
         }
 
         private void OnClose(object obj)
@@ -122,6 +146,7 @@ namespace OfflineRetailV2.UserControls.POSSection
 
             SetDecimalPlace();
             ShowData();
+            ApplyNewDesignMode();
         }
 
         private void FullKbd_Click(object sender, RoutedEventArgs e)

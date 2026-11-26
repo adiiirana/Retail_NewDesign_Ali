@@ -22,6 +22,14 @@ namespace OfflineRetailV2
         public FluentSplashScreen1()
         {
             InitializeComponent();
+
+            // new design: sliding loading bar, started in code so it runs as soon as the splash exists
+            var slide = new System.Windows.Media.Animation.DoubleAnimation(-84, 220, TimeSpan.FromSeconds(1.5))
+            {
+                RepeatBehavior = System.Windows.Media.Animation.RepeatBehavior.Forever,
+                EasingFunction = new System.Windows.Media.Animation.SineEase { EasingMode = System.Windows.Media.Animation.EasingMode.EaseInOut }
+            };
+            barMove.BeginAnimation(TranslateTransform.XProperty, slide);
         }
     }
 }

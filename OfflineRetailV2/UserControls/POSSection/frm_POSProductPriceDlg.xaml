@@ -8,78 +8,170 @@
         xmlns:lm="clr-namespace:OfflineRetailV2.LayoutManager"
         xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
         xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
-        xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" 
+        xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
         xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
         AllowsTransparency="True" WindowStyle="None" Background="Transparent" WindowStartupLocation="CenterScreen"
-        Title="" Foreground="White"   Width="700" Height="300">
-    <cc:ModalWindow  x:Name="ModalWindow">
-        <Grid Margin="9">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="9"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Grid Grid.Row="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="Title"  x:Name="Title" VerticalAlignment="Center" Style="{DynamicResource BlueHeading}" />
-                <Grid Grid.Column="1" HorizontalAlignment="Right" Margin="0,0,20,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"></ColumnDefinition>
-                        <ColumnDefinition Width="9"></ColumnDefinition>
-                        <ColumnDefinition Width="Auto"></ColumnDefinition>
-                        <ColumnDefinition Width="9"></ColumnDefinition>
-                        <ColumnDefinition Width="Auto"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
+        Title="" Foreground="White"   Width="600" SizeToContent="Height">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/NewDesignStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <Geometry x:Key="PpIconTag">M3,12 V4 A1,1 0 0 1 4,3 H12 L21,12 L12,21 Z M7.5,9 A1.5,1.5 0 1 0 7.5,6 A1.5,1.5 0 1 0 7.5,9 Z</Geometry>
 
-                    <Button IsTabStop="False" Focusable="False" Grid.Column="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Content="KEYBOARD" Visibility="Collapsed"
-                                 FontFamily="{StaticResource OSSemiBold}" Style="{DynamicResource GeneralButtonStyle}" Height="35" Width="120" x:Name="FullKbd" Click="FullKbd_Click"/>
-                    <Button IsTabStop="False" Focusable="False" Grid.Column="4" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Content="CLOSE"
-                                 FontFamily="{StaticResource OSSemiBold}" Style="{DynamicResource CancelButtonStyle}" x:Name="btnClose"  Height="35" Width="120" Click="btnClose_Click" />
+            <!-- one price level row: label left, white input right, on a light strip -->
+            <Style x:Key="PpRow" TargetType="{x:Type Border}">
+                <Setter Property="Background" Value="#EEF0F7"/>
+                <Setter Property="CornerRadius" Value="10"/>
+                <Setter Property="Padding" Value="16,7,10,7"/>
+                <Setter Property="Margin" Value="0,0,0,10"/>
+            </Style>
+            <Style x:Key="PpLabel" TargetType="{x:Type TextBlock}">
+                <Setter Property="FontFamily" Value="{StaticResource ND.Font.SemiBold}"/>
+                <Setter Property="FontSize" Value="15"/>
+                <Setter Property="Foreground" Value="#1B1D33"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+            <Style x:Key="PpField" TargetType="{x:Type Border}">
+                <Setter Property="Height" Value="40"/>
+                <Setter Property="CornerRadius" Value="8"/>
+                <Setter Property="Background" Value="#FFFFFF"/>
+                <Setter Property="BorderBrush" Value="#C9CEDC"/>
+                <Setter Property="BorderThickness" Value="1.3"/>
+                <Setter Property="Padding" Value="10,0"/>
+            </Style>
+            <Style x:Key="PpEditor" TargetType="{x:Type dxe:TextEdit}">
+                <Setter Property="ShowBorder" Value="False"/>
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="FontFamily" Value="{StaticResource ND.Font.Regular}"/>
+                <Setter Property="FontSize" Value="17"/>
+                <Setter Property="Foreground" Value="#1B1D33"/>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
 
-                    <Button IsTabStop="False" Focusable="False" Grid.Column="2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Content="UPDATE"
-                                 FontFamily="{StaticResource OSSemiBold}" Style="{DynamicResource SaveButtonStyle}" x:Name="btnUpdate" Height="35" Width="120" Click="btnUpdate_Click"/>
-                </Grid>
-            </Grid>
-            <Rectangle Grid.Row="1" Style="{DynamicResource DefaultLineStyle}"  VerticalAlignment="Center"  Margin="-9,0"/>
+    <!-- New design (Price for item): navy header with tag icon; Price A / B / C rows; Close / Save.
+         Names used by the code-behind are unchanged (Title, numPriceA/B/C, btnUpdate, btnClose, FullKbd, ModalWindow). -->
+    <Grid Margin="10">
+        <cc:ModalWindow x:Name="ModalWindow" Visibility="Collapsed"/>
 
-            <Grid Grid.Row="2" Margin="0,9,0,0">
+        <Border CornerRadius="20" Background="#FFFFFF" Effect="{StaticResource ND.ShadowLarge}"/>
+        <Border CornerRadius="20" x:Name="dlgBody">
+            <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="21"/>
+                    <RowDefinition Height="84"/>
                     <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
+
+                <!-- ===== header ===== -->
                 <Grid Grid.Row="0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="6"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="6"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="6"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="6"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="6"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    
-                    <TextBlock  Grid.Row="0" Text="Price A"/>
-                    <dxe:TextEdit Grid.Row="2" x:Name="numPriceA"  InputScope="Number" Mask="f2" MaskType="Numeric" MaskUseAsDisplayFormat="True"
-                                  Text="0.00"  EditValueChanged="numPriceA_EditValueChanged" SelectAllOnGotFocus="True" GotFocus="Num_GotFocus" LostFocus="Num_LostFocus"/>
+                    <Rectangle>
+                        <Rectangle.Fill>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#1E2246" Offset="0"/>
+                                <GradientStop Color="#2A2F5C" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Rectangle.Fill>
+                    </Rectangle>
+                    <Rectangle HorizontalAlignment="Right" Width="360" Opacity="0.85">
+                        <Rectangle.Fill>
+                            <ImageBrush ImageSource="pack://application:,,,/OfflineRetailV2;component/Resources/Images/LoginStore.jpg"
+                                        Stretch="UniformToFill" AlignmentX="Center" AlignmentY="Bottom" Viewbox="0.42,0.78,0.5,0.22"/>
+                        </Rectangle.Fill>
+                        <Rectangle.OpacityMask>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                <GradientStop Color="#00000000" Offset="0"/>
+                                <GradientStop Color="#FF000000" Offset="0.6"/>
+                            </LinearGradientBrush>
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                    <Grid Margin="22,0,18,0" VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Path Data="{StaticResource PpIconTag}" Style="{StaticResource ND.IconPath}" Stroke="#FFFFFF" StrokeThickness="1.8"
+                              Width="30" Height="30" Margin="0,0,16,0" VerticalAlignment="Center"/>
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock x:Name="Title" Text="Title" FontFamily="{StaticResource ND.Font.Bold}" FontSize="22" Foreground="#FFFFFF" TextTrimming="CharacterEllipsis"/>
+                            <TextBlock x:Name="txtSubtitle" Text="Set multiple price levels for this item" FontFamily="{StaticResource ND.Font.Regular}" FontSize="13" Foreground="#D8DBF0" Margin="0,1,0,0"/>
+                        </StackPanel>
+                        <Button Grid.Column="2" Style="{StaticResource ND.DialogCloseButton}" Click="btnClose_Click" ToolTip="Close"/>
+                    </Grid>
+                </Grid>
 
-                    <TextBlock  Grid.Row="4" Text="Price B"/>
-                    <dxe:TextEdit Grid.Row="6"  Grid.Column="2" x:Name="numPriceB"  InputScope="Number"
-                                  Text="0.00" Mask="f2" MaskType="Numeric" MaskUseAsDisplayFormat="True" EditValueChanged="numPriceA_EditValueChanged" SelectAllOnGotFocus="True" GotFocus="Num_GotFocus" LostFocus="Num_LostFocus"/>
+                <!-- ===== price levels ===== -->
+                <StackPanel Grid.Row="1" Margin="22,22,22,0">
+                    <Border Style="{StaticResource PpRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="140"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Price A" Style="{StaticResource PpLabel}"/>
+                            <Border Grid.Column="1" Style="{StaticResource PpField}" x:Name="frameA">
+                                <dxe:TextEdit x:Name="numPriceA" Style="{StaticResource PpEditor}" InputScope="Number" Mask="f2" MaskType="Numeric" MaskUseAsDisplayFormat="True"
+                                              Text="0.00" EditValueChanged="numPriceA_EditValueChanged" SelectAllOnGotFocus="True" GotFocus="Num_GotFocus" LostFocus="Num_LostFocus"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource PpRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="140"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Price B" Style="{StaticResource PpLabel}"/>
+                            <Border Grid.Column="1" Style="{StaticResource PpField}" x:Name="frameB">
+                                <dxe:TextEdit x:Name="numPriceB" Style="{StaticResource PpEditor}" InputScope="Number" Mask="f2" MaskType="Numeric" MaskUseAsDisplayFormat="True"
+                                              Text="0.00" EditValueChanged="numPriceA_EditValueChanged" SelectAllOnGotFocus="True" GotFocus="Num_GotFocus" LostFocus="Num_LostFocus"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource PpRow}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="140"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Price C" Style="{StaticResource PpLabel}"/>
+                            <Border Grid.Column="1" Style="{StaticResource PpField}" x:Name="frameC">
+                                <dxe:TextEdit x:Name="numPriceC" Style="{StaticResource PpEditor}" InputScope="Number" Mask="f2" MaskType="Numeric" MaskUseAsDisplayFormat="True"
+                                              Text="0.00" EditValueChanged="numPriceA_EditValueChanged" SelectAllOnGotFocus="True" GotFocus="Num_GotFocus" LostFocus="Num_LostFocus"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+                </StackPanel>
 
-                    <TextBlock Grid.Column="0" Grid.Row="8" Text="Price C"/>
-                    <dxe:TextEdit Grid.Row="10"  Grid.Column="2" x:Name="numPriceC"  InputScope="Number"
-                                  Text="0.00" Mask="f2" MaskType="Numeric" MaskUseAsDisplayFormat="True"  EditValueChanged="numPriceA_EditValueChanged" SelectAllOnGotFocus="True" GotFocus="Num_GotFocus" LostFocus="Num_LostFocus"/>
+                <!-- ===== footer ===== -->
+                <Grid Grid.Row="2" Margin="22,14,22,22">
+                    <Rectangle Height="1" Fill="#E3E6EF" VerticalAlignment="Top" Margin="-22,-6,-22,0"/>
+                    <Grid Margin="0,14,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="14"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button IsTabStop="False" Focusable="False" Content="KEYBOARD" Visibility="Collapsed" x:Name="FullKbd" Click="FullKbd_Click"/>
+                        <Button Grid.Column="0" IsTabStop="False" Focusable="False" x:Name="btnClose" Height="50" Style="{StaticResource ND.PosSoftButton}"
+                                HorizontalContentAlignment="Center" Click="btnClose_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <Path Data="{StaticResource ND.Icon.Close}" Style="{StaticResource ND.IconPath}" Stroke="#1B1D33" StrokeThickness="2.4" Width="13" Height="13" Margin="0,0,12,0"/>
+                                <TextBlock Text="Close" VerticalAlignment="Center" FontSize="18"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Grid.Column="2" IsTabStop="False" Focusable="False" x:Name="btnUpdate" Height="50" Style="{StaticResource ND.SuccessButton}" Click="btnUpdate_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <Path Data="{StaticResource ND.Icon.Check}" Style="{StaticResource ND.IconPath}" Stroke="#FFFFFF" StrokeThickness="2.4" Width="18" Height="16" Margin="0,0,12,0"/>
+                                <TextBlock Text="Save" VerticalAlignment="Center" FontSize="18"/>
+                            </StackPanel>
+                        </Button>
+                    </Grid>
                 </Grid>
             </Grid>
-            
-        </Grid>
-    </cc:ModalWindow>
+        </Border>
+    </Grid>
 </Window>

@@ -2514,10 +2514,11 @@ namespace OfflineRetailV2
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             // New design: open straight on Select Employee (the old module menu is gone).
+            // (LoginBorder is visible from the first frame, so nothing old or blank flashes before it fills in.)
             Dispatcher.BeginInvoke(new System.Action(() =>
             {
-                if (LoginBorder.Visibility != Visibility.Visible) ShowLoginHome();
-            }), DispatcherPriority.Background);
+                if (!_loginHomeShown) ShowLoginHome();
+            }), DispatcherPriority.Loaded);
 
             if (Settings.CheckSecondMonitor == "Y" &&
                 System.Windows.Forms.Screen.AllScreens.Length >= Settings.ScreenCountForSecondMonitor)
@@ -2634,29 +2635,51 @@ namespace OfflineRetailV2
             DataTable dtbl = new DataTable();
             dtbl = employee.FetchAllEmployees();
             if (dtbl == null) return;
-            // Pages of 4 across x 2 rows; the ScrollViewer shows one page (888 wide) at a time
+            // Pages of up to 4 across x 2 rows; the ScrollViewer shows one page (888 wide) at a time.
+            // Each page is centred in the employee area: 1-3 people sit in one centred row,
+            // 4 or more use two rows (4 = 2 x 2, 5-6 = 3 x 2, 7-8 = 4 x 2).
             System.Windows.Controls.Primitives.UniformGrid page = null;
             int n = 0;
             int total = dtbl.Rows.Count;
+            string firstEmpId = null;
             foreach (DataRow dr in dtbl.Rows)
             {
                 if (n % EmpPageSize == 0)
                 {
-                    int left = total - n;
+                    int left = Math.Min(EmpPageSize, total - n);
+                    int rows = left > 3 ? 2 : 1;
+                    int cols = rows == 1 ? left : (int)Math.Ceiling(left / 2.0);
                     page = new System.Windows.Controls.Primitives.UniformGrid
                     {
-                        Columns = 4,
-                        Rows = left > 4 ? 2 : 1,
-                        Width = 4 * EmpCardStep,
-                        VerticalAlignment = VerticalAlignment.Top
+                        Columns = Math.Max(1, cols),
+                        Rows = rows,
+                        Width = Math.Max(1, cols) * EmpCardStep,
+                        HorizontalAlignment = HorizontalAlignment.Center,
+                        VerticalAlignment = VerticalAlignment.Center,
+                        Margin = new Thickness(0, 0, 0, 18)   // balances the cards' 18 top margin
                     };
-                    pnlEmp.Children.Add(page);
+                    var pageHost = new Grid { Width = 4 * EmpCardStep };
+                    pageHost.Children.Add(page);
+                    pnlEmp.Children.Add(pageHost);
                 }
+                if (firstEmpId == null) firstEmpId = dr["EmployeeID"].ToString();
                 page.Children.Add(CreateEmployeeCard(dr));
                 n++;
             }
             ScrollViewerEmp.ScrollToHorizontalOffset(0);
             UpdateEmpArrows();
+
+            // the first employee is selected by default (just selected: no automatic sign-in)
+            if (firstEmpId != null)
+            {
+                strSelectedUserID = firstEmpId;
+                string sel = firstEmpId;
+                Dispatcher.BeginInvoke(new System.Action(() =>
+                {
+                    if (strSelectedUserID == sel) SetSeletionStyle(sel);
+                    InitializeUserControls();
+                }), DispatcherPriority.Loaded);
+            }
         }
 
         /// <summary>Visual parts of one employee card, kept so selection can restyle it.</summary>
@@ -3712,9 +3735,12 @@ namespace OfflineRetailV2
         }
 
         /// <summary>Shows Select Employee with the default section (Ordering, or Admin when POS is not registered).</summary>
+        private bool _loginHomeShown;
+
         public void ShowLoginHome()
         {
             if (LoginGrid.Visibility != Visibility.Visible) return;   // a module is open
+            _loginHomeShown = true;
             LoginMenuBorder.Visibility = Visibility.Collapsed;
             popupTooltip.IsOpen = false;
             KeyPadPasswordControl.ShowHeader = false;   // the pad shows its own centred title

@@ -6,77 +6,233 @@
         xmlns:lm="clr-namespace:OfflineRetailV2.LayoutManager"
            xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
          xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
-         xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" 
+         xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
         AllowsTransparency="True" WindowStyle="None" Background="Transparent" WindowStartupLocation="CenterScreen"
-        Title="" Foreground="White"  Width="600" Height="400"  
+        Title="" Foreground="White"  Width="600" Height="520"
         Loaded="Window_Loaded">
-    <cc:ModalWindow  x:Name="ModalWindow">
-        <Grid Margin="9">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="9"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="9"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <Grid Grid.Row="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="Employee Photo"  x:Name="Title" VerticalAlignment="Center" Style="{DynamicResource BlueHeading}" />
-                <Grid Grid.Column="1" HorizontalAlignment="Right" Margin="0,0,20,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"></ColumnDefinition>
-                        
-                    </Grid.ColumnDefinitions>
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/NewDesignStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <Geometry x:Key="EpIconUsers">M9,11 A3.5,3.5 0 1 0 9,4 A3.5,3.5 0 1 0 9,11 Z M2.5,20 C2.5,16.2 5.4,14 9,14 C12.6,14 15.5,16.2 15.5,20 M15.5,4.3 A3.5,3.5 0 0 1 15.5,10.7 M17.5,14.4 C20,15.1 21.5,17.2 21.5,20</Geometry>
+            <Geometry x:Key="EpIconCamera">M3,8 H7 L8.8,5.5 H15.2 L17,8 H21 V19 H3 Z M12,16.5 A3.5,3.5 0 1 0 12,9.5 A3.5,3.5 0 1 0 12,16.5 Z</Geometry>
+            <Geometry x:Key="EpIconPicture">M3,4.5 H21 V19.5 H3 Z M3,16 L8.5,10.5 L13,15 L16,12 L21,17 M15.5,9 A1.4,1.4 0 1 0 15.5,8.99</Geometry>
 
-                    <Button Grid.Column="8" Content="DONE" Height="35" Width="120" FontFamily="{StaticResource OSSemiBold}" 
-                        Style="{DynamicResource SaveButtonStyle}" x:Name="btnClose" Click="btnClose_Click"/>
+            <!-- light lavender button (up / down) -->
+            <Style x:Key="EpArrowButton" TargetType="{x:Type Button}">
+                <Setter Property="Width" Value="84"/>
+                <Setter Property="Height" Value="34"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Focusable" Value="False"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border x:Name="bd" Background="#ECE6FB" BorderBrush="#B9A6EE" BorderThickness="1.2" CornerRadius="9">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="bd" Property="Background" Value="#E2D9FA"/></Trigger>
+                                <Trigger Property="IsPressed" Value="True"><Setter TargetName="bd" Property="Background" Value="#D5C8F6"/></Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!-- shortcut tile (icon over label); Tag="Current" marks this screen -->
+            <Style x:Key="EpTile" TargetType="{x:Type Button}">
+                <Style.Resources><Style TargetType="{x:Type TextBlock}"/></Style.Resources>
+                <Setter Property="Foreground" Value="#1B1D33"/>
+                <Setter Property="FontFamily" Value="{StaticResource ND.Font.SemiBold}"/>
+                <Setter Property="FontSize" Value="12.5"/>
+                <Setter Property="Height" Value="62"/>
+                <Setter Property="Margin" Value="5,0"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Focusable" Value="False"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border x:Name="bd" Background="#EEF0F7" BorderBrush="#EEF0F7" BorderThickness="1.6" CornerRadius="10">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <ContentPresenter.Resources><Style TargetType="{x:Type TextBlock}"/></ContentPresenter.Resources>
+                                </ContentPresenter>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="bd" Property="Background" Value="#E5E8F2"/></Trigger>
+                                <Trigger Property="IsPressed" Value="True"><Setter TargetName="bd" Property="Background" Value="#DADEEB"/></Trigger>
+                                <Trigger Property="Tag" Value="Current">
+                                    <Setter TargetName="bd" Property="Background" Value="#EFE9FD"/>
+                                    <Setter TargetName="bd" Property="BorderBrush" Value="#8E6CF0"/>
+                                    <Setter Property="Cursor" Value="Arrow"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="EpGridHeader" TargetType="{x:Type dxg:GridColumnHeader}">
+                <Setter Property="Background" Value="#26324F"/>
+                <Setter Property="Foreground" Value="#FFFFFF"/>
+                <Setter Property="FontFamily" Value="{StaticResource ND.Font.SemiBold}"/>
+                <Setter Property="FontSize" Value="13"/>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <!-- New design (Employee Photo): navy header with Done / close; employee list with photo; shortcut tiles; Clear Order.
+         Names used by the code-behind are unchanged (Title, grdEmployee, gridView1, col*, picPhoto, btnClose, btnUpHeader, btnDownHeader, ModalWindow). -->
+    <Grid Margin="10">
+        <cc:ModalWindow x:Name="ModalWindow" Visibility="Collapsed"/>
+
+        <Border CornerRadius="20" Background="#FFFFFF" Effect="{StaticResource ND.ShadowLarge}"/>
+        <Border CornerRadius="20" x:Name="dlgBody">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="82"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- ===== header ===== -->
+                <Grid Grid.Row="0">
+                    <Rectangle>
+                        <Rectangle.Fill>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#1E2246" Offset="0"/>
+                                <GradientStop Color="#2A2F5C" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Rectangle.Fill>
+                    </Rectangle>
+                    <Rectangle HorizontalAlignment="Right" Width="380" Opacity="0.85">
+                        <Rectangle.Fill>
+                            <ImageBrush ImageSource="pack://application:,,,/OfflineRetailV2;component/Resources/Images/LoginStore.jpg"
+                                        Stretch="UniformToFill" AlignmentX="Center" AlignmentY="Bottom" Viewbox="0.42,0.78,0.5,0.22"/>
+                        </Rectangle.Fill>
+                        <Rectangle.OpacityMask>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                <GradientStop Color="#00000000" Offset="0"/>
+                                <GradientStop Color="#FF000000" Offset="0.6"/>
+                            </LinearGradientBrush>
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                    <Grid Margin="20,0,18,0" VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Width="46" Height="46" CornerRadius="23" Background="#FFFFFF" Margin="0,0,14,0">
+                            <Path Data="{StaticResource EpIconUsers}" Style="{StaticResource ND.IconPath}" Stroke="#1E2246" StrokeThickness="1.8" Width="24" Height="22"/>
+                        </Border>
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock x:Name="Title" Text="Employee Photo" FontFamily="{StaticResource ND.Font.Bold}" FontSize="22" Foreground="#FFFFFF" TextTrimming="CharacterEllipsis"/>
+                            <TextBlock Text="Manage employee photos" FontFamily="{StaticResource ND.Font.Regular}" FontSize="13" Foreground="#D8DBF0" Margin="0,1,0,0"/>
+                        </StackPanel>
+                        <Button Grid.Column="2" x:Name="btnClose" Style="{StaticResource ND.SuccessButton}" Height="40" Width="110" Margin="0,0,14,0" Click="btnClose_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <Path Data="{StaticResource ND.Icon.Check}" Style="{StaticResource ND.IconPath}" Stroke="#FFFFFF" StrokeThickness="2.4" Width="15" Height="13" Margin="0,0,9,0"/>
+                                <TextBlock Text="Done" VerticalAlignment="Center" FontSize="15"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Grid.Column="3" Style="{StaticResource ND.DialogCloseButton}" Click="btnClose_Click" ToolTip="Close"/>
+                    </Grid>
                 </Grid>
+
+                <!-- ===== list + photo ===== -->
+                <Grid Grid.Row="1" Margin="18,16,18,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="16"/>
+                        <ColumnDefinition Width="132"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Border CornerRadius="10" BorderBrush="#DDE2EC" BorderThickness="1" ClipToBounds="True">
+                        <dxg:GridControl ShowBorder="False" SelectionMode="Row" x:Name="grdEmployee" FontFamily="{StaticResource ND.Font.Regular}" FontSize="14">
+                            <dxg:GridControl.Resources>
+                                <Style TargetType="{x:Type dxg:GridColumnHeader}" BasedOn="{StaticResource EpGridHeader}"/>
+                            </dxg:GridControl.Resources>
+                            <dxg:GridControl.View>
+                                <dxg:TableView AllowPerPixelScrolling="True" ShowTotalSummary="False" x:Name="gridView1" FocusedRowChanged="gridView1_FocusedRowChanged"
+                                               AutoWidth="True" ShowGroupPanel="False" ShowIndicator="False" ShowVerticalLines="False" AllowEditing="False"
+                                               NavigationStyle="Row" RowMinHeight="38" AllowColumnFiltering="False"/>
+                            </dxg:GridControl.View>
+                            <dxg:GridColumn FieldName="ID" Header="ID" Width="*" x:Name="colID" Visible="False"/>
+                            <dxg:GridColumn FieldName="Image" Visible="False" VisibleIndex="-1" Width="*" AllowAutoFilter="False" Focusable="False">
+                                <dxg:GridColumn.EditSettings>
+                                    <dxe:ImageEditSettings Stretch="UniformToFill"/>
+                                </dxg:GridColumn.EditSettings>
+                            </dxg:GridColumn>
+                            <dxg:GridColumn FieldName="EmployeeID" Header="Employee #" Width="*" x:Name="colEmpID"/>
+                            <dxg:GridColumn FieldName="FirstName" Header="First Name" Width="*" x:Name="colFirstName"/>
+                            <dxg:GridColumn FieldName="LastName" Header="Last Name" Width="*" x:Name="colLastName"/>
+                        </dxg:GridControl>
+                    </Border>
+
+                    <!-- photo: placeholder silhouette shows until a photo is loaded -->
+                    <Border Grid.Column="2" VerticalAlignment="Top" Height="132" CornerRadius="12" Background="#EEF0F7" BorderBrush="#DDE2EC" BorderThickness="1">
+                        <Grid>
+                            <Path x:Name="picPlaceholder" Data="M12,12 A4.5,4.5 0 1 0 12,3 A4.5,4.5 0 1 0 12,12 Z M3,22 C3,16.8 7,14.5 12,14.5 C17,14.5 21,16.8 21,22 Z"
+                                  Fill="#C9CEDB" Stretch="Uniform" Width="62" Height="62" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            <Image Stretch="Uniform" x:Name="picPhoto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" StretchDirection="DownOnly" Margin="4"/>
+                            <Border Width="30" Height="30" CornerRadius="15" Background="#6B46E0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,8,8">
+                                <Path Data="{StaticResource EpIconCamera}" Style="{StaticResource ND.IconPath}" Stroke="#FFFFFF" StrokeThickness="1.8" Width="15" Height="13"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,10,0,0">
+                        <Button Style="{StaticResource EpArrowButton}" Margin="0,0,10,0" x:Name="btnUpHeader" Click="BtnUpHeader_Click" ToolTip="Previous">
+                            <Path Data="M5,15 L12,8 L19,15" Style="{StaticResource ND.IconPath}" Stroke="#4A2FA8" StrokeThickness="2.4" Width="15" Height="8"/>
+                        </Button>
+                        <Button Style="{StaticResource EpArrowButton}" x:Name="btnDownHeader" Click="BtnDownHeader_Click" ToolTip="Next">
+                            <Path Data="{StaticResource ND.Icon.ChevronDown}" Style="{StaticResource ND.IconPath}" Stroke="#4A2FA8" StrokeThickness="2.4" Width="15" Height="8"/>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+
+                <!-- ===== shortcuts + Clear Order ===== -->
+                <StackPanel Grid.Row="2" Margin="13,14,13,18">
+                    <UniformGrid Columns="4">
+                        <Button Style="{StaticResource EpTile}" Click="Shortcut_Click" CommandParameter="CustPicture">
+                            <StackPanel>
+                                <Path Data="{StaticResource EpIconCamera}" Style="{StaticResource ND.IconPath}" Stroke="#1B1D33" StrokeThickness="1.7" Width="20" Height="18" HorizontalAlignment="Center"/>
+                                <TextBlock Text="Cust. Picture" Margin="0,5,0,0" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Style="{StaticResource EpTile}" Click="Shortcut_Click" CommandParameter="CustNotes">
+                            <StackPanel>
+                                <Path Data="{StaticResource ND.Icon.NoteEdit}" Style="{StaticResource ND.IconPath}" Stroke="#1B1D33" StrokeThickness="1.7" Width="17" Height="19" HorizontalAlignment="Center"/>
+                                <TextBlock Text="Cust. Notes" Margin="0,5,0,0" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Style="{StaticResource EpTile}" Tag="Current" ToolTip="You are here">
+                            <StackPanel>
+                                <Path Data="{StaticResource ND.Icon.Person}" Style="{StaticResource ND.IconPath}" Stroke="#1B1D33" StrokeThickness="1.7" Width="18" Height="19" HorizontalAlignment="Center"/>
+                                <TextBlock Text="Emp. Picture" Margin="0,5,0,0" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Style="{StaticResource EpTile}" Click="Shortcut_Click" CommandParameter="Picture">
+                            <StackPanel>
+                                <Path Data="{StaticResource EpIconPicture}" Style="{StaticResource ND.IconPath}" Stroke="#1B1D33" StrokeThickness="1.7" Width="20" Height="17" HorizontalAlignment="Center"/>
+                                <TextBlock Text="Picture" Margin="0,5,0,0" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </UniformGrid>
+                    <Button Style="{StaticResource ND.DangerOutlineButton}" Height="44" Margin="5,12,5,0" Click="Shortcut_Click" CommandParameter="ClearOrder">
+                        <StackPanel Orientation="Horizontal">
+                            <Path Data="{StaticResource ND.Icon.Trash}" Style="{StaticResource ND.IconPath}" Stroke="#D32F2F" StrokeThickness="2" Width="17" Height="18" Margin="0,0,10,0"/>
+                            <TextBlock Text="Clear Order" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
             </Grid>
-            <Rectangle Grid.Row="1" Style="{DynamicResource DefaultLineStyle}"  VerticalAlignment="Center"  Margin="-9,0"/>
-            <Grid Grid.Row="2" Margin="0,9,0,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2.5*"/>
-                    <ColumnDefinition Width="21"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <dxg:GridControl ShowBorder="True" SelectionMode="Row" x:Name="grdEmployee">
-                    <dxg:GridControl.View>
-                        <dxg:TableView AllowPerPixelScrolling="True" ShowTotalSummary="False" x:Name="gridView1" FocusedRowChanged="gridView1_FocusedRowChanged"/>
-                    </dxg:GridControl.View>
-                    <dxg:GridColumn FieldName="ID" Header="ID" Width="*" x:Name="colID" Visible="False"/>
-                    <dxg:GridColumn FieldName="Image" Visible="False" VisibleIndex="-1" Width="*" AllowAutoFilter="False" Focusable="False">
-                        <dxg:GridColumn.EditSettings>
-                            <dxe:ImageEditSettings Stretch="UniformToFill"/>
-                        </dxg:GridColumn.EditSettings>
-                    </dxg:GridColumn>
-                    <dxg:GridColumn FieldName="EmployeeID" Header="Employee #" Width="*" x:Name="colEmpID"/>
-                    <dxg:GridColumn FieldName="FirstName" Header="First Name" Width="*" x:Name="colFirstName"/>
-                    <dxg:GridColumn FieldName="LastName" Header="Last Name" Width="*" x:Name="colLastName"/>
-                </dxg:GridControl>
-                <Border Grid.Column="2" VerticalAlignment="Top" HorizontalAlignment="Center" Width="140" Height="140"
-                            Style="{DynamicResource GroupBorder}" BorderThickness="1" CornerRadius="3">
-                    <Image Stretch="Uniform" x:Name="picPhoto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" StretchDirection="DownOnly"/>
-                </Border>
-            </Grid>
-            <Grid Grid.Row="4" >
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="9"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <Button Grid.Column="0"  VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                                Style="{DynamicResource YellowButtonStyle}" Width="100" Height="35" x:Name="btnUpHeader" Click="BtnUpHeader_Click"  >
-                    <Image Source="{DynamicResource Arrow_U}" Width="21" Height="21"/>
-                </Button>
-                <Button Grid.Column="2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                                Style="{DynamicResource YellowButtonStyle}" Width="100" Height="35" x:Name="btnDownHeader" Click="BtnDownHeader_Click" >
-                    <Image Source="{DynamicResource Arrow_D}" Width="21" Height="21"/>
-                </Button>
-                
-            </Grid>
-        </Grid>
-    </cc:ModalWindow>
+        </Border>
+    </Grid>
 </Window>
