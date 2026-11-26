@@ -18526,6 +18526,8 @@ namespace OfflineRetailV2.UserControls
 
         private int CurrentParentCategoryLevel = 1;
         private int ParentCategoryID = 0;
+        /// <summary>New design: top level shows all products (categories are in the sidebar). Not for department sale or Convenience View.</summary>
+        private bool NdRootShowsAllItems { get { return ParentCategoryID == 0 && Settings.CatSale != 1 && Settings.IsConvenienceViewEnabled != 1; } }
         /// Polulate  POS Screen Category
         private void AddItemPlus_Click(object sender, RoutedEventArgs e)
         {
@@ -18748,6 +18750,8 @@ namespace OfflineRetailV2.UserControls
                 PosDataObject.POS objPOS = new PosDataObject.POS();
                 objPOS.Connection = SystemVariables.Conn;
                 DataTable dtblCatButtons = objPOS.FetchPOSCategories(ParentCategoryID, CurrentParentCategoryLevel);
+                // new design: categories live in the left sidebar, so the top level ("All Items") shows products, not category tiles
+                if (NdRootShowsAllItems) dtblCatButtons = dtblCatButtons.Clone();
                 //  dtblCatButtons.DefaultView.Sort = "POSDISPLAYORDER asc";
                 //  dtblCatButtons.DefaultView.ApplyDefaultSort = true;
                 int intCatTotal = dtblCatButtons.Rows.Count;
@@ -19076,11 +19080,16 @@ namespace OfflineRetailV2.UserControls
 
                 // Update intCatTotal to account for the new button if subsequent code depends on it.
 
-                if (ParentCategoryID > 0)
+                if (ParentCategoryID > 0 || NdRootShowsAllItems)
                 {
+                    var ndSavedParent = currentParentCategory;
+                    if (ParentCategoryID == 0 || currentParentCategory == null)
+                        currentParentCategory = new POSControls.POSCategory { CategoryID = 0, CategoryName = "All Items", CategoryBackground = "Color", CategoryColor = "" };
+                    try
+                    {
                     PosDataObject.POS objPOSA = new PosDataObject.POS();
                     objPOSA.Connection = SystemVariables.Conn;
-                    DataTable dtblItemButtons = objPOSA.FetchPOSItemsforCategory1(ParentCategoryID);
+                    DataTable dtblItemButtons = objPOSA.FetchPOSItemsforCategory1(ParentCategoryID > 0 ? ParentCategoryID : -1);
 
                     DataTable dtblDummy = dtblItemButtons.Clone();
 
@@ -20183,6 +20192,8 @@ namespace OfflineRetailV2.UserControls
                         }
                     }
 
+                                    }
+                    finally { currentParentCategory = ndSavedParent; }
                 }
 
 
@@ -25960,7 +25971,7 @@ namespace OfflineRetailV2.UserControls
                 pnlPosRoot.ClearValue(System.Windows.Controls.Panel.BackgroundProperty);
             if (ndPosWaves != null) ndPosWaves.Visibility = sale ? Visibility.Visible : Visibility.Collapsed;
             if (txtPosTitle != null) txtPosTitle.Foreground = sale ? System.Windows.Media.Brushes.White : NdBrush("#1B1D33");
-            if (imgPosLogo != null) imgPosLogo.Visibility = sale ? Visibility.Visible : Visibility.Collapsed;   // white logo only on navy
+            if (imgPosLogo != null) imgPosLogo.Visibility = Visibility.Collapsed;   // the main header above already shows the XE logo   // white logo only on navy
             if (txtPosTitle != null) txtPosTitle.Visibility = sale ? Visibility.Collapsed : Visibility.Visible;
             if (lbCategory != null) lbCategory.Foreground = sale ? System.Windows.Media.Brushes.White : NdBrush("#1B1D33");
         }
@@ -26236,21 +26247,21 @@ namespace OfflineRetailV2.UserControls
 
         #endregion
 
-        #region New design - category sidebar
+        #region New design - left menu sidebar + category chips
 
-        // id of the highlighted sidebar entry: 0 = All Items, otherwise a top-level category id
+        // ---------- category chips (above the products): "All Items" + top-level categories ----------
         private int _ndSidebarSelectedId;
         private readonly Dictionary<int, System.Windows.Controls.Button> _ndSidebarButtons = new Dictionary<int, System.Windows.Controls.Button>();
 
-        /// <summary>"All Items" + the top-level POS categories, built from the same data as the category tiles.</summary>
         private void NdBuildCategorySidebar()
         {
-            if (pnlCatSidebarItems == null) return;
+            NdBuildMenuSidebar();
+            if (pnlCatChips == null) return;
             try
             {
-                pnlCatSidebarItems.Children.Clear();
+                pnlCatChips.Children.Clear();
                 _ndSidebarButtons.Clear();
-                pnlCatSidebarItems.Children.Add(NdSidebarButton(0, "All Items", "ND.Icon.Grid"));
+                pnlCatChips.Children.Add(NdChipButton(0, "All Items", "ND.Icon.Grid"));
 
                 PosDataObject.POS objPOS = new PosDataObject.POS();
                 objPOS.Connection = SystemVariables.Conn;
@@ -26262,86 +26273,33 @@ namespace OfflineRetailV2.UserControls
                         int id = GeneralFunctions.fnInt32(dr["ID"].ToString());
                         string name = dr["DESCRIPTION"].ToString().Trim();
                         if (id <= 0 || name == "" || _ndSidebarButtons.ContainsKey(id)) continue;
-                        pnlCatSidebarItems.Children.Add(NdSidebarButton(id, name, NdSidebarIcon(name)));
+                        pnlCatChips.Children.Add(NdChipButton(id, name, NdSidebarIcon(name)));
                     }
                 }
                 NdHighlightSidebar(ParentCategoryID);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("NdBuildCategorySidebar: " + ex.Message);   // never break the POS over the sidebar
+                Console.WriteLine("NdBuildCategorySidebar: " + ex.Message);   // never break the POS over the chips
             }
         }
 
-        private System.Windows.Controls.Button NdSidebarButton(int id, string name, string iconKey)
+        private System.Windows.Controls.Button NdChipButton(int id, string name, string iconKey)
         {
-            var icon = new System.Windows.Shapes.Path
-            {
-                Data = (TryFindResource(iconKey) as System.Windows.Media.Geometry) ?? (TryFindResource("ND.Icon.Layers") as System.Windows.Media.Geometry),
-                Style = TryFindResource("ND.IconPath") as Style, StrokeThickness = 1.8, Width = 20, Height = 20,
-                VerticalAlignment = VerticalAlignment.Center
-            };
-            var text = new TextBlock
-            {
-                Text = name, Margin = new Thickness(14, 0, 0, 0), VerticalAlignment = VerticalAlignment.Center,
-                FontFamily = TryFindResource("ND.Font.SemiBold") as System.Windows.Media.FontFamily, FontSize = 15,
-                TextTrimming = TextTrimming.CharacterEllipsis
-            };
-            var row = new DockPanel { LastChildFill = true };
-            DockPanel.SetDock(icon, Dock.Left);
-            row.Children.Add(icon);
-            row.Children.Add(text);
-
-            var btn = new System.Windows.Controls.Button
-            {
-                Content = row, Tag = id, Height = 52, Margin = new Thickness(0, 0, 0, 6), Padding = new Thickness(16, 0, 12, 0),
-                HorizontalContentAlignment = System.Windows.HorizontalAlignment.Stretch, Focusable = false, Cursor = System.Windows.Input.Cursors.Hand,
-                ToolTip = name, Template = NdSidebarTemplate()
-            };
+            var btn = NdNavButton(name, iconKey, 48, new Thickness(16, 0, 12, 0), new Thickness(0, 0, 0, 6));   // category row in the left sidebar
+            btn.Tag = id;
+            btn.ToolTip = name;
             btn.Click += NdSidebar_Click;
             _ndSidebarButtons[id] = btn;
-            NdStyleSidebarButton(btn, false);
+            NdStyleNavButton(btn, false, false);
             return btn;
-        }
-
-        private static ControlTemplate _ndSidebarTemplate;
-        private static ControlTemplate NdSidebarTemplate()
-        {
-            if (_ndSidebarTemplate != null) return _ndSidebarTemplate;
-            var bd = new FrameworkElementFactory(typeof(Border), "bd");
-            bd.SetValue(Border.CornerRadiusProperty, new CornerRadius(12));
-            bd.SetBinding(Border.BackgroundProperty, new System.Windows.Data.Binding("Background") { RelativeSource = System.Windows.Data.RelativeSource.TemplatedParent });
-            bd.SetBinding(Border.PaddingProperty, new System.Windows.Data.Binding("Padding") { RelativeSource = System.Windows.Data.RelativeSource.TemplatedParent });
-            var cp = new FrameworkElementFactory(typeof(ContentPresenter));
-            cp.SetValue(ContentPresenter.VerticalAlignmentProperty, VerticalAlignment.Center);
-            cp.SetValue(ContentPresenter.HorizontalAlignmentProperty, System.Windows.HorizontalAlignment.Stretch);
-            bd.AppendChild(cp);
-            var t = new ControlTemplate(typeof(System.Windows.Controls.Button)) { VisualTree = bd };
-            var hover = new Trigger { Property = UIElement.IsMouseOverProperty, Value = true };
-            hover.Setters.Add(new Setter(UIElement.OpacityProperty, 0.88, "bd"));
-            t.Triggers.Add(hover);
-            _ndSidebarTemplate = t;
-            return t;
-        }
-
-        private void NdStyleSidebarButton(System.Windows.Controls.Button btn, bool selected)
-        {
-            btn.Background = selected ? System.Windows.Media.Brushes.White : System.Windows.Media.Brushes.Transparent;
-            var fg = selected ? NdBrush("#1B1D33") : NdBrush("#E6E8F5");
-            var row = btn.Content as DockPanel;
-            if (row == null) return;
-            foreach (var child in row.Children)
-            {
-                if (child is System.Windows.Shapes.Path) ((System.Windows.Shapes.Path)child).Stroke = fg;
-                if (child is TextBlock) ((TextBlock)child).Foreground = fg;
-            }
         }
 
         private void NdHighlightSidebar(int parentCategoryId)
         {
             int id = _ndSidebarButtons.ContainsKey(parentCategoryId) ? parentCategoryId : (parentCategoryId == 0 ? 0 : _ndSidebarSelectedId);
             _ndSidebarSelectedId = id;
-            foreach (var kv in _ndSidebarButtons) NdStyleSidebarButton(kv.Value, kv.Key == id);
+            foreach (var kv in _ndSidebarButtons) NdStyleNavButton(kv.Value, kv.Key == id, false);
         }
 
         /// <summary>Line icon for a category from its name (falls back to a tag icon).</summary>
@@ -26399,6 +26357,151 @@ namespace OfflineRetailV2.UserControls
                 Console.WriteLine("NdSidebar_Click: " + ex.Message);
             }
             GeneralFunctions.SetFocus(txtSKU);
+        }
+
+        // ---------- left menu sidebar: the right-hand icon bar's items, with labels ----------
+        private class NdMenuEntry { public string Action; public FrameworkElement Source; public System.Windows.Controls.Button Button; }
+        private readonly List<NdMenuEntry> _ndMenu = new List<NdMenuEntry>();
+        private bool _ndMenuBuilt;
+
+        private void NdBuildMenuSidebar()
+        {
+            if (pnlCatSidebarItems == null || _ndMenuBuilt) return;
+            _ndMenuBuilt = true;
+            pnlCatSidebarItems.Children.Clear();
+            NdAddMenu("Cart", "Point of Sale", "ND.Icon.Cart", mnuPOS);
+            NdAddMenu("Customer", "Customers", "ND.Icon.Person", mnuCustomer);
+            NdAddMenu("Item", "Items", "ND.Icon.Layers", mnuItem);
+            NdAddMenu("Setup", "Setup", "ND.Icon.Sliders", mnuSetup);
+            NdAddMenu("RCT", "Receipt Printer", "ND.Icon.Printer", mnuRCT);
+            NdAddMenu("Weight", "Weighted Products", "ND.Icon.Tag", mnuWeight);
+            NdAddMenu("Logout", "Log out", "ND.Icon.Power", mnuLogout);
+            // Exit is in the main header (top right), not in the sidebar
+            NdHighlightMenu("Cart");
+
+            // the right-hand icon bar is replaced by this sidebar: keep it hidden whatever the old code does
+            if (pnlMenuHeader != null)
+            {
+                pnlMenuHeader.Visibility = Visibility.Collapsed;
+                System.ComponentModel.DependencyPropertyDescriptor.FromProperty(UIElement.VisibilityProperty, pnlMenuHeader.GetType())
+                    .AddValueChanged(pnlMenuHeader, (s, e) => { if (pnlMenuHeader.Visibility != Visibility.Collapsed) pnlMenuHeader.Visibility = Visibility.Collapsed; });
+            }
+            if (colPosMenu != null) colPosMenu.Width = new GridLength(0);
+        }
+
+        private void NdAddMenu(string action, string label, string iconKey, FrameworkElement source)
+        {
+            if (source == null) return;
+            var btn = NdNavButton(label, iconKey, 50, new Thickness(16, 0, 12, 0), new Thickness(0, 0, 0, 6));
+            var entry = new NdMenuEntry { Action = action, Source = source, Button = btn };
+            btn.Click += (s, e) => NdMenu_Click(entry);
+            // follow the old icon's visibility (permissions / settings hide some of them)
+            btn.Visibility = source.Visibility;
+            System.ComponentModel.DependencyPropertyDescriptor.FromProperty(UIElement.VisibilityProperty, source.GetType())
+                .AddValueChanged(source, (s, e) => btn.Visibility = source.Visibility);
+            if (action == "Logout") btn.Margin = new Thickness(0, 18, 0, 6);   // a gap before the session actions
+            _ndMenu.Add(entry);
+            pnlCatSidebarItems.Children.Add(btn);
+            NdStyleNavButton(btn, false, action == "Exit");
+        }
+
+        /// <summary>Runs the old icon's own handler (PreviewMouseLeftButtonDown) so behaviour is unchanged.</summary>
+        private void NdMenu_Click(NdMenuEntry entry)
+        {
+            try
+            {
+                var args = new MouseButtonEventArgs(Mouse.PrimaryDevice, Environment.TickCount, MouseButton.Left)
+                {
+                    RoutedEvent = UIElement.PreviewMouseLeftButtonDownEvent,
+                    Source = entry.Source
+                };
+                entry.Source.RaiseEvent(args);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("NdMenu_Click: " + ex.Message);
+            }
+            Dispatcher.BeginInvoke(new Action(NdRefreshRctState), System.Windows.Threading.DispatcherPriority.Background);
+        }
+
+        /// <summary>Called from ChangeMenuButtonColor: highlight the matching sidebar entry.</summary>
+        private void NdHighlightMenu(string action)
+        {
+            foreach (var m in _ndMenu)
+                if (m.Action != "RCT") NdStyleNavButton(m.Button, m.Action == action, m.Action == "Exit");
+            NdRefreshRctState();
+        }
+
+        /// <summary>Receipt Printer is an on/off toggle: show it as a soft highlight while it is on.</summary>
+        private void NdRefreshRctState()
+        {
+            foreach (var m in _ndMenu)
+            {
+                if (m.Action != "RCT") continue;
+                bool on = bmRCT != null && bmRCT.IsChecked == true;
+                NdStyleNavButton(m.Button, false, false);
+                if (on) m.Button.Background = NdBrush("#33FFFFFF");
+            }
+        }
+
+        // ---------- shared look ----------
+        private System.Windows.Controls.Button NdNavButton(string label, string iconKey, double height, Thickness padding, Thickness margin)
+        {
+            var icon = new System.Windows.Shapes.Path
+            {
+                Data = (TryFindResource(iconKey) as System.Windows.Media.Geometry) ?? (TryFindResource("ND.Icon.Layers") as System.Windows.Media.Geometry),
+                Style = TryFindResource("ND.IconPath") as Style, StrokeThickness = 1.8, Width = 20, Height = 20,
+                VerticalAlignment = VerticalAlignment.Center
+            };
+            var text = new TextBlock
+            {
+                Text = label, Margin = new Thickness(12, 0, 0, 0), VerticalAlignment = VerticalAlignment.Center,
+                FontFamily = TryFindResource("ND.Font.SemiBold") as System.Windows.Media.FontFamily, FontSize = 14.5,
+                TextTrimming = TextTrimming.CharacterEllipsis
+            };
+            var row = new DockPanel { LastChildFill = true };
+            DockPanel.SetDock(icon, Dock.Left);
+            row.Children.Add(icon);
+            row.Children.Add(text);
+            return new System.Windows.Controls.Button
+            {
+                Content = row, Height = height, Margin = margin, Padding = padding,
+                HorizontalContentAlignment = System.Windows.HorizontalAlignment.Stretch, Focusable = false,
+                Cursor = System.Windows.Input.Cursors.Hand, Template = NdSidebarTemplate()
+            };
+        }
+
+        private static ControlTemplate _ndSidebarTemplate;
+        private static ControlTemplate NdSidebarTemplate()
+        {
+            if (_ndSidebarTemplate != null) return _ndSidebarTemplate;
+            var bd = new FrameworkElementFactory(typeof(Border), "bd");
+            bd.SetValue(Border.CornerRadiusProperty, new CornerRadius(12));
+            bd.SetBinding(Border.BackgroundProperty, new System.Windows.Data.Binding("Background") { RelativeSource = System.Windows.Data.RelativeSource.TemplatedParent });
+            bd.SetBinding(Border.PaddingProperty, new System.Windows.Data.Binding("Padding") { RelativeSource = System.Windows.Data.RelativeSource.TemplatedParent });
+            var cp = new FrameworkElementFactory(typeof(ContentPresenter));
+            cp.SetValue(ContentPresenter.VerticalAlignmentProperty, VerticalAlignment.Center);
+            cp.SetValue(ContentPresenter.HorizontalAlignmentProperty, System.Windows.HorizontalAlignment.Stretch);
+            bd.AppendChild(cp);
+            var t = new ControlTemplate(typeof(System.Windows.Controls.Button)) { VisualTree = bd };
+            var hover = new Trigger { Property = UIElement.IsMouseOverProperty, Value = true };
+            hover.Setters.Add(new Setter(UIElement.OpacityProperty, 0.88, "bd"));
+            t.Triggers.Add(hover);
+            _ndSidebarTemplate = t;
+            return t;
+        }
+
+        private void NdStyleNavButton(System.Windows.Controls.Button btn, bool selected, bool danger)
+        {
+            btn.Background = selected ? System.Windows.Media.Brushes.White : System.Windows.Media.Brushes.Transparent;
+            var fg = selected ? NdBrush("#1B1D33") : NdBrush(danger ? "#FF9A9A" : "#E6E8F5");
+            var row = btn.Content as DockPanel;
+            if (row == null) return;
+            foreach (var child in row.Children)
+            {
+                if (child is System.Windows.Shapes.Path) ((System.Windows.Shapes.Path)child).Stroke = fg;
+                if (child is TextBlock) ((TextBlock)child).Foreground = fg;
+            }
         }
 
         #endregion
@@ -62313,6 +62416,7 @@ namespace OfflineRetailV2.UserControls
 
         private void ChangeMenuButtonColor(string selectaction)
         {
+            NdHighlightMenu(selectaction);   // new design: left menu sidebar mirrors this
             bmLogout.Style = this.FindResource("POSLogout") as Style;
             bmPOS.Style = this.FindResource("POSCart") as Style;
             bmCustomer.Style = this.FindResource("POSCustomer") as Style;
@@ -70412,6 +70516,9 @@ namespace OfflineRetailV2.UserControls
 
         private void UserControl_IsVisibleChanged_1(object sender, DependencyPropertyChangedEventArgs e)
         {
+            // New design: the main header shows "Exit" (top right) while the POS is open; it runs the POS Exit (old right-bar exit).
+            var ndMw = Window.GetWindow(this) as MainWindow;
+            if (ndMw != null) ndMw.SetHeaderExit(this.IsVisible ? (System.Action)(() => NdMenu_Click(new NdMenuEntry { Action = "Exit", Source = mnuExit })) : null);
             AppEvents.WholesaleModeChanged += ApplyWholesaleVisibility;
             ApplyWholesaleVisibility();
             AppEvents.ConvenienceViewModeChanged += ApplyConvenienceVisibility;

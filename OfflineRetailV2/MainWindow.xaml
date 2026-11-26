@@ -69,9 +69,14 @@
             <Border.Style>
                 <Style TargetType="{x:Type Border}">
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding Visibility, ElementName=LoginBorder}" Value="Visible">
+                        <!-- hidden only while the login screen itself is showing (LoginBorder stays "Visible" behind open modules) -->
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Visibility, ElementName=LoginBorder}" Value="Visible"/>
+                                <Condition Binding="{Binding Visibility, ElementName=LoginGrid}" Value="Visible"/>
+                            </MultiDataTrigger.Conditions>
                             <Setter Property="Visibility" Value="Collapsed"/>
-                        </DataTrigger>
+                        </MultiDataTrigger>
                     </Style.Triggers>
                 </Style>
             </Border.Style>
@@ -130,7 +135,7 @@
                         </StackPanel>
                     </Border>
                     <!-- New design: Online / Offline pill (after login) -->
-                    <Border x:Name="pnlHeaderOnline" Height="28" CornerRadius="14" Padding="11,0" Margin="12,0,0,0" VerticalAlignment="Center"
+                    <Border x:Name="pnlHeaderOnline" Visibility="Collapsed" Height="28" CornerRadius="14" Padding="11,0" Margin="12,0,0,0" VerticalAlignment="Center"
                             Background="#14FFFFFF" BorderBrush="#40FFFFFF" BorderThickness="1">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <Ellipse x:Name="dotHeaderOnline" Width="8" Height="8" Fill="#22C55E" VerticalAlignment="Center"/>
@@ -160,16 +165,16 @@
                     <TextBlock x:Name="TillTextBlock" Style="{StaticResource ND.HeaderText}" Text="{x:Static prop:Resources.Till}" Margin="0,0,22,0"/>
                     <TextBlock x:Name="TimeTextBlock" Style="{StaticResource ND.HeaderText}" Text="13:59" Margin="0,0,22,0"/>
                     <TextBlock x:Name="DateTextBlock" Style="{StaticResource ND.HeaderText}" Text="" Margin="0,0,24,0"/>
-                    <!-- Exit: shown while a screen registers a close action (Manage Register) -->
+                    <Image x:Name="btnFullScreen" Width="24" Height="24" Source="{StaticResource FullScreenOut}" Stretch="UniformToFill"
+                           Cursor="Hand" VerticalAlignment="Center" MouseLeftButtonUp="BtnFullScreen_MouseLeftButtonUp"/>
+                    <!-- Exit: shown while a screen registers a close action (Manage Register, POS): far right -->
                     <Button x:Name="btnHeaderExit" Style="{StaticResource ND.OutlineButton}" Height="40" MinWidth="84" Padding="0" Visibility="Collapsed"
-                            Margin="0,0,14,0" Click="BtnHeaderExit_Click" ToolTip="Close and sign out">
+                            Margin="16,0,0,0" Click="BtnHeaderExit_Click" ToolTip="Close and sign out">
                         <StackPanel Orientation="Horizontal" Margin="16,0">
                             <Path Data="{StaticResource ND.Icon.Power}" Style="{StaticResource ND.IconPath}" Stroke="#FFFFFF" Width="14" Height="14"/>
                             <TextBlock Text="Exit" Margin="8,0,0,0" VerticalAlignment="Center" FontSize="14"/>
                         </StackPanel>
                     </Button>
-                    <Image x:Name="btnFullScreen" Width="24" Height="24" Source="{StaticResource FullScreenOut}" Stretch="UniformToFill"
-                           Cursor="Hand" VerticalAlignment="Center" MouseLeftButtonUp="BtnFullScreen_MouseLeftButtonUp"/>
                 </StackPanel>
 
             </Grid>

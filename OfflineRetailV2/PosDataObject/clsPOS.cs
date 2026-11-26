@@ -1754,7 +1754,7 @@ namespace PosDataObject
             strSQLComm = " select ID,SKU,Description,ProductType,DisplayStockinPOS,AllowZeroStock, "
                             + " QtyOnHand,POSBackground,POSScreenColor,POSScreenStyle,POSFontType, "
                             + " POSFontSize,POSFontColor,IsBold,IsItalics,LinkSKU,BreakPackRatio,CaseQty,POSDisplayOrder, ExpiryDate "
-                            + " from Product where CategoryID = @CategoryID and ProductStatus = 'Y' and LinkSKU >= 0 "
+                            + " from Product where (@CategoryID = -1 or CategoryID = @CategoryID) and ProductStatus = 'Y' and LinkSKU >= 0 "   /* -1 = all items (new design "All Items") */
                             + " and AddtoPOSCategoryScreen = 'Y' order by POSDisplayOrder desc"; //and AddtoPOSScreen = 'Y'
 
             SqlCommand objSQlComm = new SqlCommand(strSQLComm, sqlConn);

@@ -447,7 +447,7 @@
                         <!--<ColumnDefinition Width="10"/>-->
                         <ColumnDefinition Width="430" x:Name="colPOSCart"/>
                         <ColumnDefinition Width="10" x:Name="colConvenienceKeypad"/>
-                        <ColumnDefinition Width="55"/>
+                        <ColumnDefinition Width="55" x:Name="colPosMenu"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
@@ -495,7 +495,7 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <!-- New design: XEPOS logo (as on the main screen) on the navy sale view; "POS" text on the light tabs -->
-                            <Image Grid.Column="0" x:Name="imgPosLogo" Source="pack://application:,,,/OfflineRetailV2;component/Resources/Icons/Logo.png" Height="40" Stretch="Uniform" VerticalAlignment="Center"
+                            <Image Grid.Column="0" x:Name="imgPosLogo" Visibility="Collapsed" Source="pack://application:,,,/OfflineRetailV2;component/Resources/Icons/Logo.png" Height="40" Stretch="Uniform" VerticalAlignment="Center"
                                    Margin="0,0,20,0" RenderOptions.BitmapScalingMode="HighQuality"/>
                             <TextBlock Grid.Column="0" x:Name="txtPosTitle" Text="POS" FontFamily="{StaticResource ND.Font.Bold}" FontSize="30" Foreground="#FFFFFF"
                                        VerticalAlignment="Center" Margin="0,0,18,0" Visibility="Collapsed"/>
@@ -533,11 +533,17 @@
                             </Button>
                         </Grid>
 
-                        <!-- New design: category sidebar ("All Items" + top-level categories), filled by NdBuildCategorySidebar -->
+                        <!-- New design: left sidebar = categories (top) + menu (the old right-hand icon bar, with labels) -->
                         <Border Grid.Row="1" x:Name="pnlCatSidebar" Width="200" HorizontalAlignment="Left" Margin="22,4,0,14"
                                 Background="#14FFFFFF" BorderBrush="#26FFFFFF" BorderThickness="1" CornerRadius="16">
                             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Focusable="False" PanningMode="VerticalOnly">
-                                <StackPanel x:Name="pnlCatSidebarItems" Margin="10,12,10,12"/>
+                                <StackPanel Margin="10,12,10,12">
+                                    <!-- categories (All Items + top-level categories) -->
+                                    <StackPanel x:Name="pnlCatChips"/>
+                                    <Rectangle Height="1" Fill="#33FFFFFF" Margin="6,10,6,14"/>
+                                    <!-- menu (the old right-hand icon bar, with labels) -->
+                                    <StackPanel x:Name="pnlCatSidebarItems"/>
+                                </StackPanel>
                             </ScrollViewer>
                         </Border>
 
